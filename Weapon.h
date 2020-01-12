@@ -29,42 +29,25 @@ public:
 	Weapon(const Weapon& other);
 	Weapon& operator=(const Weapon&);
 
-	void setLevel(int level);
-	void setRange(int range);
-	void setCapacity(int capacity);
-	void setUsage(int usage);
-	void setPrice(int price);
-	void setType(Type type);
-	void setBulk(double bulk);
 	void setName(QString name);
-	void setDamageDice(QString dmgDice);
-	void setDamageType(QString dmgType);
-	void setCritical(QString critical);
+	void setLevel(int level);
+	void setPrice(int price);
+	void setBulk(double bulk);
 	void setProperties(QStringList props);
 
-	int getLevel();
-	int getRange();
-	int getCapacity();
-	int getUsage();
-	int getPrice();
-	Type getType();
-	double getBulk();
 	QString getName();
-	QString getDamageDice();
-	QString getDamageType();
-	QString getCritical();
+	int getLevel();
+	int getPrice();
+	double getBulk();
 	QStringList getProperties();
 
-	void paint(QPainter* painter, const QRect& rect, const QPalette& palette, EditMode mode) const;
-	QSize sizeHint() const;
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
 private:
-	int level, range, capacity, usage, price;
-	Type type;
+	QString name;
+	int level, price;
 	double bulk;
-	QString name, damageDice, damageType, critical;
 	QStringList properties;
 
 };
