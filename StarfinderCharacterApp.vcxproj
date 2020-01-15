@@ -94,6 +94,7 @@
     <ClCompile Include="CharacterDialog.cpp" />
     <ClCompile Include="CharacterNode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="StarfinderCharacterApp.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponDelegate.cpp" />
@@ -115,6 +116,7 @@
     <QtRcc Include="StarfinderCharacterApp.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Item.h" />
     <QtMoc Include="WeaponWidget.h" />
     <QtMoc Include="WeaponDelegate.h" />
     <QtMoc Include="WeaponEditor.h" />

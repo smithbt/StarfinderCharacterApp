@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QMetaType>
 #include <QVariant>
+#include <QVector>
 #include <QPair>
 #include "Ability.h"
 #include "Weapon.h"

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QDebug>
-
 #include <QStyledItemDelegate>
+#include <QDebug>
+#include <QPainter>
 #include "Weapon.h"
 #include "WeaponEditor.h"
 #include "WeaponWidget.h"

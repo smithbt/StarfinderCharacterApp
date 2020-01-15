@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QPainter>
 #include "ui_WeaponEditor.h"
 #include "Weapon.h"
 

@@ -3,12 +3,11 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMetaType>
-#include <QPainter>
-#include <QPalette>
 #include <QString>
 #include <QStringList>
+#include "Item.h"
 
-class Weapon 
+class Weapon : public Item
 {
 	Q_GADGET
 
@@ -25,35 +24,15 @@ public:
 		Special = 8
 	};
 
-	Weapon();
-	~Weapon();
-	Weapon(const Weapon& other);
-	Weapon& operator=(const Weapon& other);
-
-	bool operator==(const Weapon& other) const;
-	bool operator!=(const Weapon& other) const;
-
-	void setName(QString name);
-	void setLevel(int level);
-	void setPrice(int price);
-	void setBulk(double bulk);
-	void setProperties(QStringList props);
-
-	QString getName();
-	int getLevel();
-	int getPrice();
-	double getBulk();
 	QStringList getProperties();
+	void setProperties(QStringList props);
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 	QString toString() const;
 
 private:
-	QString name;
-	int level, price;
-	double bulk;
-	QStringList properties;
+	QStringList special;
 
 };
 
