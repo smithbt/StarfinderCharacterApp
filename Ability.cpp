@@ -9,9 +9,10 @@ Ability::Ability(Score s, int base, int upgrade)
 
 void Ability::read(const QJsonObject& json)
 {
-	if (json.contains("Name@Enum") && json["Name@Enum"].isString()) {
-		QStringList parts = json["Name@Enum"].toString().split("@");
-		sName = static_cast<Score>(parts.at(1).toInt());
+	if (json.contains("Name") && json["Name"].isString()) {
+		QMetaEnum a = QMetaEnum::fromType<Score>();
+		QString name = json["Name"].toString();
+		sName = static_cast<Score>(a.keyToValue(name.toUtf8()));
 	}
 	if (json.contains("Base Score") && json["Base Score"].isDouble())
 		base = json["Base Score"].toInt();
@@ -21,7 +22,7 @@ void Ability::read(const QJsonObject& json)
 
 void Ability::write(QJsonObject& json) const
 {
-	json["Name@Enum"] = QString("%1@%2").arg(name()).arg(static_cast<int>(sName));
+	json["Name"] = name();
 	json["Base Score"] = base;
 	json["Personal Upgrade"] = upgrade;
 }

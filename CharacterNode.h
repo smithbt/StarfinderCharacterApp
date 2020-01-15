@@ -34,7 +34,7 @@ public:
     int columnCount() const;
     QVariant data(int column) const;
     int row() const;
-    bool insertChildren(int position, int count, int columns);
+    bool insertChildren(int position, int count);
     CharacterNode* parentNode();
     bool removeChildren(int position, int count);
     bool setData(int column, const QVariant& value);

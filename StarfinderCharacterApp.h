@@ -25,14 +25,13 @@ private:
 	Character* pc;
 	QString fileName;
 	QDataWidgetMapper* mapper;
-	
-	void refreshCharacterInfo();
 
 private slots:
 	void customWeaponMenu(QPoint pos);
 	void on_actionAdd_Weapon_triggered();
-	void on_actionNew_Character_triggered();
-	bool on_actionOpen_Character_triggered();
-	bool on_actionSave_Character_triggered();
+	void on_actionCharacter_New_triggered();
+	bool on_actionCharacter_Open_triggered();
+	bool on_actionCharacter_Save_triggered();
+	bool on_actionCharacter_SaveAs_triggered();
 	bool on_actionQuit_triggered();
 };

@@ -30,7 +30,7 @@ void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	}
 }
 
-void StarfinderCharacterApp::on_actionNew_Character_triggered()
+void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	CharacterDialog dialog(this);
 	if (dialog.exec()) {
@@ -38,7 +38,7 @@ void StarfinderCharacterApp::on_actionNew_Character_triggered()
 	}
 }
 
-bool StarfinderCharacterApp::on_actionOpen_Character_triggered()
+bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
 {
 	fileName = QFileDialog::getOpenFileName(this, tr("Open file"), "..", tr("JSON Files (*.json)"));
 	QFile loadFile(fileName);
@@ -58,7 +58,7 @@ bool StarfinderCharacterApp::on_actionOpen_Character_triggered()
 	return true;
 }
 
-bool StarfinderCharacterApp::on_actionSave_Character_triggered()
+bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
 {
 	if (fileName.isEmpty()) {
 		fileName = QFileDialog::getSaveFileName(this, tr("Save file"), "..", tr("JSON Files (*.json)"));
@@ -76,6 +76,13 @@ bool StarfinderCharacterApp::on_actionSave_Character_triggered()
 	saveFile.write(saveDoc.toJson());
 	saveFile.close();
 	return true;
+}
+
+bool StarfinderCharacterApp::on_actionCharacter_SaveAs_triggered()
+{
+	fileName.clear();
+	on_actionCharacter_Save_triggered();
+	return false;
 }
 
 bool StarfinderCharacterApp::on_actionQuit_triggered()

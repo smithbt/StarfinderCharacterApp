@@ -12,39 +12,35 @@ CharacterNode::~CharacterNode()
 
 void CharacterNode::read(const QJsonObject& json)
 {
-	if (!parent) {
-		for (CharacterNode* child : qAsConst(children))
-			child->read(json);
-	}
-	else {
-		if (itemData.first == Type::Name) {
-			if (json.contains("Name") && json["Name"].isString())
-				itemData.second = json["Name"].toString();
-		}
-		else if (itemData.first == Type::List) {
-			QString listName = itemData.second.toString();
-			if (json.contains(listName) && json[listName].isArray()) {
-				removeChildren(0, childCount());
-				QJsonArray childArray = json[listName].toArray();
-				for (int i = 0; i < childArray.size(); ++i) {
-					Type listType = static_cast<Type>(itemData.second.toInt());
-					CharacterNode* node = new CharacterNode({ listType, QVariant("") }, this);
-					node->read(json);
-					appendChild(node);
-				}
+	QMetaEnum tQME = QMetaEnum::fromType<Type>();
+	QString tKey = tQME.valueToKey(static_cast<int>(itemData.first));
+	if (itemData.first == Type::List) {
+		QString stKey = itemData.second.toString();
+		if (json[stKey].isArray()) {
+			if (childCount()) removeChildren(0, childCount());
+			QJsonArray keyArray = json[stKey].toArray();
+			for (int c = 0; c < keyArray.size(); ++c) {
+				CharacterNode* cNode = new CharacterNode({static_cast<Type>(tQME.keyToValue(stKey.toUtf8())), QVariant("")}, this);
+				cNode->read(keyArray[c].toObject());
+				appendChild(cNode);
 			}
 		}
-		else if (itemData.first == Type::Weapon) {
-			Weapon* w = new Weapon();
-			w->read(json);
-			itemData.second = QVariant::fromValue(w);
-		}
-		else if (itemData.first == Type::Ability) {
-			Ability* a = new Ability();
-			a->read(json);
-			itemData.second = QVariant::fromValue(a);
-		}
 	}
+	else if (itemData.first == Type::Name) {
+		if (json[tKey].isString())
+			itemData.second = json[tKey].toString();
+	}
+	else if (itemData.first == Type::Weapon) {
+		Weapon* w = new Weapon();
+		w->read(json);
+		itemData.second = QVariant::fromValue(w);
+	}
+	else if (itemData.first == Type::Ability) {
+		Ability* a = new Ability();
+		a->read(json);
+		itemData.second = QVariant::fromValue(a);
+	}
+
 }
 
 void CharacterNode::write(QJsonObject& json) const
@@ -54,16 +50,28 @@ void CharacterNode::write(QJsonObject& json) const
 			child->write(json);
 	}
 	else {
+		QMetaEnum tQME = QMetaEnum::fromType<Type>();
+		QString tKey = tQME.valueToKey(static_cast<int>(itemData.first));
 		if (itemData.first == Type::Name)
-			json["Name"] = itemData.second.toString();
+			json[tKey] = itemData.second.toString();
 		else if (itemData.first == Type::List) {
+			// Get json["List"], if it exists
+			QJsonArray listArray;
+			if (json.contains(tKey) && json[tKey].isArray())
+				listArray = json[tKey].toArray();
+
+			// write childrem to JSON
+			QJsonObject parentObj;
 			QJsonArray childArray;
 			for (CharacterNode* child : qAsConst(children)) {
 				QJsonObject cObj;
 				child->write(cObj);
 				childArray.append(cObj);
 			}
-			json[itemData.second.toString()] = childArray;
+			parentObj[itemData.second.toString()] = childArray;
+
+			listArray.append(parentObj);
+			json[tKey] = listArray;
 		}
 		else if (itemData.first == Type::Ability && itemData.second.canConvert<Ability*>())
 				itemData.second.value<Ability*>()->write(json);
@@ -111,7 +119,7 @@ int CharacterNode::row() const
 	return 0;
 }
 
-bool CharacterNode::insertChildren(int position, int count, int columns)
+bool CharacterNode::insertChildren(int position, int count)
 {
 	if (position < 0 || position > children.size())
 		return false;

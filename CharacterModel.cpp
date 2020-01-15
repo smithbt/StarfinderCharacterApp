@@ -5,7 +5,7 @@ CharacterModel::CharacterModel(QObject *parent)
 {
 	rootNode = new CharacterNode({ CharacterNode::Type::List, "Root"});
 	
-	setupModel(rootNode);
+	//setupModel(rootNode);
 }
 
 CharacterModel::~CharacterModel()
@@ -15,7 +15,59 @@ CharacterModel::~CharacterModel()
 
 void CharacterModel::read(const QJsonObject& json)
 {
-	rootNode->read(json);
+	QMetaEnum tQME = QMetaEnum::fromType<CharacterNode::Type>();
+	// For each CharacterNode::Type
+	for (int tIdx = 0; tIdx < tQME.keyCount(); ++tIdx) {
+
+		QString tKey = tQME.key(tIdx);
+		CharacterNode* cNode;
+
+		if (json.contains(tKey)) {
+			CharacterNode::Type tValue = static_cast<CharacterNode::Type>(tQME.value(tIdx));
+			if (tValue == CharacterNode::CharacterNode::Type::List) {
+				if (json[tKey].isArray()) {
+
+					// get lists and create children
+					QJsonArray listArray = json[tKey].toArray(); 
+					rootNode->insertChildren(0, listArray.size()); 
+
+					// set child data
+					for (int c = 0; c < listArray.size(); ++c) {
+						cNode = rootNode->child(c);
+						cNode->setData(0, QVariant::fromValue(tValue)); // set type as List
+						if (listArray[c].isObject()) {
+							QJsonObject listObj = listArray[c].toObject();
+							QString subType = listObj.keys()[0];
+							cNode->setData(1, subType); // set subtype
+							cNode->read(listObj);
+						}
+					}
+				}
+			}
+			if (tValue == CharacterNode::Type::Name) {
+				if (json[tKey].isString()) {
+					cNode = new CharacterNode({ tValue, json[tKey].toString() }, rootNode);
+					rootNode->appendChild(cNode);
+				}
+			}
+			if (tValue == CharacterNode::Type::Weapon) {
+				if (json[tKey].isObject()) {
+					cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
+					cNode->read(json[tKey].toObject());
+					rootNode->appendChild(cNode);
+				}
+					
+			}
+			if (tValue == CharacterNode::Type::Ability) {
+				if (json[tKey].isObject()) {
+					cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
+					cNode->read(json[tKey].toObject());
+					rootNode->appendChild(cNode);
+				}
+			}
+		}
+	}
+	//rootNode->read(json);
 }
 
 void CharacterModel::write(QJsonObject& json) const
@@ -148,7 +200,7 @@ bool CharacterModel::insertRows(int position, int rows, const QModelIndex& paren
 		return false;
 
 	beginInsertRows(parent, position, position + rows - 1);
-	const bool success = parentNode->insertChildren(position, rows, rootNode->columnCount());
+	const bool success = parentNode->insertChildren(position, rows);
 	endInsertRows();
 
 	return success;
