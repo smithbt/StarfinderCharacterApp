@@ -98,27 +98,6 @@ QStringList Weapon::getProperties()
 	return properties;
 }
 
-void Weapon::paint(QPainter* painter, const QRect& rect, const QPalette& palette, EditMode mode) const
-{
-	painter->save();
-
-	painter->setRenderHint(QPainter::Antialiasing, true);
-	painter->setPen(Qt::NoPen);
-	painter->setBrush(mode == EditMode::Editable ?
-		palette.highlight() :
-		palette.windowText());
-
-	QString w = name + " - " + level;
-	painter->drawText(rect, w);
-
-	painter->restore();
-}
-
-QSize Weapon::sizeHint() const
-{
-	return QSize(200,10);
-}
-
 void Weapon::read(const QJsonObject& json)
 {
 	if (json.contains("level") && json["level"].isDouble())
@@ -148,4 +127,9 @@ void Weapon::write(QJsonObject& json) const
 	json["bulk"] = bulk;
 	json["name"] = name;
 	json["properties"] = QJsonArray::fromStringList(properties);
+}
+
+QString Weapon::toString() const
+{
+	return QString("[%3] %1 (%2 cr) (%4 bulk)").arg(name).arg(price).arg(level).arg(bulk);
 }

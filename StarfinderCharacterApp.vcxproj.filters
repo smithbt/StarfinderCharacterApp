@@ -52,6 +52,15 @@
     <ClCompile Include="Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponDelegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="StarfinderCharacterApp.h">
@@ -72,6 +81,18 @@
     <QtMoc Include="Ability.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="WeaponDelegate.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Weapon.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WeaponEditor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WeaponWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="StarfinderCharacterApp.ui">
@@ -83,6 +104,12 @@
     <QtUic Include="CharacterDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="WeaponEditor.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="WeaponWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="StarfinderCharacterApp.qrc">
@@ -90,9 +117,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>Header Files</Filter>
     </ClInclude>

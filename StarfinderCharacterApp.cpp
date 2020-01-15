@@ -6,7 +6,10 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 {
 	ui.setupUi(this);
 	ui.weaponList->setModel(pc->getModel());
+	ui.weaponList->setModelColumn(1);
+	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+	ui.weaponList->setItemDelegate(new WeaponDelegate());
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));

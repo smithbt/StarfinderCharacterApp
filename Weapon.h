@@ -10,6 +10,7 @@
 
 class Weapon 
 {
+	Q_GADGET
 
 public:
 	enum class Type : int {
@@ -23,7 +24,6 @@ public:
 		Sniper = 7,
 		Special = 8
 	};
-	enum class EditMode { Editable, ReadOnly };
 
 	Weapon();
 	~Weapon();
@@ -45,11 +45,9 @@ public:
 	double getBulk();
 	QStringList getProperties();
 
-	void paint(QPainter* painter, const QRect& rect, const QPalette& palette, EditMode mode) const;
-	QSize sizeHint() const;
-
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
+	QString toString() const;
 
 private:
 	QString name;

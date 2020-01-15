@@ -349,7 +349,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QTreeView" name="weaponList"/>
+         <widget class="QListView" name="weaponList"/>
         </item>
        </layout>
       </widget>

@@ -17,33 +17,32 @@ void CharacterNode::read(const QJsonObject& json)
 			child->read(json);
 	}
 	else {
-		QJsonArray childArray;
-		QString listName;
-		Type listType;
-		switch (itemData.first) {
-		case Type::Name:
+		if (itemData.first == Type::Name) {
 			if (json.contains("Name") && json["Name"].isString())
 				itemData.second = json["Name"].toString();
-			break;
-		case Type::List:
-			listName = itemData.second.toString();
-			listType = static_cast<Type>(itemData.second.toInt());
-			removeChildren(0, childCount());
+		}
+		else if (itemData.first == Type::List) {
+			QString listName = itemData.second.toString();
 			if (json.contains(listName) && json[listName].isArray()) {
-				childArray = json[listName].toArray();
+				removeChildren(0, childCount());
+				QJsonArray childArray = json[listName].toArray();
 				for (int i = 0; i < childArray.size(); ++i) {
-					CharacterNode* node = new CharacterNode({ listType, QVariant() }, this);
+					Type listType = static_cast<Type>(itemData.second.toInt());
+					CharacterNode* node = new CharacterNode({ listType, QVariant("") }, this);
 					node->read(json);
 					appendChild(node);
 				}
 			}
-			break;
-		case Type::Weapon:
-			itemData.second.value<Weapon*>()->read(json);
-			break;
-		case Type::Ability:
-			itemData.second.value<Ability*>()->read(json);
-			break;
+		}
+		else if (itemData.first == Type::Weapon) {
+			Weapon* w = new Weapon();
+			w->read(json);
+			itemData.second = QVariant::fromValue(w);
+		}
+		else if (itemData.first == Type::Ability) {
+			Ability* a = new Ability();
+			a->read(json);
+			itemData.second = QVariant::fromValue(a);
 		}
 	}
 }
@@ -55,30 +54,21 @@ void CharacterNode::write(QJsonObject& json) const
 			child->write(json);
 	}
 	else {
-		QJsonArray childArray;
-		switch (itemData.first) {
-		case Type::Name:
+		if (itemData.first == Type::Name)
 			json["Name"] = itemData.second.toString();
-			break;
-		case Type::List:
+		else if (itemData.first == Type::List) {
+			QJsonArray childArray;
 			for (CharacterNode* child : qAsConst(children)) {
 				QJsonObject cObj;
 				child->write(cObj);
 				childArray.append(cObj);
 			}
 			json[itemData.second.toString()] = childArray;
-			break;
-		case Type::Ability:
-			if (itemData.second.canConvert<Ability*>())
-				itemData.second.value<Ability*>()->write(json);
-			break;
-		case Type::Weapon:
-			if (itemData.second.canConvert<Weapon*>())
-				itemData.second.value<Weapon*>()->write(json);
-			break;
-		default:
-			break;
 		}
+		else if (itemData.first == Type::Ability && itemData.second.canConvert<Ability*>())
+				itemData.second.value<Ability*>()->write(json);
+		else if (itemData.first == Type::Weapon && itemData.second.canConvert<Weapon*>())
+				itemData.second.value<Weapon*>()->write(json);
 	}
 }
 

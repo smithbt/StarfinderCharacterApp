@@ -12,10 +12,10 @@ Character::~Character()
 
 void Character::insertChild(QVariant& data, QModelIndex& root)
 {
-	if (model->data(root).value<CharacterNode::Type>() == CharacterNode::Type::List) {
+	if (root.data().value<CharacterNode::Type>() == CharacterNode::Type::List) {
 		// Get child type from root
 		QModelIndex listTypeIndex = model->index(root.row(), 1);
-		QVariant type = model->data(listTypeIndex);
+		QVariant type = listTypeIndex.data();
 
 		model->insertRows(0, 1, root);
 		QModelIndex index = model->index(0, 0, root);
@@ -50,7 +50,7 @@ Ability* Character::getAbility(Ability::Score s)
 	int count = model->rowCount(aRoot);
 	for (int i = 0; i < count; ++i) {
 		QModelIndex aIndex = model->index(i, 1, aRoot);
-		Ability* a = model->data(aIndex).value<Ability*>();
+		Ability* a = aIndex.data().value<Ability*>();
 		if (a->getEnum() == s) {
 			return a;
 		}
@@ -65,7 +65,7 @@ void Character::setAbility(Ability* a)
 	int count = model->rowCount(aRoot);
 	for (int i = 0; i < count; ++i) {
 		QModelIndex aIndex = model->index(i, 1, aRoot);
-		Ability* modelA = model->data(aIndex).value<Ability*>();
+		Ability* modelA = aIndex.data().value<Ability*>();
 		if (modelA->getEnum() == a->getEnum()) {
 			updated = model->setData(aIndex, QVariant::fromValue(a));
 			break;

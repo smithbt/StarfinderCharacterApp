@@ -1,8 +1,11 @@
 #pragma once
 
-#include <QPainter>
+#include <QDebug>
+
 #include <QStyledItemDelegate>
 #include "Weapon.h"
+#include "WeaponEditor.h"
+#include "WeaponWidget.h"
 
 class WeaponDelegate : public QStyledItemDelegate
 {
