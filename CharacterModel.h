@@ -19,13 +19,13 @@ public:
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
-	QVariant data(const QModelIndex& index, int role) const override;
+	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex& index) const override;
-	QModelIndex getWeaponList() const;
+	QModelIndex listTypeRoot(CharacterNode::Type t) const;
 	int typeRow(CharacterNode::Type type) const;
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -42,6 +42,5 @@ private:
 	CharacterNode* getNode(const QModelIndex& index) const;
 
 	CharacterNode* rootNode;
-	CharacterNode* wpnRoot;
 };
 

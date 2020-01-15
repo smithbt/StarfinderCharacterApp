@@ -81,9 +81,15 @@ QModelIndex CharacterModel::parent(const QModelIndex& index) const
 	return createIndex(parentNode->row(), 0, parentNode);
 }
 
-QModelIndex CharacterModel::getWeaponList() const
+QModelIndex CharacterModel::listTypeRoot(CharacterNode::Type t) const
 {
-	return createIndex(wpnRoot->row(), 0, wpnRoot);
+	for (int i = 0; i < rootNode->childCount(); ++i) {
+		CharacterNode* cn = rootNode->child(i);
+		if (cn->data(0).value<CharacterNode::Type>() == CharacterNode::Type::List
+			&& cn->data(1).value<CharacterNode::Type>() == t)
+			return createIndex(i, 0, cn);
+	}
+	return QModelIndex();
 }
 
 int CharacterModel::typeRow(CharacterNode::Type type) const
@@ -173,19 +179,20 @@ CharacterNode* CharacterModel::getNode(const QModelIndex& index) const
 
 void CharacterModel::setupModel(CharacterNode* parent)
 {
-	wpnRoot = new CharacterNode(
+	CharacterNode* node = new CharacterNode(
 		{ CharacterNode::Type::List, QVariant::fromValue(CharacterNode::Type::Weapon) }, parent);
-	parent->appendChild(wpnRoot);
-
-	CharacterNode* node = new CharacterNode({ CharacterNode::Type::Name, QString() }, parent);
 	parent->appendChild(node);
 
-	CharacterNode* abilityRoot = new CharacterNode(
+	node = new CharacterNode({ CharacterNode::Type::Name, QString() }, parent);
+	parent->appendChild(node);
+
+	node = new CharacterNode(
 		{ CharacterNode::Type::List, QVariant::fromValue(CharacterNode::Type::Ability) }, parent);
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 	for (int i = 0; i < aEnum.keyCount(); ++i) {
 		Ability* a = new Ability(static_cast<Ability::Score>(aEnum.value(i)));
-		node = new CharacterNode({ CharacterNode::Type::Ability, QVariant::fromValue(a) }, abilityRoot);
-		abilityRoot->appendChild(node);
+		CharacterNode* aChild = new CharacterNode({ CharacterNode::Type::Ability, QVariant::fromValue(a) }, node);
+		node->appendChild(aChild);
 	}
+	parent->appendChild(node);
 }

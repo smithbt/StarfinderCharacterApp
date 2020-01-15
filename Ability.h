@@ -23,7 +23,10 @@ public:
 
 	int score() const;
 	int modifier() const;
+	Score getEnum() const;
 	QString name() const;
+
+	QString toString() const;
 
 private:
 	Score sName;

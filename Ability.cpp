@@ -9,19 +9,21 @@ Ability::Ability(Score s, int base, int upgrade)
 
 void Ability::read(const QJsonObject& json)
 {
-	if (json.contains("AbilityScore") && json["AbilityScore"].isString()) {
-		QStringList parts = json["AbilityScore"].toString().split("|");
-		const char* key = parts.at(0).toStdString().c_str();
-		auto meta = QMetaEnum::fromType<Score>();
-		sName = static_cast<Score>(meta.keyToValue(key));
-		base = parts.at(1).toInt();
-		upgrade = parts.at(2).toInt();
+	if (json.contains("Name@Enum") && json["Name@Enum"].isString()) {
+		QStringList parts = json["Name@Enum"].toString().split("#");
+		sName = static_cast<Score>(parts.at(1).toInt());
 	}
+	if (json.contains("Base Score") && json["Base Score"].isDouble())
+		base = json["Base Score"].toInt();
+	if (json.contains("Personal Upgrade") && json["Personal Upgrade"].isDouble())
+		base = json["Personal Upgrade"].toInt();
 }
 
 void Ability::write(QJsonObject& json) const
 {
-	json["AbilityScore"] = (name() + "|" + base + "|" + upgrade);
+	json["Name@Enum"] = (name() + "@" + static_cast<int>(sName));
+	json["Base Score"] = base;
+	json["Personal Upgrade"] = upgrade;
 }
 
 void Ability::setType(Score s)
@@ -49,6 +51,11 @@ int Ability::modifier() const
 	return floor((base + upgrade - 10) / 2);
 }
 
+Ability::Score Ability::getEnum() const
+{
+	return sName;
+}
+
 QString Ability::name() const
 {
 	switch (sName) {
@@ -60,4 +67,9 @@ QString Ability::name() const
 	case Score::Charisma: return "Charisma";
 	}
 	return QString();
+}
+
+QString Ability::toString() const
+{
+	return QString::asprintf("%1: %2 [%+i]", modifier()).arg(name(), score());
 }
