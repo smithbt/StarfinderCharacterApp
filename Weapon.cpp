@@ -22,9 +22,30 @@ Weapon::Weapon(const Weapon& other)
 	this->properties = other.properties;
 }
 
-Weapon& Weapon::operator=(const Weapon&)
+Weapon& Weapon::operator=(const Weapon& other)
 {
+	if (&other != this) {
+		this->level = other.level;
+		this->price = other.price;
+		this->bulk = other.bulk;
+		this->name = other.name;
+		this->properties = other.properties;
+	}
 	return *this;
+}
+
+bool Weapon::operator==(const Weapon& other) const
+{
+	return this->level == other.level
+		&& this->price == other.price
+		&& this->bulk == other.bulk
+		&& this->name == other.name
+		&& this->properties == other.properties;
+}
+
+bool Weapon::operator!=(const Weapon& other) const
+{
+	return !(*this == other);
 }
 
 void Weapon::setLevel(int level)
@@ -77,6 +98,27 @@ QStringList Weapon::getProperties()
 	return properties;
 }
 
+void Weapon::paint(QPainter* painter, const QRect& rect, const QPalette& palette, EditMode mode) const
+{
+	painter->save();
+
+	painter->setRenderHint(QPainter::Antialiasing, true);
+	painter->setPen(Qt::NoPen);
+	painter->setBrush(mode == EditMode::Editable ?
+		palette.highlight() :
+		palette.windowText());
+
+	QString w = name + " - " + level;
+	painter->drawText(rect, w);
+
+	painter->restore();
+}
+
+QSize Weapon::sizeHint() const
+{
+	return QSize(200,10);
+}
+
 void Weapon::read(const QJsonObject& json)
 {
 	if (json.contains("level") && json["level"].isDouble())
@@ -94,6 +136,7 @@ void Weapon::read(const QJsonObject& json)
 			QString s = wpnProps[i].toString();
 			properties.append(s);
 		}
+		
 	}
 
 }
@@ -104,9 +147,5 @@ void Weapon::write(QJsonObject& json) const
 	json["price"] = price;
 	json["bulk"] = bulk;
 	json["name"] = name;
-	QJsonArray wpnProps;
-	foreach(QString prop, properties) {
-		wpnProps.append(QJsonValue(prop));
-	}
-	json["properties"] = wpnProps;
+	json["properties"] = QJsonArray::fromStringList(properties);
 }

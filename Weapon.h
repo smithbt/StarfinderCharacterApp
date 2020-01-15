@@ -8,8 +8,9 @@
 #include <QString>
 #include <QStringList>
 
-class Weapon
+class Weapon 
 {
+
 public:
 	enum class Type : int {
 		Unknown = 0,
@@ -27,7 +28,10 @@ public:
 	Weapon();
 	~Weapon();
 	Weapon(const Weapon& other);
-	Weapon& operator=(const Weapon&);
+	Weapon& operator=(const Weapon& other);
+
+	bool operator==(const Weapon& other) const;
+	bool operator!=(const Weapon& other) const;
 
 	void setName(QString name);
 	void setLevel(int level);
@@ -41,6 +45,9 @@ public:
 	double getBulk();
 	QStringList getProperties();
 
+	void paint(QPainter* painter, const QRect& rect, const QPalette& palette, EditMode mode) const;
+	QSize sizeHint() const;
+
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
@@ -52,5 +59,5 @@ private:
 
 };
 
-Q_DECLARE_OPAQUE_POINTER(Weapon);
-Q_DECLARE_METATYPE(Weapon);
+Q_DECLARE_METATYPE(Weapon*)
+Q_DECLARE_OPAQUE_POINTER(Weapon*)
