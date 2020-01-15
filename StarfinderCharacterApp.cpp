@@ -54,6 +54,7 @@ bool StarfinderCharacterApp::on_actionOpen_Character_triggered()
 
 	pc->read(loadDoc.object());
 	loadFile.close();
+	ui.weaponList->updateGeometry();
 	return true;
 }
 

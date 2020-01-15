@@ -1,12 +1,16 @@
 #include "WeaponDelegate.h"
 
 WeaponDelegate::WeaponDelegate(QWidget *parent)
-	: QStyledItemDelegate(parent)
+	: QStyledItemDelegate(parent),
+	wWdgt(new WeaponWidget(parent))
 {
+	wWdgt->setAttribute(Qt::WA_DontShowOnScreen, true);
+	wWdgt->show();
 }
 
 WeaponDelegate::~WeaponDelegate()
 {
+	delete wWdgt;
 }
 
 void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -15,20 +19,13 @@ void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
 		Weapon* w = index.data().value<Weapon*>();
 		qDebug() << w->toString();
 
-		//WeaponWidget* wWdgt = new WeaponWidget();
-		//wWdgt->setWeapon(w);
-
 		if (option.state & QStyle::State_Selected)
 			painter->fillRect(option.rect, option.palette.highlight());
 
+		wWdgt->setWeapon(w);
 		painter->save();
-
-		painter->setRenderHint(QPainter::Antialiasing, true);
-		painter->setPen(Qt::NoPen);
-		painter->setBrush(option.palette.windowText());
-
-		painter->drawText(option.rect, Qt::AlignLeft | Qt::AlignTop, w->toString());
-
+		painter->translate(option.rect.topLeft());
+		wWdgt->render(painter,QPoint(), QRegion(), QWidget::DrawChildren);
 		painter->restore();
 	}
 	else QStyledItemDelegate::paint(painter, option, index);
