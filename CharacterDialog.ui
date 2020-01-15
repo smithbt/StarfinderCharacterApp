@@ -6,52 +6,193 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>229</width>
-    <height>159</height>
+    <width>213</width>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Character</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="name_label">
-     <property name="text">
-      <string>Name</string>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>1</number>
      </property>
-     <property name="buddy">
-      <cstring>name_field</cstring>
-     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Basics</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="name_label">
+         <property name="text">
+          <string>Name</string>
+         </property>
+         <property name="buddy">
+          <cstring>name_field</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="name_field"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="race_label">
+         <property name="text">
+          <string>Race</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="theme_label">
+         <property name="text">
+          <string>Theme</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="class_label">
+         <property name="text">
+          <string>Class</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Ability Scores</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="STR_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Strength</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="STR_score">
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="DEX_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Dexterity</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="DEX_score">
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="CON_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Constitution</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="CON_score">
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="INT_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Intelligence</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="INT_score">
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="WIS_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Wisdom</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="WIS_score">
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="CHA_label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Charisma</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="CHA_score">
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="name_field"/>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="race_label">
-     <property name="text">
-      <string>Race</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="theme_label">
-     <property name="text">
-      <string>Theme</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="class_label">
-     <property name="text">
-      <string>Class</string>
      </property>
     </widget>
    </item>

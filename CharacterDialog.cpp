@@ -10,9 +10,7 @@ CharacterDialog::~CharacterDialog()
 {
 }
 
-Character CharacterDialog::getCharacter()
+void CharacterDialog::saveToModel(Character* pc)
 {
-	Character pc;
-	pc.setName(ui.name_field->text());
-	return pc;
+	pc->setProperty(CharacterNode::Type::Name, QVariant(ui.name_field->text()));
 }

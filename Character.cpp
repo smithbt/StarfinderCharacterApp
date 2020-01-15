@@ -1,157 +1,52 @@
 #include "Character.h"
 
-Character::Character()
+Character::Character(QObject* parent)
+	: model(new CharacterModel(parent))
 {
-	name = QString();
-	charLevel = 0;
-	bab = 0;
-	currentHP = 0;
-	maxHP = 0;
-	currentStamina = 0;
-	maxStamina = 0;
-	currentResolve = 0;
-	maxResolve = 0;
 }
 
-Character::Character(QString name)
+Character::~Character()
 {
-	this->name = name;
-	charLevel = 0;
-	bab = 0;
-	currentHP = 0;
-	maxHP = 0;
-	currentStamina = 0;
-	maxStamina = 0;
-	currentResolve = 0;
-	maxResolve = 0;
+	delete model;
 }
 
-void Character::setName(QString name)
+void Character::insertChild(QPair<CharacterNode::Type, QVariant> data, QModelIndex& root)
 {
-	this->name = name;
+	model->insertRows(0, 1, root);
+	QModelIndex index = model->index(0, 0, root);
+	model->setData(index, QVariant::fromValue(data.first));
+	index = model->index(0, 1, root);
+	model->setData(index, data.second);
 }
 
-QString Character::getName()
-{
-	return name;
-}
-
-void Character::setCharLevel(int lvl)
-{
-	charLevel = lvl;
-}
-
-int Character::getCharLevel()
-{
-	return charLevel;
-}
-
-void Character::setBAB(int bab)
-{
-	this->bab = bab;
-}
-
-int Character::getBAB()
-{
-	return bab;
-}
-
-void Character::setMaxHP(int max)
-{
-	maxHP = max;
-}
-
-int Character::getMaxHP()
-{
-	return maxHP;
-}
-
-void Character::setCurrentHP(int current)
-{
-	currentHP = current;
-}
-
-int Character::getCurrentHP()
-{
-	return currentHP;
-}
-
-void Character::setMaxStamina(int max)
-{
-	maxStamina = max;
-}
-
-int Character::getMaxStamina()
-{
-	return maxStamina;
-}
-
-void Character::setCurrentStamina(int current)
-{
-	currentStamina = current;
-}
-
-int Character::getCurrentStamina()
-{
-	return currentStamina;
-}
-
-void Character::setMaxResolve(int max)
-{
-	maxResolve = max;
-}
-
-int Character::getMaxResolve()
-{
-	return maxResolve;
-}
-
-void Character::setCurrentResolve(int current)
-{
-	currentResolve = current;
-}
-
-int Character::getCurrentResolve()
-{
-	return currentResolve;
-}
-
-void Character::addWeapon(const Weapon& w)
-{
-	weapons.append(w);
-}
-
-QList<Weapon> Character::getWeaponList()
-{
-	return weapons;
-}
-
-void Character::read(const QJsonObject& json)
-{
-	if (json.contains("name") && json["name"].isString())
-		name = json["name"].toString();
-	if (json.contains("abilities") && json["abilities"].isArray()) {
-		
-	}
-	if (json.contains("weapons") && json["weapons"].isArray()) {
-		QJsonArray jsonWpns = json["weapons"].toArray();
-		weapons.clear();
-		for (int i = 0; i < jsonWpns.size(); ++i) {
-			Weapon w;
-			w.read(jsonWpns[i].toObject());
-			addWeapon(w);
+void Character::setProperty(CharacterNode::Type t, QVariant& value) {
+	if (t != CharacterNode::Type::List) {
+		int row = model->typeRow(t);
+		if (row) {
+			QModelIndex index = model->index(row, 1);
+			model->setData(index, value);
 		}
 	}
 }
 
+bool Character::addWeapon(Weapon* w)
+{
+	QModelIndex wpnRoot = model->getWeaponList();
+	insertChild({ CharacterNode::Type::Weapon, QVariant::fromValue<Weapon*>(w) }, wpnRoot);
+	return true;
+}
+
+CharacterModel* Character::getModel()
+{
+	return model;
+}
+
+void Character::read(const QJsonObject& json)
+{
+	model->read(json);
+}
+
 void Character::write(QJsonObject& json) const
 {
-	json["name"] = name;
-	QJsonArray wpnArray;
-	for (int i = 0; i < weapons.size(); ++i) {
-		QJsonObject wpnObj;
-		weapons[i].write(wpnObj);
-		wpnArray.append(wpnObj);
-	}
-	json["weapons"] = wpnArray;
+	model->write(json);
 }

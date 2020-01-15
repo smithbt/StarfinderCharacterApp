@@ -1,54 +1,26 @@
 #pragma once
 
-#include <QJsonObject>
-#include <QList>
-#include <QString>
+#include <QVariant>
+#include <QVector>
+#include "CharacterModel.h"
 #include "Weapon.h"
 
 class Character
 {
-public:
+public: 
+	Character(QObject* parent = nullptr);
+	~Character();
 
-	Character();
-	Character(QString name);
+	void insertChild(QPair<CharacterNode::Type, QVariant> data, QModelIndex& root = QModelIndex());
+	void setProperty(CharacterNode::Type t, QVariant& value);
+	bool addWeapon(Weapon* w);
 
-	void setName(QString name);
-	QString getName();
-
-	void setCharLevel(int lvl);
-	int getCharLevel();
-
-	void setBAB(int bab);
-	int getBAB();
-
-	void setMaxHP(int max);
-	int getMaxHP();
-	void setCurrentHP(int current);
-	int getCurrentHP();
-
-	void setMaxStamina(int max);
-	int getMaxStamina();
-	void setCurrentStamina(int current);
-	int getCurrentStamina();
-
-	void setMaxResolve(int max);
-	int getMaxResolve();
-	void setCurrentResolve(int current);
-	int getCurrentResolve();
-
-	void addWeapon(const Weapon& w);
-	QList<Weapon> getWeaponList();
+	CharacterModel* getModel();
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
 private:
-	QString name;
-	int charLevel;
-	int bab;
-	int currentHP, maxHP;
-	int currentStamina, maxStamina;
-	int currentResolve, maxResolve;
-	QList<Weapon> weapons;
+	CharacterModel* model;
 };
 
