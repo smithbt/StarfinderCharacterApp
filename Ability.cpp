@@ -1,14 +1,32 @@
 #include "Ability.h"
 
-Ability::Ability(int base, int upgrade)
+Ability::Ability(Score s, int base, int upgrade)
 {
+	this->sName = s;
 	this->base = base;
 	this->upgrade = upgrade;
 }
 
-Ability::Ability(QString s)
+void Ability::read(const QJsonObject& json)
 {
-	fromString(s);
+	if (json.contains("AbilityScore") && json["AbilityScore"].isString()) {
+		QStringList parts = json["AbilityScore"].toString().split("|");
+		const char* key = parts.at(0).toStdString().c_str();
+		auto meta = QMetaEnum::fromType<Score>();
+		sName = static_cast<Score>(meta.keyToValue(key));
+		base = parts.at(1).toInt();
+		upgrade = parts.at(2).toInt();
+	}
+}
+
+void Ability::write(QJsonObject& json) const
+{
+	json["AbilityScore"] = (name() + "|" + base + "|" + upgrade);
+}
+
+void Ability::setType(Score s)
+{
+	sName = s;
 }
 
 void Ability::setBase(int base)
@@ -21,31 +39,19 @@ void Ability::setUpgrade(int upgrade)
 	this->upgrade = upgrade;
 }
 
-void Ability::fromString(QString s)
-{
-	auto parts = s.split("|");
-	base = parts.at(1).toInt();
-	upgrade = parts.at(2).toInt();
-}
-
-int Ability::fullScore()
+int Ability::score() const
 {
 	return base + upgrade;
 }
 
-int Ability::modifier()
+int Ability::modifier() const
 {
 	return floor((base + upgrade - 10) / 2);
 }
 
-QString Ability::toString()
+QString Ability::name() const
 {
-	return (base + "|" + upgrade);
-}
-
-QString Ability::getScoreName(Score s)
-{
-	switch (s) {
+	switch (sName) {
 	case Score::Strength: return "Strength";
 	case Score::Dexterity: return "Dexterity";
 	case Score::Constitution: return "Constitution";
