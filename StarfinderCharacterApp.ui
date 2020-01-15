@@ -24,7 +24,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="mainTab">
        <attribute name="title">
@@ -287,7 +287,7 @@
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="QSpinBox" name="spinBox_WIS">
+            <widget class="QSpinBox" name="WIS_score">
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
              </property>
@@ -349,7 +349,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QListView" name="listView"/>
+         <widget class="QTreeView" name="weaponList"/>
         </item>
        </layout>
       </widget>
@@ -371,7 +371,7 @@
      <string>Character</string>
     </property>
     <addaction name="actionNew_Character"/>
-    <addaction name="actionOpen_Charater"/>
+    <addaction name="actionOpen_Character"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Character"/>
     <addaction name="separator"/>
@@ -388,7 +388,7 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOpen_Charater">
+  <action name="actionOpen_Character">
    <property name="text">
     <string>Open...</string>
    </property>

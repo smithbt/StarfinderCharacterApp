@@ -1,25 +1,29 @@
 #include "StarfinderCharacterApp.h"
 
-StarfinderCharacterApp::StarfinderCharacterApp(QWidget *parent)
-	: QMainWindow(parent)
+StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
+	: QMainWindow(parent),
+	pc(new Character(this))
 {
 	ui.setupUi(this);
-	ui.listView->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(ui.listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customWeaponMenu(QPoint)));
+	ui.weaponList->setModel(pc->getModel());
+	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui.weaponList,
+		SIGNAL(customContextMenuRequested(QPoint)), 
+		SLOT(customWeaponMenu(QPoint)));
 }
 
 void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
 
 	QMenu* menu = new QMenu(this);
 	menu->addAction(ui.actionAdd_Weapon);
-	menu->popup(ui.listView->viewport()->mapToGlobal(pos));
+	menu->popup(ui.weaponList->viewport()->mapToGlobal(pos));
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	WeaponDialog dialog(this);
 	if (dialog.exec()) {
-		Weapon w = dialog.getWeapon();
-		pc.addWeapon(w);
+		Weapon* w = dialog.getWeapon();
+		pc->addWeapon(w);
 	}
 }
 
@@ -27,8 +31,7 @@ void StarfinderCharacterApp::on_actionNew_Character_triggered()
 {
 	CharacterDialog dialog(this);
 	if (dialog.exec()) {
-		pc = dialog.getCharacter();
-		ui.charName_field->setText(pc.getName());
+		dialog.saveToModel(pc);
 	}
 }
 
@@ -46,7 +49,8 @@ bool StarfinderCharacterApp::on_actionOpen_Character_triggered()
 
 	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
 
-	pc.read(loadDoc.object());
+	pc->read(loadDoc.object());
+	loadFile.close();
 	return true;
 }
 
@@ -63,8 +67,15 @@ bool StarfinderCharacterApp::on_actionSave_Character_triggered()
 	}
 
 	QJsonObject pcObj;
-	pc.write(pcObj);
+	pc->write(pcObj);
 	QJsonDocument saveDoc(pcObj);
 	saveFile.write(saveDoc.toJson());
+	saveFile.close();
+	return true;
+}
+
+bool StarfinderCharacterApp::on_actionQuit_triggered()
+{
+	QApplication::quit();
 	return true;
 }
