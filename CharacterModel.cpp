@@ -5,7 +5,7 @@ CharacterModel::CharacterModel(QObject *parent)
 {
 	rootNode = new CharacterNode({ CharacterNode::Type::List, "Root"});
 	
-	//setupModel(rootNode);
+	setupModel();
 }
 
 CharacterModel::~CharacterModel()
@@ -229,22 +229,18 @@ CharacterNode* CharacterModel::getNode(const QModelIndex& index) const
 	return rootNode;
 }
 
-void CharacterModel::setupModel(CharacterNode* parent)
+void CharacterModel::setupModel()
 {
-	CharacterNode* node = new CharacterNode(
-		{ CharacterNode::Type::List, QVariant::fromValue(CharacterNode::Type::Weapon) }, parent);
-	parent->appendChild(node);
+	QFile loadFile(":/StarfinderCharacterApp/Resources/default.json");
 
-	node = new CharacterNode({ CharacterNode::Type::Name, QString() }, parent);
-	parent->appendChild(node);
-
-	node = new CharacterNode(
-		{ CharacterNode::Type::List, QVariant::fromValue(CharacterNode::Type::Ability) }, parent);
-	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
-	for (int i = 0; i < aEnum.keyCount(); ++i) {
-		Ability* a = new Ability(static_cast<Ability::Score>(aEnum.value(i)));
-		CharacterNode* aChild = new CharacterNode({ CharacterNode::Type::Ability, QVariant::fromValue(a) }, node);
-		node->appendChild(aChild);
+	if (!loadFile.open(QIODevice::ReadOnly)) {
+		qWarning("Error opening file.");
 	}
-	parent->appendChild(node);
+
+	QByteArray loadData = loadFile.readAll();
+
+	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
+
+	read(loadDoc.object());
+	loadFile.close();
 }

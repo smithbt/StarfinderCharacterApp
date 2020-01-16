@@ -17,7 +17,7 @@ void Ability::read(const QJsonObject& json)
 	if (json.contains("Base Score") && json["Base Score"].isDouble())
 		base = json["Base Score"].toInt();
 	if (json.contains("Personal Upgrade") && json["Personal Upgrade"].isDouble())
-		base = json["Personal Upgrade"].toInt();
+		upgrade = json["Personal Upgrade"].toInt();
 }
 
 void Ability::write(QJsonObject& json) const

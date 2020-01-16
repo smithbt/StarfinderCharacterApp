@@ -17,7 +17,6 @@ void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
 {
 	if (index.data().canConvert<Weapon*>()) {
 		Weapon* w = index.data().value<Weapon*>();
-		qDebug() << w->toString();
 
 		if (option.state & QStyle::State_Selected)
 			painter->fillRect(option.rect, option.palette.highlight());
@@ -25,7 +24,8 @@ void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
 		wWdgt->setWeapon(w);
 		painter->save();
 		painter->translate(option.rect.topLeft());
-		wWdgt->render(painter,QPoint(), QRegion(), QWidget::DrawChildren);
+		painter->drawText(option.rect, w->toString());
+		//wWdgt->render(painter, QPoint(), QRegion(), QWidget::DrawChildren);
 		painter->restore();
 	}
 	else QStyledItemDelegate::paint(painter, option, index);

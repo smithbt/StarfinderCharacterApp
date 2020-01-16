@@ -5,14 +5,19 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	pc(new Character(this))
 {
 	ui.setupUi(this);
-	ui.weaponList->setModel(pc->getModel());
-	ui.weaponList->setModelColumn(1);
-	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
-	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
-	ui.weaponList->setItemDelegate(new WeaponDelegate());
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));
+
+	asWdgts.insert(Ability::Score::Strength, ui.STR_widget);
+	asWdgts.insert(Ability::Score::Dexterity, ui.DEX_widget);
+	asWdgts.insert(Ability::Score::Constitution, ui.CON_widget);
+	asWdgts.insert(Ability::Score::Intelligence, ui.INT_widget);
+	asWdgts.insert(Ability::Score::Wisdom, ui.WIS_widget);
+	asWdgts.insert(Ability::Score::Charisma, ui.CHA_widget);
+
+	updateModelViews();
+
 }
 
 void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
@@ -20,6 +25,22 @@ void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
 	QMenu* menu = new QMenu(this);
 	menu->addAction(ui.actionAdd_Weapon);
 	menu->popup(ui.weaponList->viewport()->mapToGlobal(pos));
+}
+
+void StarfinderCharacterApp::updateModelViews()
+{
+	ui.weaponList->setModel(pc->getModel());
+	ui.weaponList->setModelColumn(1);
+	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
+	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+	ui.weaponList->setItemDelegate(new WeaponDelegate());
+
+	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
+	for (int i = 0; i < aEnum.keyCount(); ++i) {
+		Ability::Score score = static_cast<Ability::Score>(aEnum.value(i));
+		Ability* a = pc->getAbility(score);
+		asWdgts.value(score)->setAbility(a);
+	}
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
@@ -36,6 +57,7 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 	if (dialog.exec()) {
 		dialog.saveToModel(pc);
 	}
+	updateModelViews();
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
@@ -54,7 +76,7 @@ bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
 
 	pc->read(loadDoc.object());
 	loadFile.close();
-	ui.weaponList->updateGeometry();
+	updateModelViews();
 	return true;
 }
 

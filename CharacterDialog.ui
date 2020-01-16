@@ -83,6 +83,9 @@
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
+         <property name="value">
+          <number>10</number>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -102,6 +105,9 @@
         <widget class="QSpinBox" name="DEX_score">
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="value">
+          <number>10</number>
          </property>
         </widget>
        </item>
@@ -123,6 +129,9 @@
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
+         <property name="value">
+          <number>10</number>
+         </property>
         </widget>
        </item>
        <item row="3" column="0">
@@ -142,6 +151,9 @@
         <widget class="QSpinBox" name="INT_score">
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="value">
+          <number>10</number>
          </property>
         </widget>
        </item>
@@ -163,6 +175,9 @@
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
+         <property name="value">
+          <number>10</number>
+         </property>
         </widget>
        </item>
        <item row="5" column="0">
@@ -182,6 +197,9 @@
         <widget class="QSpinBox" name="CHA_score">
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="value">
+          <number>10</number>
          </property>
         </widget>
        </item>

@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="StarfinderCharacterApp">
+    <qresource prefix="/StarfinderCharacterApp">
+        <file>Resources/default.json</file>
     </qresource>
 </RCC>

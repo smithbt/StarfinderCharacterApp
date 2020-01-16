@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
-#include <QJsonObject>
+#include <QJsonDocument>
 #include <QList>
 #include <QString>
 #include <QVariant>
@@ -38,7 +38,7 @@ public:
 	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 
 private:
-	void setupModel(CharacterNode* parent);
+	void setupModel();
 	CharacterNode* getNode(const QModelIndex& index) const;
 
 	CharacterNode* rootNode;

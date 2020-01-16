@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QStandardItemModel>
 #include "ui_StarfinderCharacterApp.h"
+#include "AbilityDelegate.h"
 #include "Character.h"
 #include "CharacterDialog.h"
 #include "Weapon.h"
@@ -21,10 +22,12 @@ public:
 	StarfinderCharacterApp(QWidget *parent = Q_NULLPTR);
 
 private:
+	void updateModelViews();
+
 	Ui::StarfinderCharacterAppClass ui;
 	Character* pc;
 	QString fileName;
-	QDataWidgetMapper* mapper;
+	QMap<Ability::Score, AbilityWidget*> asWdgts;
 
 private slots:
 	void customWeaponMenu(QPoint pos);
