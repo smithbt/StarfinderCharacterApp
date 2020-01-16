@@ -32,6 +32,5 @@ void Weapon::write(QJsonObject& json) const
 
 QString Weapon::toString() const
 {
-	return QString("[%3] %1 (%2 cr) (%4 bulk)")
-		.arg(getName()).arg(getPrice()).arg(getLevel()).arg(getBulk());
+	return Item::toString() + QString("\nSpecial: %5").arg(special.join(", "));
 }

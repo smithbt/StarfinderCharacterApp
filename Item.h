@@ -6,6 +6,8 @@
 class Item
 {
 public: 
+	Item();
+
 	QString getName() const;
 	void setName(QString n);
 
@@ -20,6 +22,8 @@ public:
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
+
+	QString toString() const;
 
 private:
 	QString name;

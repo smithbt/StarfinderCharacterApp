@@ -1,5 +1,13 @@
 #include "Item.h"
 
+Item::Item()
+	: name(QString()),
+	level(0),
+	price(0),
+	bulk(0.0)
+{
+}
+
 QString Item::getName() const {
 	return name;
 }
@@ -50,4 +58,9 @@ void Item::write(QJsonObject& json) const
 	json["price"] = price;
 	json["bulk"] = bulk;
 	json["name"] = name;
+}
+
+QString Item::toString() const
+{
+	return QString("%1 [%3] (%2 cr) (%4 bulk)").arg(name).arg(price).arg(level).arg(bulk);
 }
