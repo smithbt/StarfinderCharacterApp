@@ -1,7 +1,8 @@
 #include "AbilityWidget.h"
 
 AbilityWidget::AbilityWidget(QWidget *parent)
-	: QWidget(parent)
+	: QWidget(parent),
+	a(new Ability())
 {
 	ui.setupUi(this);
 }
