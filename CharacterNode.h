@@ -32,12 +32,12 @@ public:
     CharacterNode* child(int row);
     int childCount() const;
     int columnCount() const;
-    QVariant data(int column) const;
+    QVariant data(int column, int role = Qt::UserRole) const;
     int row() const;
     bool insertChildren(int position, int count);
     CharacterNode* parentNode();
     bool removeChildren(int position, int count);
-    bool setData(int column, const QVariant& value);
+    bool setData(int column, const QVariant& value, int role = Qt::UserRole);
 
 
 private:

@@ -102,13 +102,27 @@ int CharacterNode::columnCount() const
 	return 2;
 }
 
-QVariant CharacterNode::data(int column) const
+QVariant CharacterNode::data(int column, int role) const
 {
-	switch (column) {
-	case 0: return QVariant::fromValue(itemData.first);
-	case 1: return itemData.second;
-	default: return QVariant();
+	if (role == Qt::UserRole) {
+		switch (column) {
+		case 0: return QVariant::fromValue(itemData.first);
+		case 1: return itemData.second;
+		default: return QVariant();
+		}
 	}
+	if (role == Qt::DisplayRole) {
+		switch (column) {
+		case 0: return QVariant::fromValue(itemData.first).toString();
+		case 1: 
+			if (itemData.second.canConvert<Ability*>())
+				return itemData.second.value<Ability*>()->toString();
+			else if (itemData.second.canConvert<Weapon*>())
+				return itemData.second.value<Weapon*>()->toString();
+		}
+		return QString();
+	}
+	return QVariant();
 }
 
 int CharacterNode::row() const
@@ -148,16 +162,19 @@ bool CharacterNode::removeChildren(int position, int count)
 	return true;
 }
 
-bool CharacterNode::setData(int column, const QVariant& value)
+bool CharacterNode::setData(int column, const QVariant& value, int role)
 {
-	switch (column) {
-	case 0: 
-		itemData.first = value.value<Type>(); 
-		break;
-	case 1: 
-		itemData.second = value; 
-		break;
-	default: return false;
+	if (role == Qt::UserRole) {
+		switch (column) {
+		case 0:
+			itemData.first = value.value<Type>();
+			break;
+		case 1:
+			itemData.second = value;
+			break;
+		default: return false;
+		}
+		return true;
 	}
-	return true;
+	else return false;
 }

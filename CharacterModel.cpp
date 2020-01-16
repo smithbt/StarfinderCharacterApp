@@ -80,12 +80,12 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 	if (!index.isValid())
 		return QVariant();
 
-	if (role != Qt::DisplayRole)
+	if (role != Qt::DisplayRole && role != Qt::UserRole)
 		return QVariant();
 
 	CharacterNode* item = static_cast<CharacterNode*>(index.internalPointer());
 
-	return item->data(index.column());
+	return item->data(index.column(), role);
 }
 
 Qt::ItemFlags CharacterModel::flags(const QModelIndex& index) const
