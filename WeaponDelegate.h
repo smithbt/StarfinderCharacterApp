@@ -1,11 +1,9 @@
 #pragma once
 
 #include <QStyledItemDelegate>
-#include <QDebug>
 #include <QPainter>
 #include "Weapon.h"
 #include "WeaponEditor.h"
-#include "WeaponWidget.h"
 
 class WeaponDelegate : public QStyledItemDelegate
 {
@@ -20,9 +18,6 @@ public:
     QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
     void setEditorData(QWidget* editor, const QModelIndex& index) const override;
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
-
-private:
-    WeaponWidget* wWdgt;
 
 private slots:
     void commitAndCloseEditor();
