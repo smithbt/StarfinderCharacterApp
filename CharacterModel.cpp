@@ -170,14 +170,14 @@ int CharacterModel::columnCount(const QModelIndex& parent) const
 
 bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (role != Qt::EditRole)
+	if (role != Qt::UserRole)
 		return false;
 
 	CharacterNode* node = getNode(index);
 	bool result = node->setData(index.column(), value);
 
 	if (result)
-		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::UserRole });
 
 	return result;
 }
