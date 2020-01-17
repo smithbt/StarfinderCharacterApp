@@ -15,6 +15,7 @@ CharacterModel::~CharacterModel()
 
 void CharacterModel::read(const QJsonObject& json)
 {
+	beginResetModel();
 	QMetaEnum tQME = QMetaEnum::fromType<CharacterNode::Type>();
 	// For each CharacterNode::Type
 	for (int tIdx = 0; tIdx < tQME.keyCount(); ++tIdx) {
@@ -68,6 +69,7 @@ void CharacterModel::read(const QJsonObject& json)
 		}
 	}
 	//rootNode->read(json);
+	endResetModel();
 }
 
 void CharacterModel::write(QJsonObject& json) const
