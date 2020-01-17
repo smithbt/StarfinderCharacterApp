@@ -21,7 +21,7 @@ void WeaponEditor::setWeapon(Weapon* w)
 	wpn = w;
 	ui.level_spinBox->setValue(wpn->getLevel());
 	ui.name_lineEdit->setText(wpn->getName());
-	ui.price_lineEdit->setText(QString::number(wpn->getLevel()));
+	ui.price_lineEdit->setText(QString::number(wpn->getPrice()));
 }
 
 Weapon* WeaponEditor::getWeapon()
