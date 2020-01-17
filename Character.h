@@ -12,10 +12,11 @@ public:
 	Character(QObject* parent = nullptr);
 	~Character();
 
-	void insertChild(QVariant& data, QModelIndex& root = QModelIndex());
+	void insertChild(QVariant& data, QModelIndex& parent = QModelIndex());
 	void setProperty(CharacterNode::Type t, QVariant& value);
 	bool addWeapon(Weapon* w);
 
+	QModelIndex getAbilityIndex(Ability::Score s);
 	Ability* getAbility(Ability::Score s);
 	void setAbility(Ability* a);
 

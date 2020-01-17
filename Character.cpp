@@ -10,17 +10,17 @@ Character::~Character()
 	delete model;
 }
 
-void Character::insertChild(QVariant& data, QModelIndex& root)
+void Character::insertChild(QVariant& data, QModelIndex& parent)
 {
-	if (root.data(Qt::UserRole).value<CharacterNode::Type>() == CharacterNode::Type::List) {
+	if (parent.data(Qt::UserRole).value<CharacterNode::Type>() == CharacterNode::Type::List) {
 		// Get child type from root
-		QModelIndex listTypeIndex = model->index(root.row(), 1);
+		QModelIndex listTypeIndex = model->index(parent.row(), 1);
 		QVariant type = listTypeIndex.data(Qt::UserRole);
 
-		model->insertRows(0, 1, root);
-		QModelIndex index = model->index(0, 0, root);
+		model->insertRows(0, 1, parent);
+		QModelIndex index = model->index(0, 0, parent);
 		model->setData(index, type);
-		index = model->index(0, 1, root);
+		index = model->index(0, 1, parent);
 		model->setData(index, data);
 	}
 }
@@ -44,34 +44,35 @@ bool Character::addWeapon(Weapon* w)
 	return true;
 }
 
-Ability* Character::getAbility(Ability::Score s)
+QModelIndex Character::getAbilityIndex(Ability::Score s)
 {
 	QModelIndex aRoot = model->listTypeRoot(CharacterNode::Type::Ability);
 	int count = model->rowCount(aRoot);
 	for (int i = 0; i < count; ++i) {
 		QModelIndex aIndex = model->index(i, 1, aRoot);
-		Ability* a = aIndex.data(Qt::UserRole).value<Ability*>();
-		if (a->getEnum() == s) {
-			return a;
+		if (aIndex.data(Qt::UserRole).value<Ability*>()->getEnum() == s) {
+			return aIndex;
 		}
 	}
-	return nullptr;
+	return QModelIndex();
+}
+
+Ability* Character::getAbility(Ability::Score s)
+{
+	QModelIndex aIndex = getAbilityIndex(s);
+	return aIndex.data(Qt::UserRole).value<Ability*>();
 }
 
 void Character::setAbility(Ability* a)
 {
 	bool updated = false;
-	QModelIndex aRoot = model->listTypeRoot(CharacterNode::Type::Ability);
-	int count = model->rowCount(aRoot);
-	for (int i = 0; i < count; ++i) {
-		QModelIndex aIndex = model->index(i, 1, aRoot);
-		Ability* modelA = aIndex.data(Qt::UserRole).value<Ability*>();
-		if (modelA->getEnum() == a->getEnum()) {
-			updated = model->setData(aIndex, QVariant::fromValue(a));
-			break;
-		}
+	QModelIndex aIndex = getAbilityIndex(a->getEnum());
+	updated = model->setData(aIndex, QVariant::fromValue(a));
+
+	if (!updated) {
+		QModelIndex aRoot = model->listTypeRoot(CharacterNode::Type::Ability);
+		insertChild(QVariant::fromValue(a), aRoot);
 	}
-	if (!updated) insertChild(QVariant::fromValue(a), aRoot);
 }
 
 CharacterModel* Character::getModel()
