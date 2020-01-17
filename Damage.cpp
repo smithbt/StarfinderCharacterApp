@@ -1,10 +1,10 @@
 #include "Damage.h"
 
-QString Damage::typeString() const
-{
-	QMetaEnum typeE = QMetaEnum::fromType<Type>();
-	return typeE.valueToKey(static_cast<int>(type));
-}
+//QString Damage::typeString() const
+//{
+//	QMetaEnum typeE = QMetaEnum::fromType<Type>();
+//	return typeE.valueToKey(static_cast<int>(type));
+//}
 
 void Damage::read(const QJsonObject& json)
 {
@@ -14,6 +14,8 @@ void Damage::read(const QJsonObject& json)
 		dieSize = json.value("DieSize").toInt();
 	if (json.contains("Type") && json.value("Type").isDouble())
 		type = static_cast<Type>(json.value("Type").toInt());
+	if (json.contains("TypeString") && json.value("TypeString").isString())
+		typeString = json.value("TypeString").toString();
 }
 
 void Damage::write(QJsonObject& json) const
@@ -21,9 +23,10 @@ void Damage::write(QJsonObject& json) const
 	json.insert("DieCount", dieCount);
 	json.insert("DieSize", dieSize);
 	json.insert("Type", static_cast<int>(type));
+	json.insert("TypeString", typeString);
 }
 
 QString Damage::toString() const
 {
-	return QString("%1d%2 %3").arg(dieCount, dieSize).arg(typeString());
+	return QString("%1d%2 %3").arg(dieCount, dieSize).arg(typeString);
 }

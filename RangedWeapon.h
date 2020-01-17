@@ -6,9 +6,11 @@
 
 class RangedWeapon : public Weapon
 {
+public:
 	Damage damage;
+	QString critEffect;
 	Resource ammo;
-
+	int range;
 	int capacity();
 	int usage();
 

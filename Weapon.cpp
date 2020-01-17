@@ -22,5 +22,5 @@ void Weapon::write(QJsonObject& json) const
 
 QString Weapon::toString() const
 {
-	return Item::toString() + QString("\nSpecial: %5").arg(special.join(", "));
+	return Item::toString() + QString("\nSpecial: %1").arg(special.join(", "));
 }
