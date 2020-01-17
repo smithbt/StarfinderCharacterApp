@@ -25,44 +25,42 @@ void CharacterModel::read(const QJsonObject& json)
 
 		if (json.contains(tKey)) {
 			CharacterNode::Type tValue = static_cast<CharacterNode::Type>(tQME.value(tIdx));
-			if (tValue == CharacterNode::CharacterNode::Type::List) {
-				if (json[tKey].isArray()) {
-
-					// get lists and create children
-					QJsonArray listArray = json[tKey].toArray(); 
-					rootNode->insertChildren(0, listArray.size()); 
-
-					// set child data
-					for (int c = 0; c < listArray.size(); ++c) {
-						cNode = rootNode->child(c);
-						cNode->setData(0, QVariant::fromValue(tValue)); // set type as List
-						if (listArray[c].isObject()) {
-							QJsonObject listObj = listArray[c].toObject();
-							QString subType = listObj.keys()[0];
-							cNode->setData(1, subType); // set subtype
-							cNode->read(listObj);
+			if (tValue == CharacterNode::Type::List) {
+				if (json.value(tKey).isObject()) {
+					QJsonObject listObject = json.value(tKey).toObject();
+					QVariantMap listMap = listObject.toVariantMap();
+					
+					// child data
+					for (auto mapIt = listMap.begin(); mapIt != listMap.end(); ++mapIt) {
+						cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
+						if (mapIt.value().canConvert<QVariantMap>()) {
+							QJsonObject subList = QJsonObject::fromVariantMap(mapIt.value().toMap());
+							QString subType = mapIt.key().section("|", -1);
+							cNode->setData(1, QVariant(subType));
+							cNode->read(subList);
 						}
+						rootNode->appendChild(cNode);
 					}
 				}
 			}
 			if (tValue == CharacterNode::Type::Name) {
-				if (json[tKey].isString()) {
-					cNode = new CharacterNode({ tValue, json[tKey].toString() }, rootNode);
+				if (json.value(tKey).isString()) {
+					cNode = new CharacterNode({ tValue, json.value(tKey).toString() }, rootNode);
 					rootNode->appendChild(cNode);
 				}
 			}
 			if (tValue == CharacterNode::Type::Weapon) {
-				if (json[tKey].isObject()) {
+				if (json.value(tKey).isObject()) {
 					cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
-					cNode->read(json[tKey].toObject());
+					cNode->read(json.value(tKey).toObject());
 					rootNode->appendChild(cNode);
 				}
 					
 			}
 			if (tValue == CharacterNode::Type::Ability) {
-				if (json[tKey].isObject()) {
+				if (json.value(tKey).isObject()) {
 					cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
-					cNode->read(json[tKey].toObject());
+					cNode->read(json.value(tKey).toObject());
 					rootNode->appendChild(cNode);
 				}
 			}
@@ -149,10 +147,12 @@ QModelIndex CharacterModel::listTypeRoot(CharacterNode::Type t) const
 int CharacterModel::typeRow(CharacterNode::Type type) const
 {
 	for (int i = 0; i < rootNode->childCount(); ++i) {
-		if (rootNode->child(i)->data(0).value<CharacterNode::Type>() == type)
+		QVariant cType = rootNode->child(i)->data(0);
+		if (cType.canConvert<CharacterNode::Type>() &&
+			cType.value<CharacterNode::Type>() == type)
 			return i;
 	}
-	return 0;
+	return -1;
 }
 
 int CharacterModel::rowCount(const QModelIndex& parent) const
@@ -241,7 +241,9 @@ void CharacterModel::setupModel()
 
 	QByteArray loadData = loadFile.readAll();
 
+	//QJsonParseError* err;
 	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
+	//qDebug() << err->errorString();
 
 	read(loadDoc.object());
 	loadFile.close();

@@ -1,43 +1,43 @@
 {
-    "List": [
+  "List": {
+    "List|Weapon": {
+      "Weapon": [
+      ]
+    },
+    "List|Ability": {
+      "Ability": [
         {
-            "Weapon": [
-            ]
+          "Base Score": 10,
+          "Name": "Strength",
+          "Personal Upgrade": 0
         },
         {
-            "Ability": [
-                {
-                    "Base Score": 10,
-                    "Name": "Strength",
-                    "Personal Upgrade": 0
-                },
-                {
-                    "Base Score": 10,
-                    "Name": "Dexterity",
-                    "Personal Upgrade": 0
-                },
-                {
-                    "Base Score": 10,
-                    "Name": "Constitution",
-                    "Personal Upgrade": 0
-                },
-                {
-                    "Base Score": 10,
-                    "Name": "Intelligence",
-                    "Personal Upgrade": 0
-                },
-                {
-                    "Base Score": 10,
-                    "Name": "Wisdom",
-                    "Personal Upgrade": 0
-                },
-                {
-                    "Base Score": 10,
-                    "Name": "Charisma",
-                    "Personal Upgrade": 0
-                }
-            ]
+          "Base Score": 10,
+          "Name": "Dexterity",
+          "Personal Upgrade": 0
+        },
+        {
+          "Base Score": 10,
+          "Name": "Constitution",
+          "Personal Upgrade": 0
+        },
+        {
+          "Base Score": 10,
+          "Name": "Intelligence",
+          "Personal Upgrade": 0
+        },
+        {
+          "Base Score": 10,
+          "Name": "Wisdom",
+          "Personal Upgrade": 0
+        },
+        {
+          "Base Score": 10,
+          "Name": "Charisma",
+          "Personal Upgrade": 0
         }
-    ],
-    "Name": ""
+      ]
+    }
+  },
+  "Name": ""
 }

@@ -27,7 +27,7 @@ void Weapon::read(const QJsonObject& json)
 void Weapon::write(QJsonObject& json) const
 {
 	Item::write(json);
-	json["special"] = QJsonArray::fromStringList(special);
+	json.insert("special", QJsonArray::fromStringList(special));
 }
 
 QString Weapon::toString() const

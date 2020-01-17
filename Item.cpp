@@ -54,10 +54,10 @@ void Item::read(const QJsonObject& json)
 
 void Item::write(QJsonObject& json) const
 {
-	json["level"] = level;
-	json["price"] = price;
-	json["bulk"] = bulk;
-	json["name"] = name;
+	json.insert("level", level);
+	json.insert("price", price);
+	json.insert("bulk", bulk);
+	json.insert("name", name);
 }
 
 QString Item::toString() const

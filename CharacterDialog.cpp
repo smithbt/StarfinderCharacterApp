@@ -16,8 +16,9 @@ CharacterDialog::~CharacterDialog()
 {
 }
 
-void CharacterDialog::saveToModel(Character* pc)
+Character* CharacterDialog::newCharacter()
 {
+	Character* pc = new Character();
 	pc->setProperty(CharacterNode::Type::Name, QVariant(ui.name_field->text()));
 
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
@@ -26,4 +27,6 @@ void CharacterDialog::saveToModel(Character* pc)
 		Ability* a = new Ability(score, asWdgts[i]->value());
 		pc->setAbility(a);
 	}
+
+	return pc;
 }

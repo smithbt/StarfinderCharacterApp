@@ -17,7 +17,7 @@ void Character::insertChild(QVariant& data, QModelIndex& parent)
 		QModelIndex listTypeIndex = model->index(parent.row(), 1);
 		QVariant type = listTypeIndex.data(Qt::UserRole);
 
-		model->insertRows(0, 1, parent);
+		model->insertRow(0, parent);
 		QModelIndex index = model->index(0, 0, parent);
 		model->setData(index, type);
 		index = model->index(0, 1, parent);
@@ -28,9 +28,9 @@ void Character::insertChild(QVariant& data, QModelIndex& parent)
 void Character::setProperty(CharacterNode::Type t, QVariant& value) {
 	if (t != CharacterNode::Type::List) {
 		int row = model->typeRow(t);
-		if (!row) {
-			model->insertRows(row, 1);
-			model->setData(model->index(row, 0), QVariant::fromValue(t));
+		if (row < 0) {
+			model->insertRow(0);
+			model->setData(model->index(0, 0), QVariant::fromValue(t));
 		}
 		QModelIndex index = model->index(row, 1);
 		model->setData(index, value);
@@ -50,7 +50,8 @@ QModelIndex Character::getAbilityIndex(Ability::Score s)
 	int count = model->rowCount(aRoot);
 	for (int i = 0; i < count; ++i) {
 		QModelIndex aIndex = model->index(i, 1, aRoot);
-		if (aIndex.data(Qt::UserRole).value<Ability*>()->getEnum() == s) {
+		if (aIndex.data(Qt::UserRole).canConvert<Ability*>() && 
+			aIndex.data(Qt::UserRole).value<Ability*>()->getEnum() == s) {
 			return aIndex;
 		}
 	}

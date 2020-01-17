@@ -19,9 +19,11 @@ class StarfinderCharacterApp : public QMainWindow
 public:
 	StarfinderCharacterApp(QWidget *parent = Q_NULLPTR);
 
-private:
-	void updateModelViews();
+private slots:
+	void updateAbilityScores();
+	void updateWeaponView();
 
+private:
 	Ui::StarfinderCharacterAppClass ui;
 	Character* pc;
 	QString fileName;

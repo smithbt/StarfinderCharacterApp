@@ -22,9 +22,9 @@ void Ability::read(const QJsonObject& json)
 
 void Ability::write(QJsonObject& json) const
 {
-	json["Name"] = name();
-	json["Base Score"] = base;
-	json["Personal Upgrade"] = upgrade;
+	json.insert("Name", name());
+	json.insert("Base Score", base);
+	json.insert("Personal Upgrade", upgrade);
 }
 
 void Ability::setType(Score s)

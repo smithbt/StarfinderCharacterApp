@@ -16,9 +16,9 @@ void CharacterNode::read(const QJsonObject& json)
 	QString tKey = tQME.valueToKey(static_cast<int>(itemData.first));
 	if (itemData.first == Type::List) {
 		QString stKey = itemData.second.toString();
-		if (json[stKey].isArray()) {
+		if (json.value(stKey).isArray()) {
 			if (childCount()) removeChildren(0, childCount());
-			QJsonArray keyArray = json[stKey].toArray();
+			QJsonArray keyArray = json.value(stKey).toArray();
 			for (int c = 0; c < keyArray.size(); ++c) {
 				CharacterNode* cNode = new CharacterNode({static_cast<Type>(tQME.keyToValue(stKey.toUtf8())), QVariant("")}, this);
 				cNode->read(keyArray[c].toObject());
@@ -27,8 +27,8 @@ void CharacterNode::read(const QJsonObject& json)
 		}
 	}
 	else if (itemData.first == Type::Name) {
-		if (json[tKey].isString())
-			itemData.second = json[tKey].toString();
+		if (json.value(tKey).isString())
+			itemData.second = json.value(tKey).toString();
 	}
 	else if (itemData.first == Type::Weapon) {
 		Weapon* w = new Weapon();
@@ -53,25 +53,27 @@ void CharacterNode::write(QJsonObject& json) const
 		QMetaEnum tQME = QMetaEnum::fromType<Type>();
 		QString tKey = tQME.valueToKey(static_cast<int>(itemData.first));
 		if (itemData.first == Type::Name)
-			json[tKey] = itemData.second.toString();
+			json.insert(tKey, itemData.second.toString());
 		else if (itemData.first == Type::List) {
 			// Get json["List"], if it exists
-			QJsonArray listArray;
-			if (json.contains(tKey) && json[tKey].isArray())
-				listArray = json[tKey].toArray();
+			QJsonObject listObject;
+			if (json.contains(tKey) && json.value(tKey).isObject())
+				listObject = json.value(tKey).toObject();
 
 			// write childrem to JSON
-			QJsonObject parentObj;
+			QJsonObject subList;
 			QJsonArray childArray;
 			for (CharacterNode* child : qAsConst(children)) {
 				QJsonObject cObj;
 				child->write(cObj);
 				childArray.append(cObj);
 			}
-			parentObj[itemData.second.toString()] = childArray;
+			subList.insert(itemData.second.toString(), childArray);
 
-			listArray.append(parentObj);
-			json[tKey] = listArray;
+			QString subListKey = QString("%1|%2").arg(tKey, itemData.second.toString());
+			listObject.insert(subListKey, subList);
+
+			json.insert(tKey, listObject);
 		}
 		else if (itemData.first == Type::Ability && itemData.second.canConvert<Ability*>())
 				itemData.second.value<Ability*>()->write(json);

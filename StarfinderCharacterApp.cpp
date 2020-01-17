@@ -8,11 +8,10 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));
+	connect(pc->getModel(), &QAbstractItemModel::dataChanged,
+		this, &StarfinderCharacterApp::updateWeaponView);
 	connect(pc->getModel(), &QAbstractItemModel::modelReset,
-		ui.weaponList, &QListView::reset);
-
-	updateModelViews();
-
+		this, &StarfinderCharacterApp::updateAbilityScores);
 }
 
 void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
@@ -22,7 +21,7 @@ void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
 	menu->popup(ui.weaponList->viewport()->mapToGlobal(pos));
 }
 
-void StarfinderCharacterApp::updateModelViews()
+void StarfinderCharacterApp::updateAbilityScores()
 {
 	ui.STR_widget->linkToModel(Ability::Score::Strength, pc);
 	ui.DEX_widget->linkToModel(Ability::Score::Dexterity, pc);
@@ -30,7 +29,10 @@ void StarfinderCharacterApp::updateModelViews()
 	ui.INT_widget->linkToModel(Ability::Score::Intelligence, pc);
 	ui.WIS_widget->linkToModel(Ability::Score::Wisdom, pc);
 	ui.CHA_widget->linkToModel(Ability::Score::Charisma, pc);
+}
 
+void StarfinderCharacterApp::updateWeaponView()
+{
 	ui.weaponList->setModel(pc->getModel());
 	ui.weaponList->setModelColumn(1);
 	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
@@ -50,8 +52,8 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	CharacterDialog dialog(this);
 	if (dialog.exec()) {
-		dialog.saveToModel(pc);
-		//updateModelViews();
+		pc = dialog.newCharacter();
+		fileName.clear();
 	}
 }
 
@@ -71,15 +73,13 @@ bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
 
 	pc->read(loadDoc.object());
 	loadFile.close();
-	updateModelViews();
 	return true;
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
 {
-	if (fileName.isEmpty()) {
+	if (fileName.isEmpty())
 		fileName = QFileDialog::getSaveFileName(this, tr("Save file"), "..", tr("JSON Files (*.json)"));
-	}
 	QFile saveFile(fileName);
 
 	if (!saveFile.open(QIODevice::WriteOnly)) {
@@ -98,8 +98,7 @@ bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
 bool StarfinderCharacterApp::on_actionCharacter_SaveAs_triggered()
 {
 	fileName.clear();
-	on_actionCharacter_Save_triggered();
-	return false;
+	return on_actionCharacter_Save_triggered();
 }
 
 bool StarfinderCharacterApp::on_actionQuit_triggered()

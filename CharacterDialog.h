@@ -12,7 +12,7 @@ public:
 	CharacterDialog(QWidget *parent = Q_NULLPTR);
 	~CharacterDialog();
 
-	void saveToModel(Character* pc);
+	Character* newCharacter();
 
 private:
 	Ui::CharacterDialog ui;
