@@ -1,15 +1,5 @@
 #include "Weapon.h"
 
-void Weapon::setProperties(QStringList props)
-{
-	this->special = props;
-}
-
-QStringList Weapon::getProperties()
-{
-	return special;
-}
-
 void Weapon::read(const QJsonObject& json)
 {
 	Item::read(json);

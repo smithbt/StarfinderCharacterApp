@@ -3,16 +3,19 @@
 #include <QJsonObject>
 #include <QString>
 
-class Item
+class Resource
 {
-public: 
-	Item();
+public:
+	Resource(int current, int max, int step = 1);
 
-	QString name;
-	int level, price;
-	double bulk;
+	int current;
+	int max;
+	int step;
+
+	void adjustCurrent(int change);
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 	QString toString() const;
 };
+

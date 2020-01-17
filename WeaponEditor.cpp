@@ -19,16 +19,16 @@ WeaponEditor::~WeaponEditor()
 void WeaponEditor::setWeapon(Weapon* w)
 {
 	wpn = w;
-	ui.level_spinBox->setValue(wpn->getLevel());
-	ui.name_lineEdit->setText(wpn->getName());
-	ui.price_lineEdit->setText(QString::number(wpn->getPrice()));
+	ui.level_spinBox->setValue(wpn->level);
+	ui.name_lineEdit->setText(wpn->name);
+	ui.price_lineEdit->setText(QString::number(wpn->price));
 }
 
 Weapon* WeaponEditor::getWeapon()
 {
-	wpn->setLevel(ui.level_spinBox->value());
-	wpn->setName(ui.name_lineEdit->text());
-	wpn->setPrice(ui.price_lineEdit->text().toInt());
+	wpn->level = ui.level_spinBox->value();
+	wpn->name = ui.name_lineEdit->text();
+	wpn->price = ui.price_lineEdit->text().toInt();
 	return wpn;
 }
 

@@ -51,7 +51,7 @@ QModelIndex Character::getAbilityIndex(Ability::Score s)
 	for (int i = 0; i < count; ++i) {
 		QModelIndex aIndex = model->index(i, 1, aRoot);
 		if (aIndex.data(Qt::UserRole).canConvert<Ability*>() && 
-			aIndex.data(Qt::UserRole).value<Ability*>()->getEnum() == s) {
+			aIndex.data(Qt::UserRole).value<Ability*>()->type == s) {
 			return aIndex;
 		}
 	}
@@ -67,18 +67,13 @@ Ability* Character::getAbility(Ability::Score s)
 void Character::setAbility(Ability* a)
 {
 	bool updated = false;
-	QModelIndex aIndex = getAbilityIndex(a->getEnum());
+	QModelIndex aIndex = getAbilityIndex(a->type);
 	updated = model->setData(aIndex, QVariant::fromValue(a));
 
 	if (!updated) {
 		QModelIndex aRoot = model->listTypeRoot(CharacterNode::Type::Ability);
 		insertChild(QVariant::fromValue(a), aRoot);
 	}
-}
-
-CharacterModel* Character::getModel()
-{
-	return model;
 }
 
 void Character::read(const QJsonObject& json)

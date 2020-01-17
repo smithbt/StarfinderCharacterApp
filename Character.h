@@ -20,12 +20,9 @@ public:
 	Ability* getAbility(Ability::Score s);
 	void setAbility(Ability* a);
 
-	CharacterModel* getModel();
-
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
-private:
 	CharacterModel* model;
 };
 

@@ -24,16 +24,11 @@ public:
 		Special = 8
 	};
 
-	QStringList getProperties();
-	void setProperties(QStringList props);
+	QStringList special;
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 	QString toString() const;
-
-private:
-	QStringList special;
-
 };
 
 Q_DECLARE_METATYPE(Weapon*)

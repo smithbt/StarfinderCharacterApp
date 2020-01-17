@@ -97,6 +97,7 @@
     <ClCompile Include="CharacterNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Resource.cpp" />
     <ClCompile Include="StarfinderCharacterApp.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponDelegate.cpp" />
@@ -119,6 +120,7 @@
     <QtRcc Include="StarfinderCharacterApp.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Resource.h" />
     <QtMoc Include="WeaponDelegate.h" />
     <QtMoc Include="AbilityWidget.h" />
     <QtMoc Include="AbilityDelegate.h" />

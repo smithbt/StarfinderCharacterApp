@@ -8,9 +8,9 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));
-	connect(pc->getModel(), &QAbstractItemModel::dataChanged,
+	connect(pc->model, &QAbstractItemModel::dataChanged,
 		this, &StarfinderCharacterApp::updateWeaponView);
-	connect(pc->getModel(), &QAbstractItemModel::modelReset,
+	connect(pc->model, &QAbstractItemModel::modelReset,
 		this, &StarfinderCharacterApp::updateAbilityScores);
 }
 
@@ -33,9 +33,9 @@ void StarfinderCharacterApp::updateAbilityScores()
 
 void StarfinderCharacterApp::updateWeaponView()
 {
-	ui.weaponList->setModel(pc->getModel());
+	ui.weaponList->setModel(pc->model);
 	ui.weaponList->setModelColumn(1);
-	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
+	ui.weaponList->setRootIndex(pc->model->listTypeRoot(CharacterNode::Type::Weapon));
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui.weaponList->setItemDelegate(new WeaponDelegate());
 }
@@ -43,7 +43,7 @@ void StarfinderCharacterApp::updateWeaponView()
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	WeaponDialog dialog(this);
 	if (dialog.exec()) {
-		Weapon* w = dialog.getWeapon();
+		Weapon* w = dialog.newWeapon();
 		pc->addWeapon(w);
 	}
 }

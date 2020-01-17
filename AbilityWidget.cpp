@@ -30,10 +30,10 @@ Ability* AbilityWidget::getAbility() const
 
 void AbilityWidget::linkToModel(Ability::Score s, Character* pc)
 {
-	connect(pc->getModel(), &QAbstractItemModel::modelReset,
+	connect(pc->model, &QAbstractItemModel::modelReset,
 		mapper, &QDataWidgetMapper::revert);
-	mapper->setModel(pc->getModel());
-	mapper->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Ability));
+	mapper->setModel(pc->model);
+	mapper->setRootIndex(pc->model->listTypeRoot(CharacterNode::Type::Ability));
 	mapper->setCurrentIndex(pc->getAbilityIndex(s).row());
 	mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 	mapper->setItemDelegate(new AbilityDelegate());

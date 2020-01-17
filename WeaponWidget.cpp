@@ -12,9 +12,9 @@ WeaponWidget::~WeaponWidget()
 
 void WeaponWidget::setWeapon(Weapon* w)
 {
-	ui.name_label->setText(w->getName());
-	ui.bulk_label->setText(QString::number(w->getBulk()));
-	ui.level_label->setText(QString::number(w->getLevel()));
-	ui.price_label->setText(QString::number(w->getPrice()));
-	ui.special_label->setText(w->getProperties().join(", "));
+	ui.name_label->setText(w->name);
+	ui.bulk_label->setText(QString::number(w->bulk));
+	ui.level_label->setText(QString::number(w->level));
+	ui.price_label->setText(QString::number(w->price));
+	ui.special_label->setText(w->special.join(", "));
 }

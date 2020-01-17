@@ -10,13 +10,13 @@ WeaponDialog::~WeaponDialog()
 {
 }
 
-Weapon* WeaponDialog::getWeapon()
+Weapon* WeaponDialog::newWeapon()
 {
 	Weapon *wpn = new Weapon();
-	wpn->setLevel(ui.level_field->value());
-	wpn->setPrice(ui.price_field->value());
-	wpn->setBulk(ui.bulk_field->value());
-	wpn->setName(ui.name_field->text());
-	wpn->setProperties(ui.properties_field->text().split(", "));
+	wpn->level = ui.level_field->value();
+	wpn->price = ui.price_field->value();
+	wpn->bulk  = ui.bulk_field->value();
+	wpn->name = ui.name_field->text();
+	wpn->special = ui.properties_field->text().split(", ");
 	return wpn;
 }

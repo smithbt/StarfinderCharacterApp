@@ -17,19 +17,13 @@ public:
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
-	void setType(Score s);
-	void setBase(int base);
-	void setUpgrade(int upgrade);
-
 	int score() const;
 	int modifier() const;
-	Score getEnum() const;
 	QString name() const;
 
 	QString toString() const;
 
-private:
-	Score sName;
+	Score type;
 	int base;
 	int upgrade;
 };

@@ -12,7 +12,7 @@ public:
 	WeaponDialog(QWidget *parent = Q_NULLPTR);
 	~WeaponDialog();
 
-	Weapon* getWeapon();
+	Weapon* newWeapon();
 
 private:
 	Ui::WeaponDialog ui;
