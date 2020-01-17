@@ -2,8 +2,7 @@
 
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
-	pc(new Character(this)),
-	aMappers(QVector<QDataWidgetMapper*>(6, new QDataWidgetMapper(this)))
+	pc(new Character(this))
 {
 	ui.setupUi(this);
 	connect(ui.weaponList,
@@ -11,24 +10,6 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 		SLOT(customWeaponMenu(QPoint)));
 	connect(pc->getModel(), &QAbstractItemModel::modelReset,
 		ui.weaponList, &QListView::reset);
-
-	
-	QMetaEnum aE = QMetaEnum::fromType<Ability::Score>();
-	aWidgets.insert(static_cast<int>(Ability::Score::Strength), ui.STR_widget);
-	aWidgets.insert(static_cast<int>(Ability::Score::Dexterity), ui.DEX_widget);
-	aWidgets.insert(static_cast<int>(Ability::Score::Constitution), ui.CON_widget);
-	aWidgets.insert(static_cast<int>(Ability::Score::Intelligence), ui.INT_widget);
-	aWidgets.insert(static_cast<int>(Ability::Score::Wisdom), ui.WIS_widget);
-	aWidgets.insert(static_cast<int>(Ability::Score::Charisma), ui.CHA_widget);
-	for (int aIndex = 0; aIndex < aE.keyCount(); ++aIndex) {
-		connect(pc->getModel(), &QAbstractItemModel::modelReset,
-			aMappers[aIndex], &QDataWidgetMapper::revert);
-		aMappers[aIndex]->setModel(pc->getModel());
-		aMappers[aIndex]->setCurrentIndex(pc->getAbilityIndex(static_cast<Ability::Score>(aE.value(aIndex))).row());
-		aMappers[aIndex]->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-		aMappers[aIndex]->setItemDelegate(new AbilityDelegate());
-		aMappers[aIndex]->addMapping(aWidgets[aIndex], 1);
-	}
 
 	updateModelViews();
 
@@ -43,6 +24,13 @@ void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
 
 void StarfinderCharacterApp::updateModelViews()
 {
+	ui.STR_widget->linkToModel(Ability::Score::Strength, pc);
+	ui.DEX_widget->linkToModel(Ability::Score::Dexterity, pc);
+	ui.CON_widget->linkToModel(Ability::Score::Constitution, pc);
+	ui.INT_widget->linkToModel(Ability::Score::Intelligence, pc);
+	ui.WIS_widget->linkToModel(Ability::Score::Wisdom, pc);
+	ui.CHA_widget->linkToModel(Ability::Score::Charisma, pc);
+
 	ui.weaponList->setModel(pc->getModel());
 	ui.weaponList->setModelColumn(1);
 	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
@@ -63,8 +51,8 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 	CharacterDialog dialog(this);
 	if (dialog.exec()) {
 		dialog.saveToModel(pc);
+		//updateModelViews();
 	}
-	//updateModelViews();
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()

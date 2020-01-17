@@ -6,7 +6,6 @@
 #include <QJsonDocument>
 #include <QStandardItemModel>
 #include "ui_StarfinderCharacterApp.h"
-#include "AbilityDelegate.h"
 #include "Character.h"
 #include "CharacterDialog.h"
 #include "Weapon.h"
@@ -26,8 +25,6 @@ private:
 	Ui::StarfinderCharacterAppClass ui;
 	Character* pc;
 	QString fileName;
-	QVector<QDataWidgetMapper*> aMappers;
-	QVector<AbilityWidget*> aWidgets;
 
 private slots:
 	void customWeaponMenu(QPoint pos);

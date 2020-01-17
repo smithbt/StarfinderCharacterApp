@@ -16,5 +16,5 @@ public:
 
 private:
 	Ui::CharacterDialog ui;
-	QMap<Ability::Score, QSpinBox*> asWdgts;
+	QVector<QSpinBox*> asWdgts;
 };
