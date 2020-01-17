@@ -11,11 +11,12 @@ AbilityDelegate::~AbilityDelegate()
 
 void AbilityDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-	if (index.data().canConvert<Ability*>()) {
-		Ability* a = index.data().value<Ability*>();
+	if (index.data(Qt::UserRole).canConvert<Ability*>()) {
+		Ability* a = index.data(Qt::UserRole).value<Ability*>();
 
 		if (option.state & QStyle::State_Selected)
 			painter->fillRect(option.rect, option.palette.highlight());
+		qDebug() << a->toString();
 
 		painter->save();
 		painter->translate(option.rect.topLeft());
@@ -27,14 +28,14 @@ void AbilityDelegate::paint(QPainter* painter, const QStyleOptionViewItem& optio
 
 QSize AbilityDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-	if (index.data().canConvert<Ability*>())
+	if (index.data(Qt::UserRole).canConvert<Ability*>())
 		return AbilityWidget(0).sizeHint();
 	return QStyledItemDelegate::sizeHint(option, index);
 }
 
 QWidget* AbilityDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-	if (index.data().canConvert<Ability*>()) {
+	if (index.data(Qt::UserRole).canConvert<Ability*>()) {
 		//AbilityWidget* editor = new AbilityWidget(parent);
 		//connect(editor, &AbilityWidget::editingFinished,
 		//	this, &AbilityDelegate::commitAndCloseEditor);
@@ -45,10 +46,10 @@ QWidget* AbilityDelegate::createEditor(QWidget* parent, const QStyleOptionViewIt
 
 void AbilityDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
-	if (index.data().canConvert<Ability*>()) {
-		//Ability* a = index.data().value<Ability*>();
-		//AbilityWidget* wpnEditor = qobject_cast<AbilityWidget*>(editor);
-		//wpnEditor->setAbility(a);
+	if (index.data(Qt::UserRole).canConvert<Ability*>()) {
+		Ability* a = index.data(Qt::UserRole).value<Ability*>();
+		AbilityWidget* aW = qobject_cast<AbilityWidget*>(editor);
+		aW->setAbility(a);
 	}
 	else {
 		QStyledItemDelegate::setEditorData(editor, index);
@@ -57,9 +58,9 @@ void AbilityDelegate::setEditorData(QWidget* editor, const QModelIndex& index) c
 
 void AbilityDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
-	if (index.data().canConvert<Ability*>()) {
-		//AbilityWidget* wpnEditor = qobject_cast<AbilityWidget*>(editor);
-		//model->setData(index, QVariant::fromValue(wpnEditor->getAbility()));
+	if (index.data(Qt::UserRole).canConvert<Ability*>()) {
+		AbilityWidget* aW = qobject_cast<AbilityWidget*>(editor);
+		model->setData(index, QVariant::fromValue(aW->getAbility()));
 	}
 	else {
 		QStyledItemDelegate::setModelData(editor, model, index);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QDebug>
+
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include "Ability.h"

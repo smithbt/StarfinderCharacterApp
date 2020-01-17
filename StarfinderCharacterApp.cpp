@@ -2,19 +2,33 @@
 
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
-	pc(new Character(this))
+	pc(new Character(this)),
+	aMappers(QVector<QDataWidgetMapper*>(6, new QDataWidgetMapper(this)))
 {
 	ui.setupUi(this);
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));
+	connect(pc->getModel(), &QAbstractItemModel::modelReset,
+		ui.weaponList, &QListView::reset);
 
-	asWdgts.insert(Ability::Score::Strength, ui.STR_widget);
-	asWdgts.insert(Ability::Score::Dexterity, ui.DEX_widget);
-	asWdgts.insert(Ability::Score::Constitution, ui.CON_widget);
-	asWdgts.insert(Ability::Score::Intelligence, ui.INT_widget);
-	asWdgts.insert(Ability::Score::Wisdom, ui.WIS_widget);
-	asWdgts.insert(Ability::Score::Charisma, ui.CHA_widget);
+	
+	QMetaEnum aE = QMetaEnum::fromType<Ability::Score>();
+	aWidgets.insert(static_cast<int>(Ability::Score::Strength), ui.STR_widget);
+	aWidgets.insert(static_cast<int>(Ability::Score::Dexterity), ui.DEX_widget);
+	aWidgets.insert(static_cast<int>(Ability::Score::Constitution), ui.CON_widget);
+	aWidgets.insert(static_cast<int>(Ability::Score::Intelligence), ui.INT_widget);
+	aWidgets.insert(static_cast<int>(Ability::Score::Wisdom), ui.WIS_widget);
+	aWidgets.insert(static_cast<int>(Ability::Score::Charisma), ui.CHA_widget);
+	for (int aIndex = 0; aIndex < aE.keyCount(); ++aIndex) {
+		connect(pc->getModel(), &QAbstractItemModel::modelReset,
+			aMappers[aIndex], &QDataWidgetMapper::revert);
+		aMappers[aIndex]->setModel(pc->getModel());
+		aMappers[aIndex]->setCurrentIndex(pc->getAbilityIndex(static_cast<Ability::Score>(aE.value(aIndex))).row());
+		aMappers[aIndex]->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+		aMappers[aIndex]->setItemDelegate(new AbilityDelegate());
+		aMappers[aIndex]->addMapping(aWidgets[aIndex], 1);
+	}
 
 	updateModelViews();
 
@@ -34,13 +48,6 @@ void StarfinderCharacterApp::updateModelViews()
 	ui.weaponList->setRootIndex(pc->getModel()->listTypeRoot(CharacterNode::Type::Weapon));
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui.weaponList->setItemDelegate(new WeaponDelegate());
-
-	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
-	for (int i = 0; i < aEnum.keyCount(); ++i) {
-		Ability::Score score = static_cast<Ability::Score>(aEnum.value(i));
-		Ability* a = pc->getAbility(score);
-		asWdgts.value(score)->setAbility(a);
-	}
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
@@ -57,7 +64,7 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 	if (dialog.exec()) {
 		dialog.saveToModel(pc);
 	}
-	updateModelViews();
+	//updateModelViews();
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
