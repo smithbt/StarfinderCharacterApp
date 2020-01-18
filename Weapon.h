@@ -13,7 +13,7 @@ class Weapon : public Item
 
 public:
 	enum class Type : int {
-		Melee,
+		Melee = 0,
 		Ranged
 	};
 	Q_ENUM(Type)

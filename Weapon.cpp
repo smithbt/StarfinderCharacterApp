@@ -16,8 +16,10 @@ Weapon::~Weapon()
 void Weapon::read(const QJsonObject& json)
 {
 	Item::read(json);
-	if (json.contains("Type") && json.value("Type").isDouble())
-		Type type = static_cast<Type>(json.value("Type").toInt());
+	if (json.contains("Type") && json.value("Type").isString()) {
+		QString t = json.value("Type").toString();
+		type = static_cast<Type>(QMetaEnum::fromType<Type>().keyToValue(t.toUtf8()));
+	}
 	if (json.contains("special") && json.value("special").isArray()) {
 		QJsonArray wpnProps = json.value("special").toArray();
 		special.clear();
@@ -32,7 +34,7 @@ void Weapon::read(const QJsonObject& json)
 void Weapon::write(QJsonObject& json) const
 {
 	Item::write(json);
-	json.insert("Type", static_cast<int>(type));
+	json.insert("Type", QVariant::fromValue(type).toString());
 	json.insert("special", QJsonArray::fromStringList(special));
 }
 

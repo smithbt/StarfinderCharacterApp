@@ -30,9 +30,10 @@ void CharacterNode::read(const QJsonObject& json)
         QJsonArray wArray = json.value("Weapon").toArray();
         for (int i = 0; i < wArray.size(); ++i) {
             QJsonObject wObj = wArray.at(i).toObject();
-            if (wObj.contains("Type") && wObj.value("Type").isDouble()) {
+            if (wObj.contains("Type") && wObj.value("Type").isString()) {
                 Weapon* w;
-                Weapon::Type wType = static_cast<Weapon::Type>(wObj.value("Type").toInt());
+                Weapon::Type wType = static_cast<Weapon::Type>(
+                    QMetaEnum::fromType<Weapon::Type>().keyToValue(wObj.value("Type").toString().toUtf8()));
                 switch (wType) {
                 case (Weapon::Type::Ranged):
                     w = new RangedWeapon();
@@ -42,7 +43,7 @@ void CharacterNode::read(const QJsonObject& json)
                     w = new Weapon();
                     break;
                 }
-                w->read(json);
+                w->read(wObj);
                 CharacterNode* cNode = new CharacterNode({ static_cast<Type>(tQME.keyToValue("Weapon")), QVariant::fromValue(w) }, wRoot);
                 wRoot->appendChild(cNode);
             }
@@ -62,8 +63,7 @@ void CharacterNode::write(QJsonObject& json) const
             child->write(json);
     }
     else {
-        QMetaEnum tQME = QMetaEnum::fromType<Type>();
-        QString tKey = tQME.valueToKey(static_cast<int>(itemData.first));
+        QString tKey = QVariant::fromValue(itemData.first).toString();
         if (itemData.first == Type::Name)
             json.insert(tKey, itemData.second.toString());
         else if (itemData.first == Type::List) {

@@ -8,9 +8,8 @@ Ability::Ability(Score type, int base, int upgrade)
 void Ability::read(const QJsonObject& json)
 {
 	if (json.contains("Name") && json["Name"].isString()) {
-		QMetaEnum a = QMetaEnum::fromType<Score>();
 		QString name = json["Name"].toString();
-		type = static_cast<Score>(a.keyToValue(name.toUtf8()));
+		type = static_cast<Score>(QMetaEnum::fromType<Score>().keyToValue(name.toUtf8()));
 	}
 	if (json.contains("Base Score") && json["Base Score"].isDouble())
 		base = json["Base Score"].toInt();
@@ -37,15 +36,7 @@ int Ability::modifier() const
 
 QString Ability::name() const
 {
-	switch (type) {
-	case Score::Strength: return "Strength";
-	case Score::Dexterity: return "Dexterity";
-	case Score::Constitution: return "Constitution";
-	case Score::Intelligence: return "Intelligence";
-	case Score::Wisdom: return "Wisdom";
-	case Score::Charisma: return "Charisma";
-	}
-	return QString();
+	return QVariant::fromValue(type).toString();
 }
 
 QString Ability::toString() const
