@@ -16,7 +16,8 @@ public:
 	Q_DECLARE_FLAGS(Types, Type)
 	Q_FLAG(Type)
 
-	Damage(int count, int size);
+	Damage(int count = 1, int size = 1);
+	Damage(int count, int size, QString type);
 
 	int dieCount;
 	int dieSize;

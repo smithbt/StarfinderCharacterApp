@@ -5,6 +5,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	pc(new Character(this))
 {
 	ui.setupUi(this);
+	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));
@@ -36,14 +37,13 @@ void StarfinderCharacterApp::updateWeaponView()
 	ui.weaponList->setModel(pc->model);
 	ui.weaponList->setModelColumn(1);
 	ui.weaponList->setRootIndex(pc->model->listTypeRoot(CharacterNode::Type::Weapon));
-	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui.weaponList->setItemDelegate(new WeaponDelegate());
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	WeaponDialog dialog(this);
 	if (dialog.exec()) {
-		Weapon* w = dialog.newWeapon();
+		QVariant w = dialog.newWeapon();
 		pc->addWeapon(w);
 	}
 }

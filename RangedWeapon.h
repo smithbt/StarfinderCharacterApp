@@ -6,10 +6,15 @@
 
 class RangedWeapon : public Weapon
 {
+	Q_GADGET
+
 public:
-	Damage damage;
+	RangedWeapon();
+	RangedWeapon(Weapon* base, int range, Damage* dmg, QString crit, Resource* ammo);
+
+	Damage* damage;
 	QString critEffect;
-	Resource ammo;
+	Resource* ammo;
 	int range;
 	int capacity();
 	int usage();
@@ -18,4 +23,7 @@ public:
 	void write(QJsonObject& json) const;
 	QString toString() const;
 };
+
+Q_DECLARE_METATYPE(RangedWeapon*)
+Q_DECLARE_OPAQUE_POINTER(RangedWeapon*)
 

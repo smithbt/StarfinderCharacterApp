@@ -2,7 +2,7 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QMetaType>
+#include <QMetaEnum>
 #include <QString>
 #include <QStringList>
 #include "Item.h"
@@ -13,22 +13,20 @@ class Weapon : public Item
 
 public:
 	enum class Type : int {
-		Unknown = 0,
-		AdvMelee = 1,
-		BasicMelee = 2,
-		Grenade = 3,
-		Heavy = 4,
-		LongArm = 5,
-		SmallArm = 6,
-		Sniper = 7,
-		Special = 8
+		Melee,
+		Ranged
 	};
+	Q_ENUM(Type)
+
+	Weapon();
+	virtual ~Weapon();
 
 	QStringList special;
+	Type type;
 
-	void read(const QJsonObject& json);
-	void write(QJsonObject& json) const;
-	QString toString() const;
+	virtual void read(const QJsonObject& json);
+	virtual void write(QJsonObject& json) const;
+	virtual QString toString() const;
 };
 
 Q_DECLARE_METATYPE(Weapon*)

@@ -14,7 +14,7 @@ public:
 
 	void insertChild(QVariant& data, QModelIndex& parent = QModelIndex());
 	void setProperty(CharacterNode::Type t, QVariant& value);
-	bool addWeapon(Weapon* w);
+	bool addWeapon(QVariant& value);
 
 	QModelIndex getAbilityIndex(Ability::Score s);
 	Ability* getAbility(Ability::Score s);

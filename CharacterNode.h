@@ -8,6 +8,7 @@
 #include <QPair>
 #include "Ability.h"
 #include "Weapon.h"
+#include "RangedWeapon.h"
 
 class CharacterNode
 {

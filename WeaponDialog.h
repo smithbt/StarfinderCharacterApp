@@ -3,6 +3,7 @@
 #include <QDialog>
 #include "ui_WeaponDialog.h"
 #include "Weapon.h"
+#include "RangedWeapon.h"
 
 class WeaponDialog : public QDialog
 {
@@ -12,8 +13,9 @@ public:
 	WeaponDialog(QWidget *parent = Q_NULLPTR);
 	~WeaponDialog();
 
-	Weapon* newWeapon();
+	QVariant newWeapon();
 
 private:
 	Ui::WeaponDialog ui;
+	QMetaEnum weaponTypes;
 };

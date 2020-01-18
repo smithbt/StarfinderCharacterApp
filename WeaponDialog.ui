@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>247</width>
-    <height>216</height>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Basic Info</string>
+       <string>General Info</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="0">
@@ -32,7 +32,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="name_field"/>
+        <widget class="QLineEdit" name="name_lineEdit"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="level_label">
@@ -42,7 +42,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QSpinBox" name="level_field">
+        <widget class="QSpinBox" name="level_spinBox">
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
          </property>
@@ -58,13 +58,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QSpinBox" name="price_field">
-         <property name="buttonSymbols">
-          <enum>QAbstractSpinBox::NoButtons</enum>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0">
         <widget class="QLabel" name="bulk_label">
          <property name="text">
@@ -73,25 +66,41 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QDoubleSpinBox" name="bulk_field">
+        <widget class="QDoubleSpinBox" name="bulk_doubleSpinBox">
          <property name="decimals">
           <number>1</number>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="properties_label">
+        <widget class="QLabel" name="special_label">
          <property name="text">
-          <string>Properties</string>
+          <string>Special</string>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="properties_field"/>
+        <widget class="QLineEdit" name="special_lineEdit"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="QComboBox" name="type_comboBox"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="type_label">
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="price_lineEdit"/>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Tab 2</string>
       </attribute>

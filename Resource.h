@@ -6,7 +6,7 @@
 class Resource
 {
 public:
-	Resource(int current, int max, int step = 1);
+	Resource(int current = 1, int max = 1, int step = 1);
 
 	int current;
 	int max;

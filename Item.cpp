@@ -5,6 +5,10 @@ Item::Item()
 {
 }
 
+Item::~Item()
+{
+}
+
 
 
 void Item::read(const QJsonObject& json)

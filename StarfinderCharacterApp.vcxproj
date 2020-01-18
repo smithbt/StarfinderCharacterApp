@@ -123,7 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Damage.h" />
-    <ClInclude Include="RangedWeapon.h" />
+    <QtMoc Include="RangedWeapon.h" />
     <ClInclude Include="Resource.h" />
     <QtMoc Include="WeaponDelegate.h" />
     <QtMoc Include="AbilityWidget.h" />

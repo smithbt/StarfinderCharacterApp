@@ -5,14 +5,16 @@
 
 class Item
 {
+
 public: 
 	Item();
+	virtual ~Item();
 
 	QString name;
 	int level, price;
 	double bulk;
 
-	void read(const QJsonObject& json);
-	void write(QJsonObject& json) const;
-	QString toString() const;
+	virtual void read(const QJsonObject& json);
+	virtual void write(QJsonObject& json) const;
+	virtual QString toString() const;
 };

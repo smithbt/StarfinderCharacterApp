@@ -1,5 +1,17 @@
 #include "Damage.h"
 
+Damage::Damage(int count, int size)
+	: dieCount(count), dieSize(size), type(Type::Bludgeoning), typeString(QString(""))
+{
+
+}
+
+Damage::Damage(int count, int size, QString type)
+	: dieCount(count), dieSize(size), type(Type::Bludgeoning), typeString(type)
+{
+
+}
+
 //QString Damage::typeString() const
 //{
 //	QMetaEnum typeE = QMetaEnum::fromType<Type>();
@@ -28,5 +40,5 @@ void Damage::write(QJsonObject& json) const
 
 QString Damage::toString() const
 {
-	return QString("%1d%2 %3").arg(dieCount, dieSize).arg(typeString);
+	return QString("%1d%2 %3").arg(dieCount).arg(dieSize).arg(typeString);
 }

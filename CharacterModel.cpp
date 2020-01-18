@@ -16,57 +16,8 @@ CharacterModel::~CharacterModel()
 void CharacterModel::read(const QJsonObject& json)
 {
 	beginResetModel();
-	QMetaEnum tQME = QMetaEnum::fromType<CharacterNode::Type>();
-	// For each CharacterNode::Type
-	for (int tIdx = 0; tIdx < tQME.keyCount(); ++tIdx) {
-
-		QString tKey = tQME.key(tIdx);
-		CharacterNode* cNode;
-
-		if (json.contains(tKey)) {
-			CharacterNode::Type tValue = static_cast<CharacterNode::Type>(tQME.value(tIdx));
-			if (tValue == CharacterNode::Type::List) {
-				if (json.value(tKey).isObject()) {
-					QJsonObject listObject = json.value(tKey).toObject();
-					QVariantMap listMap = listObject.toVariantMap();
-					
-					// child data
-					for (auto mapIt = listMap.begin(); mapIt != listMap.end(); ++mapIt) {
-						cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
-						if (mapIt.value().canConvert<QVariantMap>()) {
-							QJsonObject subList = QJsonObject::fromVariantMap(mapIt.value().toMap());
-							QString subType = mapIt.key().section("|", -1);
-							cNode->setData(1, QVariant(subType));
-							cNode->read(subList);
-						}
-						rootNode->appendChild(cNode);
-					}
-				}
-			}
-			if (tValue == CharacterNode::Type::Name) {
-				if (json.value(tKey).isString()) {
-					cNode = new CharacterNode({ tValue, json.value(tKey).toString() }, rootNode);
-					rootNode->appendChild(cNode);
-				}
-			}
-			if (tValue == CharacterNode::Type::Weapon) {
-				if (json.value(tKey).isObject()) {
-					cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
-					cNode->read(json.value(tKey).toObject());
-					rootNode->appendChild(cNode);
-				}
-					
-			}
-			if (tValue == CharacterNode::Type::Ability) {
-				if (json.value(tKey).isObject()) {
-					cNode = new CharacterNode({ tValue, QVariant("") }, rootNode);
-					cNode->read(json.value(tKey).toObject());
-					rootNode->appendChild(cNode);
-				}
-			}
-		}
-	}
-	//rootNode->read(json);
+	rootNode->removeChildren(0, rootNode->childCount());
+	rootNode->read(json);
 	endResetModel();
 }
 
@@ -241,9 +192,7 @@ void CharacterModel::setupModel()
 
 	QByteArray loadData = loadFile.readAll();
 
-	//QJsonParseError* err;
 	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
-	//qDebug() << err->errorString();
 
 	read(loadDoc.object());
 	loadFile.close();

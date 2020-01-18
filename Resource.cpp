@@ -30,5 +30,5 @@ void Resource::write(QJsonObject& json) const
 
 QString Resource::toString() const
 {
-	return QString("%1/%2 [step=%3]").arg(current, max, step);
+	return QString("%1/%2 [step=%3]").arg(current).arg(max).arg(step);
 }

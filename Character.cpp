@@ -37,10 +37,10 @@ void Character::setProperty(CharacterNode::Type t, QVariant& value) {
 	}
 }
 
-bool Character::addWeapon(Weapon* w)
+bool Character::addWeapon(QVariant& value)
 {
 	QModelIndex wpnRoot = model->listTypeRoot(CharacterNode::Type::Weapon);
-	insertChild(QVariant::fromValue<Weapon*>(w), wpnRoot);
+	insertChild(value, wpnRoot);
 	return true;
 }
 
