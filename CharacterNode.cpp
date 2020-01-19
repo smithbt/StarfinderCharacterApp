@@ -135,6 +135,16 @@ QVariant CharacterNode::data(int column, int role) const
                     return itemData.second.value<RangedWeapon*>()->toString();
                 else if (itemData.second.canConvert<MeleeWeapon*>())
                     return itemData.second.value<MeleeWeapon*>()->toString();
+                else {
+                    switch (itemData.second.value<Weapon*>()->type) {
+                    case Weapon::Type::Melee:
+                        return reinterpret_cast<MeleeWeapon*>(itemData.second.value<Weapon*>())->toString();
+                    case Weapon::Type::Ranged:
+                        return reinterpret_cast<RangedWeapon*>(itemData.second.value<Weapon*>())->toString();
+                    default:
+                        return itemData.second.value<Weapon*>()->toString();
+                    }
+                }
             default:
                 return itemData.second.toString();
             }
