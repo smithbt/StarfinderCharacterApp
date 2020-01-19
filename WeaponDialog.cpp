@@ -8,7 +8,7 @@ WeaponDialog::WeaponDialog(QWidget *parent)
 	QIntValidator* validPrice = new QIntValidator(ui.price_lineEdit);
 	validPrice->setBottom(0);
 	ui.price_lineEdit->setValidator(validPrice);
-	damageRegEx = QRegularExpression("(?<count>\\d{0,2})[d,D](?<size>\\d{0,3}) (?<type>.*)");
+	damageRegEx = QRegularExpression("^(?<count>\\d+)[d,D](?<size>\\d+)\\s*(?<type>.*)$");
 	QRegularExpressionValidator* validDice = new QRegularExpressionValidator(damageRegEx, ui.damage_lineEdit);
 	ui.damage_lineEdit->setValidator(validDice);
 	ui.damage_lineEdit->setPlaceholderText("e.g. 1d6 E & F");
@@ -59,18 +59,14 @@ QVariant WeaponDialog::newWeapon()
 
 Damage* WeaponDialog::parseDamageString(QString dmg)
 {
-	QRegularExpressionMatch dMatch = damageRegEx.match(dmg);
-	int count, size;
-	QString type;
-	if (ui.damage_fields->isVisible() && dMatch.hasMatch()) {
+	QRegularExpressionMatch dMatch = damageRegEx.match(dmg, 0, QRegularExpression::PartialPreferCompleteMatch);
+	int count = 0;
+	int size = 0;
+	QString type = QString();
+	if (dMatch.hasMatch() || dMatch.hasPartialMatch()) {
 		count = dMatch.captured("count").toInt();
 		size = dMatch.captured("size").toInt();
 		type = dMatch.captured("type");
-	}
-	else {
-		count = 0;
-		size = 0;
-		type = QString();
 	}
 	return new Damage(count, size, type);
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QDialog>
-#include <QPushButton>
 #include "ui_WeaponDialog.h"
 #include "Weapon.h"
 #include "MeleeWeapon.h"

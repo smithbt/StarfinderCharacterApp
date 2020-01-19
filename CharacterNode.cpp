@@ -127,12 +127,17 @@ QVariant CharacterNode::data(int column, int role) const
 		switch (column) {
 		case 0: return QVariant::fromValue(itemData.first).toString();
 		case 1: 
-            if (itemData.second.canConvert<Ability*>())
+            switch (itemData.first) {
+            case Type::Ability:
                 return itemData.second.value<Ability*>()->toString();
-            else if (itemData.second.canConvert<Weapon*>())
-                return itemData.second.value<Weapon*>()->toString();
-            else
+            case Type::Weapon:
+                if (itemData.second.canConvert<RangedWeapon*>())
+                    return itemData.second.value<RangedWeapon*>()->toString();
+                else if (itemData.second.canConvert<MeleeWeapon*>())
+                    return itemData.second.value<MeleeWeapon*>()->toString();
+            default:
                 return itemData.second.toString();
+            }
 		}
 		return QString();
 	}

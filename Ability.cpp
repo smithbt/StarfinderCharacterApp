@@ -41,5 +41,5 @@ QString Ability::name() const
 
 QString Ability::toString() const
 {
-	return QString::asprintf("%1: %2 [%+i]", modifier()).arg(name(), score());
+	return QString::asprintf("%1: %2 [%+i]", modifier()).arg(name()).arg(score());
 }
