@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QPushButton>
 #include "ui_WeaponDialog.h"
 #include "Weapon.h"
 #include "RangedWeapon.h"
@@ -15,7 +16,11 @@ public:
 
 	QVariant newWeapon();
 
+private slots:
+	void updateFields(Weapon::Type);
+
 private:
 	Ui::WeaponDialog ui;
+	QRegularExpression damageRegEx;
 	QMetaEnum weaponTypes;
 };

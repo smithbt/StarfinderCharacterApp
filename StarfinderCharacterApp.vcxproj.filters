@@ -117,9 +117,6 @@
     <QtMoc Include="AbilityDelegate.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Damage.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="RangedWeapon.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -157,6 +154,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Damage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
