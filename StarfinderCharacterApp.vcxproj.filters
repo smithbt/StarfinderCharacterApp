@@ -79,6 +79,9 @@
     <ClCompile Include="Damage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MeleeWeapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="StarfinderCharacterApp.h">
@@ -118,6 +121,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="RangedWeapon.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MeleeWeapon.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

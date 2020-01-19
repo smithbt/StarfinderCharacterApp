@@ -39,6 +39,8 @@ void CharacterNode::read(const QJsonObject& json)
                     w = new RangedWeapon();
                     break;
                 case (Weapon::Type::Melee):
+                    w = new MeleeWeapon();
+                    break;
                 default:
                     w = new Weapon();
                     break;
@@ -82,6 +84,8 @@ void CharacterNode::write(QJsonObject& json) const
         else if (itemData.first == Type::Weapon) {
             if (itemData.second.canConvert<RangedWeapon*>())
                 itemData.second.value<RangedWeapon*>()->write(json);
+            else if (itemData.second.canConvert<MeleeWeapon*>())
+                itemData.second.value<MeleeWeapon*>()->write(json);
             else
                 itemData.second.value<Weapon*>()->write(json);
         }
@@ -123,10 +127,12 @@ QVariant CharacterNode::data(int column, int role) const
 		switch (column) {
 		case 0: return QVariant::fromValue(itemData.first).toString();
 		case 1: 
-			if (itemData.second.canConvert<Ability*>())
-				return itemData.second.value<Ability*>()->toString();
-			else if (itemData.second.canConvert<Weapon*>())
-				return itemData.second.value<Weapon*>()->toString();
+            if (itemData.second.canConvert<Ability*>())
+                return itemData.second.value<Ability*>()->toString();
+            else if (itemData.second.canConvert<Weapon*>())
+                return itemData.second.value<Weapon*>()->toString();
+            else
+                return itemData.second.toString();
 		}
 		return QString();
 	}

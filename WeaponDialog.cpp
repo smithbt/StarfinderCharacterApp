@@ -39,31 +39,40 @@ QVariant WeaponDialog::newWeapon()
 	if(ui.type_comboBox->currentData(Qt::UserRole).canConvert<Weapon::Type>())
 		wpn->type = ui.type_comboBox->currentData(Qt::UserRole).value<Weapon::Type>();
 
-	// hardcode values for testing
 	if (wpn->type == Weapon::Type::Ranged) {
-		QRegularExpressionMatch dMatch = damageRegEx.match(ui.damage_lineEdit->text());
-		int count, size;
-		QString type;
-		if (dMatch.hasMatch()) {
-			count = dMatch.captured("count").toInt();
-			size = dMatch.captured("size").toInt();
-			type = dMatch.captured("type");
-		}
-		else {
-			count = 0;
-			size = 0;
-			type = QString();
-		}
-		QStringList xDy = ui.damage_lineEdit->text().split("d");
 		RangedWeapon* rWpn = new RangedWeapon(wpn,
 			ui.range_spinBox->value(), 
-			new Damage(count, size, type),
+			parseDamageString(ui.damage_lineEdit->text()),
 			ui.crit_lineEdit->text(),
 			new Resource(0, ui.capacity_spinBox->value(), ui.usage_spinBox->value()));
 		return QVariant::fromValue<RangedWeapon*>(rWpn);
 	}
+	else if (wpn->type == Weapon::Type::Melee) {
+		MeleeWeapon* mWpn = new MeleeWeapon(wpn,
+			parseDamageString(ui.damage_lineEdit->text()),
+			ui.crit_lineEdit->text());
+		return qVariantFromValue<MeleeWeapon*>(mWpn);
+	}
 
 	return QVariant::fromValue<Weapon*>(wpn);
+}
+
+Damage* WeaponDialog::parseDamageString(QString dmg)
+{
+	QRegularExpressionMatch dMatch = damageRegEx.match(dmg);
+	int count, size;
+	QString type;
+	if (ui.damage_fields->isVisible() && dMatch.hasMatch()) {
+		count = dMatch.captured("count").toInt();
+		size = dMatch.captured("size").toInt();
+		type = dMatch.captured("type");
+	}
+	else {
+		count = 0;
+		size = 0;
+		type = QString();
+	}
+	return new Damage(count, size, type);
 }
 
 void WeaponDialog::updateFields(Weapon::Type wt) 

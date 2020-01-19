@@ -6,6 +6,8 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	qRegisterMetaType<Weapon*>();
 	QMetaType::registerComparators<Weapon*>();
+	qRegisterMetaType<MeleeWeapon*>();
+	QMetaType::registerComparators<MeleeWeapon*>();
 	qRegisterMetaType<RangedWeapon*>();
 	QMetaType::registerComparators<RangedWeapon*>();
 	qRegisterMetaType<Ability*>();

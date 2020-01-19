@@ -19,6 +19,7 @@ public:
 	Q_ENUM(Type)
 
 	Weapon();
+	Weapon(Type t);
 	virtual ~Weapon();
 
 	QStringList special;

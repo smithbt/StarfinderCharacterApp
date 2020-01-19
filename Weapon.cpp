@@ -3,8 +3,14 @@
 
 Weapon::Weapon()
 	:Item(),
-	special(),
-	type(Type::Melee)
+	special(), type(Type::Melee)
+{
+
+}
+
+Weapon::Weapon(Type t)
+	:Item(),
+	special(), type(t)
 {
 
 }

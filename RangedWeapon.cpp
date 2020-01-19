@@ -1,13 +1,14 @@
 #include "RangedWeapon.h"
 
 RangedWeapon::RangedWeapon()
-	: Weapon(),
+	: Weapon(Weapon::Type::Ranged),
 	range(0), damage(new Damage()), critEffect(QString("")), ammo(new Resource())
 {
 }
 
 RangedWeapon::RangedWeapon(Weapon* base, int range, Damage* dmg, QString crit, Resource* ammo)
-	: Weapon(*base),	range(range), damage(dmg), critEffect(crit), ammo(ammo)
+	: Weapon(*base),
+	range(range), damage(dmg), critEffect(crit), ammo(ammo)
 {
 }
 

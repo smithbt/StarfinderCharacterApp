@@ -98,6 +98,7 @@
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="MeleeWeapon.cpp" />
     <ClCompile Include="RangedWeapon.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="StarfinderCharacterApp.cpp" />
@@ -124,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="Damage.h" />
     <QtMoc Include="RangedWeapon.h" />
+    <QtMoc Include="MeleeWeapon.h" />
     <ClInclude Include="Resource.h" />
     <QtMoc Include="WeaponDelegate.h" />
     <QtMoc Include="AbilityWidget.h" />
