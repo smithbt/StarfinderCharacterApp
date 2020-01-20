@@ -17,10 +17,27 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 			ui.weaponList->setRootIndex(proxy->mapFromSource(
 				pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
 		});
-	ui.weaponList->setRootIndex(proxy->mapFromSource(
-		pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
+	QModelIndex wRoot = pc->model->listTypeRoot(CharacterNode::Type::Weapon);
+	ui.weaponList->setRootIndex(proxy->mapFromSource(wRoot));
 	ui.weaponList->setModelColumn(1);
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+
+	QDataWidgetMapper* wMap = new QDataWidgetMapper(this);
+	wMap->setModel(proxy);
+	wMap->setRootIndex(proxy->mapFromSource(wRoot));
+	wMap->setItemDelegate(new WeaponDelegate());
+	wMap->addMapping(ui.weapon_widget, 1);
+	connect(pc->model, &CharacterModel::modelReset, wMap, [=]() {
+		wMap->setRootIndex(proxy->mapFromSource(
+			pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
+		});
+	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
+		wMap, &QDataWidgetMapper::setCurrentModelIndex);
+	connect(wMap, &QDataWidgetMapper::currentIndexChanged, ui.weapon_widget,
+		[=]() {
+			Ability* a = pc->getAbility(ui.weapon_widget->getWeapon()->attackScore);
+			ui.weapon_widget->setAttackModifiers(a->modifier(), 0); // TODO: replace hardcoded BAB with value from PC.
+		});
 
 	aWdgts.insert(static_cast<int>(Ability::Score::Strength), ui.STR_widget);
 	aWdgts.insert(static_cast<int>(Ability::Score::Dexterity), ui.DEX_widget);

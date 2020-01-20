@@ -6,6 +6,7 @@
 #include <QString>
 #include <QStringList>
 #include "Item.h"
+#include "Ability.h"
 
 class Weapon : public Item
 {
@@ -24,6 +25,7 @@ public:
 
 	QStringList special;
 	Type type;
+	Ability::Score attackScore;
 
 	virtual void read(const QJsonObject& json);
 	virtual void write(QJsonObject& json) const;

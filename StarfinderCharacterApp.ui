@@ -251,6 +251,9 @@
         <item row="0" column="0">
          <widget class="QListView" name="weaponList"/>
         </item>
+        <item row="0" column="1">
+         <widget class="WeaponWidget" name="weapon_widget" native="true"/>
+        </item>
        </layout>
       </widget>
      </widget>
@@ -341,6 +344,12 @@
    <class>AbilityWidget</class>
    <extends>QWidget</extends>
    <header>AbilityWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WeaponWidget</class>
+   <extends>QWidget</extends>
+   <header>WeaponWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

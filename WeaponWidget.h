@@ -13,8 +13,10 @@ public:
 	WeaponWidget(QWidget *parent = Q_NULLPTR);
 	~WeaponWidget();
 
-	Weapon* getWeapon();
+	Weapon* getWeapon() const;
 	void setWeapon(Weapon* w);
+
+	void setAttackModifiers(int abilityMod, int bab, int misc = 0);
 
 public slots:
 	void updateLabels();
@@ -25,4 +27,5 @@ signals:
 private:
 	Ui::WeaponWidget ui;
 	Weapon* weapon;
+	int attackMod;
 };
