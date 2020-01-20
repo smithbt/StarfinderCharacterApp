@@ -11,6 +11,7 @@ public:
 
 	int dieCount;
 	int dieSize;
+	QString dice();
 	QString type;
 
 	void read(const QJsonObject& json);

@@ -12,6 +12,11 @@ Damage::Damage(int count, int size, QString type)
 
 }
 
+QString Damage::dice()
+{
+	return QString("%1d%2").arg(dieCount).arg(dieSize);
+}
+
 void Damage::read(const QJsonObject& json)
 {
 	if (json.contains("DieCount") && json.value("DieCount").isDouble())
