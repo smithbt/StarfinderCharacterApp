@@ -4,8 +4,10 @@
 #include <QDataWidgetMapper>
 #include <QFileDialog>
 #include <QJsonDocument>
-#include <QStandardItemModel>
+#include <QSortFilterProxyModel>
 #include "ui_StarfinderCharacterApp.h"
+#include "AbilityDelegate.h"
+#include "AbilityWidget.h"
 #include "Character.h"
 #include "CharacterDialog.h"
 #include "Weapon.h"
@@ -19,14 +21,14 @@ class StarfinderCharacterApp : public QMainWindow
 public:
 	StarfinderCharacterApp(QWidget *parent = Q_NULLPTR);
 
-private slots:
-	void updateAbilityScores();
-	void updateWeaponView();
-
 private:
 	Ui::StarfinderCharacterAppClass ui;
+	QSortFilterProxyModel* proxy;
 	Character* pc;
 	QString fileName;
+	QVector<QDataWidgetMapper*> aMaps;
+	QVector<AbilityWidget*> aWdgts;
+
 
 private slots:
 	void customWeaponMenu(QPoint pos);

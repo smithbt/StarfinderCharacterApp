@@ -2,8 +2,7 @@
 
 AbilityWidget::AbilityWidget(QWidget *parent)
 	: QWidget(parent),
-	ability(new Ability()),
-	mapper(new QDataWidgetMapper(parent))
+	ability(new Ability())
 {
 	ui.setupUi(this);
 	connect(this, &AbilityWidget::abilityChanged, [=]() {
@@ -26,16 +25,4 @@ void AbilityWidget::setAbility(Ability* a)
 Ability* AbilityWidget::getAbility() const
 {
 	return ability;
-}
-
-void AbilityWidget::linkToModel(Ability::Score s, Character* pc)
-{
-	connect(pc->model, &QAbstractItemModel::modelReset,
-		mapper, &QDataWidgetMapper::revert);
-	mapper->setModel(pc->model);
-	mapper->setRootIndex(pc->model->listTypeRoot(CharacterNode::Type::Ability));
-	mapper->setCurrentIndex(pc->getAbilityIndex(s).row());
-	mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-	mapper->setItemDelegate(new AbilityDelegate());
-	mapper->addMapping(this, 1);
 }

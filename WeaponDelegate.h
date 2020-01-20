@@ -2,8 +2,9 @@
 
 #include <QStyledItemDelegate>
 #include <QPainter>
-#include "Weapon.h"
 #include "WeaponEditor.h"
+#include "Weapon.h"
+#include "MeleeWeapon.h"
 #include "RangedWeapon.h"
 
 class WeaponDelegate : public QStyledItemDelegate

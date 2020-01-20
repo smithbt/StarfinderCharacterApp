@@ -2,17 +2,51 @@
 
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
-	pc(new Character(this))
+	pc(new Character(this)),
+	proxy(new QSortFilterProxyModel(this)),
+	aMaps(QVector<QDataWidgetMapper*>(6, new QDataWidgetMapper(this)))
 {
 	ui.setupUi(this);
-	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+	proxy->setSourceModel(pc->model);
+	ui.weaponList->setModel(proxy);
 	connect(ui.weaponList,
 		SIGNAL(customContextMenuRequested(QPoint)), 
 		SLOT(customWeaponMenu(QPoint)));
-	connect(pc->model, &QAbstractItemModel::dataChanged,
-		this, &StarfinderCharacterApp::updateWeaponView);
-	connect(pc->model, &QAbstractItemModel::modelReset,
-		this, &StarfinderCharacterApp::updateAbilityScores);
+	connect(pc->model, &CharacterModel::modelReset, ui.weaponList, [=]() {
+			ui.weaponList->reset();
+			ui.weaponList->setRootIndex(proxy->mapFromSource(
+				pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
+		});
+	ui.weaponList->setRootIndex(proxy->mapFromSource(
+		pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
+	ui.weaponList->setModelColumn(1);
+	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+
+	aWdgts.insert(static_cast<int>(Ability::Score::Strength), ui.STR_widget);
+	aWdgts.insert(static_cast<int>(Ability::Score::Dexterity), ui.DEX_widget);
+	aWdgts.insert(static_cast<int>(Ability::Score::Constitution), ui.CON_widget);
+	aWdgts.insert(static_cast<int>(Ability::Score::Intelligence), ui.INT_widget);
+	aWdgts.insert(static_cast<int>(Ability::Score::Wisdom), ui.WIS_widget);
+	aWdgts.insert(static_cast<int>(Ability::Score::Charisma), ui.CHA_widget);
+	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
+	QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
+	for (int i = 0; i < aEnum.keyCount(); ++i) {
+		connect(pc->model, &CharacterModel::modelReset,
+			aMaps.at(i), [=]() {
+				QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
+				aMaps.at(i)->setRootIndex(proxy->mapFromSource(aRoot));
+				aMaps.at(i)->setCurrentIndex(1);
+			});
+		aMaps.at(i)->setModel(proxy);
+		aMaps.at(i)->setRootIndex(proxy->mapFromSource(aRoot));
+		aMaps.at(i)->setOrientation(Qt::Vertical);
+		aMaps.at(i)->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+		aMaps.at(i)->setItemDelegate(new AbilityDelegate());
+		QModelIndex modelIdx = pc->getAbilityIndex(static_cast<Ability::Score>(aEnum.value(i)));
+		aMaps.at(i)->addMapping(aWdgts.at(i), proxy->mapFromSource(modelIdx).row());
+		aMaps.at(i)->setCurrentIndex(1);
+	}
+
 }
 
 void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
@@ -20,24 +54,6 @@ void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
 	QMenu* menu = new QMenu(this);
 	menu->addAction(ui.actionAdd_Weapon);
 	menu->popup(ui.weaponList->viewport()->mapToGlobal(pos));
-}
-
-void StarfinderCharacterApp::updateAbilityScores()
-{
-	ui.STR_widget->linkToModel(Ability::Score::Strength, pc);
-	ui.DEX_widget->linkToModel(Ability::Score::Dexterity, pc);
-	ui.CON_widget->linkToModel(Ability::Score::Constitution, pc);
-	ui.INT_widget->linkToModel(Ability::Score::Intelligence, pc);
-	ui.WIS_widget->linkToModel(Ability::Score::Wisdom, pc);
-	ui.CHA_widget->linkToModel(Ability::Score::Charisma, pc);
-}
-
-void StarfinderCharacterApp::updateWeaponView()
-{
-	ui.weaponList->setModel(pc->model);
-	ui.weaponList->setModelColumn(1);
-	ui.weaponList->setRootIndex(pc->model->listTypeRoot(CharacterNode::Type::Weapon));
-	ui.weaponList->setItemDelegate(new WeaponDelegate());
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {

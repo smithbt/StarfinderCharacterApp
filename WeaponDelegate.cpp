@@ -11,15 +11,21 @@ WeaponDelegate::~WeaponDelegate()
 
 void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-	if (index.data(Qt::UserRole).canConvert<RangedWeapon*>()) {
-		RangedWeapon* rw = index.data(Qt::UserRole).value<RangedWeapon*>();
-
+	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
+		Weapon* w;
+		if (index.data(Qt::UserRole).canConvert<MeleeWeapon*>())
+			w = index.data(Qt::UserRole).value<MeleeWeapon*>();
+		else if (index.data(Qt::UserRole).canConvert<RangedWeapon*>())
+			w = index.data(Qt::UserRole).value<RangedWeapon*>();
+		else
+			w = index.data(Qt::UserRole).value<Weapon*>();
+		
 		if (option.state & QStyle::State_Selected)
 			painter->fillRect(option.rect, option.palette.highlight());
 
 		painter->save();
 		painter->translate(option.rect.topLeft());
-		painter->drawText(option.rect, rw->toString());
+		painter->drawText(option.rect, w->toString());
 		painter->restore();
 	}
 	else QStyledItemDelegate::paint(painter, option, index);
