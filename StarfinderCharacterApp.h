@@ -23,10 +23,12 @@ public:
 
 private:
 	Ui::StarfinderCharacterAppClass ui;
-	QSortFilterProxyModel* proxy;
+	QSortFilterProxyModel* wProxy;
+	QSortFilterProxyModel* aProxy;
 	Character* pc;
 	QString fileName;
-	QVector<QDataWidgetMapper*> aMaps;
+	QDataWidgetMapper* aMap;
+	QDataWidgetMapper* wMap;
 	QVector<AbilityWidget*> aWdgts;
 
 

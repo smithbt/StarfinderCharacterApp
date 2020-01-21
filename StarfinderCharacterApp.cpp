@@ -3,66 +3,76 @@
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
 	pc(new Character(this)),
-	proxy(new QSortFilterProxyModel(this)),
-	aMaps(QVector<QDataWidgetMapper*>(6, new QDataWidgetMapper(this)))
+	wProxy(new QSortFilterProxyModel(this)),
+	aProxy(new QSortFilterProxyModel(this)),
+	wMap(new QDataWidgetMapper(this)),
+	aMap(new QDataWidgetMapper(this))
 {
 	ui.setupUi(this);
-	proxy->setSourceModel(pc->model);
-	ui.weaponList->setModel(proxy);
-	connect(ui.weaponList,
-		SIGNAL(customContextMenuRequested(QPoint)), 
-		SLOT(customWeaponMenu(QPoint)));
-	connect(pc->model, &CharacterModel::modelReset, ui.weaponList, [=]() {
-			ui.weaponList->reset();
-			ui.weaponList->setRootIndex(proxy->mapFromSource(
-				pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
-		});
-	QModelIndex wRoot = pc->model->listTypeRoot(CharacterNode::Type::Weapon);
-	ui.weaponList->setRootIndex(proxy->mapFromSource(wRoot));
-	ui.weaponList->setModelColumn(1);
-	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-	QDataWidgetMapper* wMap = new QDataWidgetMapper(this);
-	wMap->setModel(proxy);
-	wMap->setRootIndex(proxy->mapFromSource(wRoot));
-	wMap->setItemDelegate(new WeaponDelegate());
-	wMap->addMapping(ui.weapon_widget, 1);
-	connect(pc->model, &CharacterModel::modelReset, wMap, [=]() {
-		wMap->setRootIndex(proxy->mapFromSource(
-			pc->model->listTypeRoot(CharacterNode::Type::Weapon)));
-		});
-	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
-		wMap, &QDataWidgetMapper::setCurrentModelIndex);
-	connect(wMap, &QDataWidgetMapper::currentIndexChanged, ui.weapon_widget,
-		[=]() {
-			Ability* a = pc->getAbility(ui.weapon_widget->getWeapon()->attackScore);
-			ui.weapon_widget->setAttackModifiers(a->modifier(), 0); // TODO: replace hardcoded BAB with value from PC.
-		});
-
+	// setup vector of AbilityWidgets
 	aWdgts.insert(static_cast<int>(Ability::Score::Strength), ui.STR_widget);
 	aWdgts.insert(static_cast<int>(Ability::Score::Dexterity), ui.DEX_widget);
 	aWdgts.insert(static_cast<int>(Ability::Score::Constitution), ui.CON_widget);
 	aWdgts.insert(static_cast<int>(Ability::Score::Intelligence), ui.INT_widget);
 	aWdgts.insert(static_cast<int>(Ability::Score::Wisdom), ui.WIS_widget);
 	aWdgts.insert(static_cast<int>(Ability::Score::Charisma), ui.CHA_widget);
+
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
+
+	wProxy->setSourceModel(pc->model);
+	ui.weaponList->setModel(wProxy);
+	QModelIndex wRoot = pc->model->listTypeRoot(CharacterNode::Type::Weapon);
+	ui.weaponList->setRootIndex(wProxy->mapFromSource(wRoot));
+	ui.weaponList->setModelColumn(1);
+	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui.weaponList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customWeaponMenu(QPoint)));
+
+	wMap->setModel(wProxy);
+	wMap->setRootIndex(wProxy->mapFromSource(wRoot));
+	wMap->setItemDelegate(new WeaponDelegate());
+	wMap->addMapping(ui.weapon_widget, 1);
+	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
+		wMap, &QDataWidgetMapper::setCurrentModelIndex);
+	connect(wMap, &QDataWidgetMapper::currentIndexChanged, ui.weapon_widget,
+		[=]() {
+			Ability* a = pc->getAbility(ui.weapon_widget->getWeapon()->attackScore);
+			// TODO: replace hardcoded BAB with value from PC.
+			ui.weapon_widget->setAttackModifiers(a->modifier(), 0); 
+		});
+
+	aProxy->setSourceModel(pc->model);
 	QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
+	aMap->setModel(aProxy);
+	aMap->setRootIndex(aProxy->mapFromSource(aRoot));
+	aMap->setOrientation(Qt::Vertical);
+	aMap->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+	aMap->setItemDelegate(new AbilityDelegate());
 	for (int i = 0; i < aEnum.keyCount(); ++i) {
-		connect(pc->model, &CharacterModel::modelReset,
-			aMaps.at(i), [=]() {
-				QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
-				aMaps.at(i)->setRootIndex(proxy->mapFromSource(aRoot));
-				aMaps.at(i)->setCurrentIndex(1);
-			});
-		aMaps.at(i)->setModel(proxy);
-		aMaps.at(i)->setRootIndex(proxy->mapFromSource(aRoot));
-		aMaps.at(i)->setOrientation(Qt::Vertical);
-		aMaps.at(i)->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-		aMaps.at(i)->setItemDelegate(new AbilityDelegate());
 		QModelIndex modelIdx = pc->getAbilityIndex(static_cast<Ability::Score>(aEnum.value(i)));
-		aMaps.at(i)->addMapping(aWdgts.at(i), proxy->mapFromSource(modelIdx).row());
-		aMaps.at(i)->setCurrentIndex(1);
+		aMap->addMapping(aWdgts.at(i), aProxy->mapFromSource(modelIdx).row());
 	}
+	aMap->setCurrentIndex(1);
+
+
+	connect(pc->model, &CharacterModel::modelReset, this,
+		[=]() {
+			ui.weaponList->reset();
+			QModelIndex wRoot = pc->model->listTypeRoot(CharacterNode::Type::Weapon);
+			ui.weaponList->setRootIndex(wProxy->mapFromSource(wRoot));
+			ui.weaponList->setModelColumn(1);
+
+			wMap->setRootIndex(wProxy->mapFromSource(wRoot));
+			wMap->addMapping(ui.weapon_widget, 1);
+
+			QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
+			aMap->setRootIndex(aProxy->mapFromSource(aRoot));
+			for (int i = 0; i < aEnum.keyCount(); ++i) {
+				QModelIndex modelIdx = pc->getAbilityIndex(static_cast<Ability::Score>(aEnum.value(i)));
+				aMap->addMapping(aWdgts.at(i), aProxy->mapFromSource(modelIdx).row());
+			}
+			aMap->setCurrentIndex(1);
+		});
 
 }
 
