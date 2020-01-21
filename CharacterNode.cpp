@@ -30,25 +30,10 @@ void CharacterNode::read(const QJsonObject& json)
         QJsonArray wArray = json.value("Weapon").toArray();
         for (int i = 0; i < wArray.size(); ++i) {
             QJsonObject wObj = wArray.at(i).toObject();
-            if (wObj.contains("Type") && wObj.value("Type").isString()) {
-                Weapon* w;
-                Weapon::Type wType = static_cast<Weapon::Type>(
-                    QMetaEnum::fromType<Weapon::Type>().keyToValue(wObj.value("Type").toString().toUtf8()));
-                switch (wType) {
-                case (Weapon::Type::Ranged):
-                    w = new RangedWeapon();
-                    break;
-                case (Weapon::Type::Melee):
-                    w = new MeleeWeapon();
-                    break;
-                default:
-                    w = new Weapon();
-                    break;
-                }
-                w->read(wObj);
-                CharacterNode* cNode = new CharacterNode({ static_cast<Type>(tQME.keyToValue("Weapon")), QVariant::fromValue(w) }, wRoot);
-                wRoot->appendChild(cNode);
-            }
+            Weapon* w = new Weapon();
+            w->read(wObj);
+            CharacterNode* cNode = new CharacterNode({ static_cast<Type>(tQME.keyToValue("Weapon")), QVariant::fromValue(w) }, wRoot);
+            wRoot->appendChild(cNode);
         }
         appendChild(wRoot);
     }
@@ -81,14 +66,8 @@ void CharacterNode::write(QJsonObject& json) const
         else if (itemData.first == Type::Ability && itemData.second.canConvert<Ability*>())
             itemData.second.value<Ability*>()->write(json);
 
-        else if (itemData.first == Type::Weapon) {
-            if (itemData.second.canConvert<RangedWeapon*>())
-                itemData.second.value<RangedWeapon*>()->write(json);
-            else if (itemData.second.canConvert<MeleeWeapon*>())
-                itemData.second.value<MeleeWeapon*>()->write(json);
-            else
-                itemData.second.value<Weapon*>()->write(json);
-        }
+        else if (itemData.first == Type::Weapon && itemData.second.canConvert<Weapon*>())
+            itemData.second.value<Weapon*>()->write(json);
     }
 }
 
@@ -131,20 +110,7 @@ QVariant CharacterNode::data(int column, int role) const
             case Type::Ability:
                 return itemData.second.value<Ability*>()->toString();
             case Type::Weapon:
-                if (itemData.second.canConvert<RangedWeapon*>())
-                    return itemData.second.value<RangedWeapon*>()->toString();
-                else if (itemData.second.canConvert<MeleeWeapon*>())
-                    return itemData.second.value<MeleeWeapon*>()->toString();
-                else {
-                    switch (itemData.second.value<Weapon*>()->type) {
-                    case Weapon::Type::Melee:
-                        return reinterpret_cast<MeleeWeapon*>(itemData.second.value<Weapon*>())->toString();
-                    case Weapon::Type::Ranged:
-                        return reinterpret_cast<RangedWeapon*>(itemData.second.value<Weapon*>())->toString();
-                    default:
-                        return itemData.second.value<Weapon*>()->toString();
-                    }
-                }
+                return itemData.second.value<Weapon*>()->toString();
             default:
                 return itemData.second.toString();
             }

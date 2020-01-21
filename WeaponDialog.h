@@ -3,8 +3,6 @@
 #include <QDialog>
 #include "ui_WeaponDialog.h"
 #include "Weapon.h"
-#include "MeleeWeapon.h"
-#include "RangedWeapon.h"
 
 class WeaponDialog : public QDialog
 {

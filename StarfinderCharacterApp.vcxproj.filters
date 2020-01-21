@@ -73,13 +73,7 @@
     <ClCompile Include="Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RangedWeapon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Damage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MeleeWeapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,12 +112,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="AbilityDelegate.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="RangedWeapon.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="MeleeWeapon.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

@@ -22,6 +22,16 @@ Weapon::~Weapon()
 {
 }
 
+int Weapon::capacity()
+{
+	return ammo->max;
+}
+
+int Weapon::usage()
+{
+	return ammo->step;
+}
+
 void Weapon::read(const QJsonObject& json)
 {
 	Item::read(json);
@@ -37,6 +47,14 @@ void Weapon::read(const QJsonObject& json)
 			special.append(s);
 		}
 	}
+	if (json.contains("Range") && json.value("Range").isDouble())
+		range = json.value("Range").toInt();
+	if (json.contains("Ammo") && json.value("Ammo").isObject())
+		ammo->read(json.value("Ammo").toObject());
+	if (json.contains("Damage") && json.value("Damage").isObject())
+		damage->read(json.value("Damage").toObject());
+	if (json.contains("Crit") && json.value("Crit").isString())
+		crit = json.value("Crit").toString();
 
 }
 
@@ -45,9 +63,28 @@ void Weapon::write(QJsonObject& json) const
 	Item::write(json);
 	json.insert("Type", QVariant::fromValue(type).toString());
 	json.insert("special", QJsonArray::fromStringList(special));
+	json.insert("Range", range);
+	QJsonObject ammoObj;
+	ammo->write(ammoObj);
+	json.insert("Ammo", ammoObj);
+	QJsonObject dmgObj;
+	damage->write(dmgObj);
+	json.insert("Damage", dmgObj);
+	json.insert("Crit", crit);
 }
 
 QString Weapon::toString() const
 {
-	return Item::toString() + QString("\nSpecial: %1").arg(special.join(", "));
+	QString output = Item::toString();
+	switch (type) {
+	case Type::Melee:
+		output += QString("\n%1 damage (Critical %2)").arg(damage->toString()).arg(crit);
+		break;
+	case Type::Ranged:
+		output += QString("\n%1 damage (Critical %2); Range: %3; Usage/Capacity: %4")
+			.arg(damage->toString()).arg(crit).arg(range).arg(ammo->toString());
+		break;
+	}
+	output += QString("\nSpecial: %1").arg(special.join(", "));
+	return output;
 }

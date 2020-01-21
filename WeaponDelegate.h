@@ -4,8 +4,6 @@
 #include <QPainter>
 #include "WeaponWidget.h"
 #include "Weapon.h"
-#include "MeleeWeapon.h"
-#include "RangedWeapon.h"
 
 class WeaponDelegate : public QStyledItemDelegate
 {

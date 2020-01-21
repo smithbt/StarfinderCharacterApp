@@ -30,31 +30,22 @@ WeaponDialog::~WeaponDialog()
 
 QVariant WeaponDialog::newWeapon()
 {
-	Weapon* wpn = new Weapon();
-	wpn->level = ui.level_spinBox->value();
-	wpn->price = ui.price_lineEdit->text().toInt();
-	wpn->bulk = ui.bulk_doubleSpinBox->value();
-	wpn->name = ui.name_lineEdit->text();
-	wpn->special = ui.special_lineEdit->text().split(", ");
-	if(ui.type_comboBox->currentData(Qt::UserRole).canConvert<Weapon::Type>())
+	if (ui.type_comboBox->currentData(Qt::UserRole).canConvert<Weapon::Type>()) {
+		Weapon* wpn = new Weapon();
 		wpn->type = ui.type_comboBox->currentData(Qt::UserRole).value<Weapon::Type>();
+		wpn->range = ui.range_spinBox->value();
+		wpn->damage = parseDamageString(ui.damage_lineEdit->text());
+		wpn->crit = ui.crit_lineEdit->text();
+		wpn->ammo = new Resource(0, ui.capacity_spinBox->value(), ui.usage_spinBox->value());
+		wpn->level = ui.level_spinBox->value();
+		wpn->price = ui.price_lineEdit->text().toInt();
+		wpn->bulk = ui.bulk_doubleSpinBox->value();
+		wpn->name = ui.name_lineEdit->text();
+		wpn->special = ui.special_lineEdit->text().split(", ");
 
-	if (wpn->type == Weapon::Type::Ranged) {
-		RangedWeapon* rWpn = new RangedWeapon(wpn,
-			ui.range_spinBox->value(), 
-			parseDamageString(ui.damage_lineEdit->text()),
-			ui.crit_lineEdit->text(),
-			new Resource(0, ui.capacity_spinBox->value(), ui.usage_spinBox->value()));
-		return QVariant::fromValue<RangedWeapon*>(rWpn);
+		return QVariant::fromValue<Weapon*>(wpn);
 	}
-	else if (wpn->type == Weapon::Type::Melee) {
-		MeleeWeapon* mWpn = new MeleeWeapon(wpn,
-			parseDamageString(ui.damage_lineEdit->text()),
-			ui.crit_lineEdit->text());
-		return qVariantFromValue<MeleeWeapon*>(mWpn);
-	}
-
-	return QVariant::fromValue<Weapon*>(wpn);
+	return QVariant();
 }
 
 Damage* WeaponDialog::parseDamageString(QString dmg)

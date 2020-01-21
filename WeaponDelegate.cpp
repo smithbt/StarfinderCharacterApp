@@ -12,13 +12,7 @@ WeaponDelegate::~WeaponDelegate()
 //void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 //{
 //	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
-//		Weapon* w;
-//		if (index.data(Qt::UserRole).canConvert<MeleeWeapon*>())
-//			w = index.data(Qt::UserRole).value<MeleeWeapon*>();
-//		else if (index.data(Qt::UserRole).canConvert<RangedWeapon*>())
-//			w = index.data(Qt::UserRole).value<RangedWeapon*>();
-//		else
-//			w = index.data(Qt::UserRole).value<Weapon*>();
+//		Weapon* w = index.data(Qt::UserRole).value<Weapon*>();
 //		
 //		if (option.state & QStyle::State_Selected)
 //			painter->fillRect(option.rect, option.palette.highlight());
@@ -33,14 +27,14 @@ WeaponDelegate::~WeaponDelegate()
 //
 //QSize WeaponDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 //{
-//	if (index.data(Qt::UserRole).canConvert<RangedWeapon*>())
+//	if (index.data(Qt::UserRole).canConvert<Weapon*>())
 //		return WeaponWidget(0).sizeHint();
 //	return QStyledItemDelegate::sizeHint(option, index);
 //}
 //
 //QWidget* WeaponDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 //{
-//	if (index.data(Qt::UserRole).canConvert<RangedWeapon*>()) {
+//	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
 //		WeaponWidget* editor = new WeaponWidget(parent);
 //		connect(editor, &WeaponEditor::editingFinished,
 //			this, &WeaponDelegate::commitAndCloseEditor);
@@ -63,7 +57,7 @@ void WeaponDelegate::setEditorData(QWidget* editor, const QModelIndex& index) co
 
 void WeaponDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
-	if (index.data(Qt::UserRole).canConvert<RangedWeapon*>()) {
+	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
 		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
 		model->setData(index, QVariant::fromValue(wpnEditor->getWeapon()),Qt::UserRole);
 	}
