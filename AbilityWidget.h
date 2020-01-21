@@ -7,19 +7,22 @@
 class AbilityWidget : public QWidget
 {
 	Q_OBJECT
-	Q_PROPERTY(Ability* ability READ getAbility WRITE setAbility NOTIFY abilityChanged)
+	Q_PROPERTY(QVector<Ability*> abilities READ getAbilityList WRITE setAbilityList NOTIFY abilityListChanged)
 
 public:
 	AbilityWidget(QWidget *parent = Q_NULLPTR);
 	~AbilityWidget();
 
-	void setAbility(Ability* a);
-	Ability* getAbility() const;
+	void setAbilityList(QVector<Ability*> a);
+	QVector<Ability*> getAbilityList() const;
 
 signals:
-	void abilityChanged(Ability*);
+	void abilityListChanged(QVector<Ability*>);
 
 private:
 	Ui::AbilityWidget ui;
-	Ability* ability;
+	QVector<Ability*> abilities;
+	QVector<QLabel*> aMods;
+	QVector<QLabel*> aScores;
+	QMetaEnum aEnum;
 };

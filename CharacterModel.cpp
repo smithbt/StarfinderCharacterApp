@@ -1,42 +1,89 @@
 #include "CharacterModel.h"
 
 CharacterModel::CharacterModel(QObject *parent)
-	: QAbstractItemModel(parent)
+	: QAbstractListModel(parent),
+	map()
 {
-	rootNode = new CharacterNode({ CharacterNode::Type::List, "Root"});
-	
-	setupModel();
 }
 
 CharacterModel::~CharacterModel()
 {
-	delete rootNode;
+	map.clear();
 }
 
 void CharacterModel::read(const QJsonObject& json)
 {
 	beginResetModel();
-	rootNode->removeChildren(0, rootNode->childCount());
-	rootNode->read(json);
+
+	if (json.contains("Ability") && json.value("Ability").isArray()) {
+		QVector<Ability*> abilities;
+		QJsonArray aArray = json.value("Ability").toArray();
+		for (int i = 0; i < aArray.size(); ++i) {
+			QJsonObject aObj = aArray.at(i).toObject();
+			Ability* a = new Ability();
+			a->read(aObj);
+			abilities.insert(static_cast<int>(a->type), a);
+		}
+		map.insert(Key::Abilities, QVariant::fromValue(abilities));
+	}
+	if (json.contains("Weapon") && json.value("Weapon").isArray()) {
+		QVector<Weapon*> weapons;
+		QJsonArray wArray = json.value("Weapon").toArray();
+		for (int i = 0; i < wArray.size(); ++i) {
+			QJsonObject wObj = wArray.at(i).toObject();
+			Weapon* w = new Weapon();
+			w->read(wObj);
+			weapons.append(w);
+		}
+		map.insert(Key::Weapons, QVariant::fromValue(weapons));
+	}
+	if (json.contains("Name") && json.value("Name").isString()) {
+		map.insert(Key::Name, json.value("Name").toString());
+	}
 	endResetModel();
 }
 
 void CharacterModel::write(QJsonObject& json) const
 {
-	rootNode->write(json);
+	for (QMap<int, QVariant>::const_iterator i = map.cbegin(); i != map.cend(); ++i) {
+		QString keyString = QVariant::fromValue(i.key()).toString();
+		if (i.key() == Key::Name)
+			json.insert(keyString, i.value().toString());
+		if (i.key() == Key::Weapons) {
+			QJsonArray weaponArray;
+			for (Weapon* w : i.value().value<QVector<Weapon*>>()) {
+				QJsonObject wObj;
+				w->write(wObj);
+				weaponArray.append(wObj);
+			}
+			json.insert(keyString, weaponArray);
+		}
+		if (i.key() == Key::Abilities) {
+			QJsonArray abilityArray;
+			for (Ability* a : i.value().value<QVector<Ability*>>()) {
+				QJsonObject aObj;
+				a->write(aObj);
+				abilityArray.append(aObj);
+			}
+			json.insert(keyString, abilityArray);
+		}
+	}
 }
 
 QVariant CharacterModel::data(const QModelIndex& index, int role) const
 {
-	if (!index.isValid())
+	const int key = index.row();
+	if (!index.isValid()) // invalid index
 		return QVariant();
 
-	if (role != Qt::DisplayRole && role != Qt::UserRole)
+	if (key >= map.size() || key < 0) // out of range
 		return QVariant();
 
-	CharacterNode* item = static_cast<CharacterNode*>(index.internalPointer());
 
-	return item->data(index.column(), role);
+	if (role == Qt::UserRole)
+		return map.value(key);
+
+	return QVariant();
 }
 
 Qt::ItemFlags CharacterModel::flags(const QModelIndex& index) const
@@ -50,150 +97,48 @@ Qt::ItemFlags CharacterModel::flags(const QModelIndex& index) const
 QVariant CharacterModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-		return rootNode->data(section);
+		return "Value";
 
 	return QVariant();
 }
 
-QModelIndex CharacterModel::index(int row, int column, const QModelIndex& parent) const
-{
-	if (parent.isValid() && parent.column() != 0)
-		return QModelIndex();
-
-	CharacterNode* parentNode = getNode(parent);
-	if (!parentNode)
-		return QModelIndex();
-
-	CharacterNode* childNode = parentNode->child(row);
-	if (childNode)
-		return createIndex(row, column, childNode);
-	return QModelIndex();
-}
-
-QModelIndex CharacterModel::parent(const QModelIndex& index) const
-{
-	if (!index.isValid())
-		return QModelIndex();
-
-	CharacterNode* childNode = getNode(index);
-	CharacterNode* parentNode = childNode ? childNode->parentNode() : nullptr;
-
-	if (parentNode == rootNode || !parentNode)
-		return QModelIndex();
-
-	return createIndex(parentNode->row(), 0, parentNode);
-}
-
-QModelIndex CharacterModel::listTypeRoot(CharacterNode::Type t) const
-{
-	for (int i = 0; i < rootNode->childCount(); ++i) {
-		CharacterNode* cn = rootNode->child(i);
-		if (cn->data(0).value<CharacterNode::Type>() == CharacterNode::Type::List
-			&& cn->data(1).value<CharacterNode::Type>() == t)
-			return createIndex(i, 0, cn);
-	}
-	return QModelIndex();
-}
-
-int CharacterModel::typeRow(CharacterNode::Type type) const
-{
-	for (int i = 0; i < rootNode->childCount(); ++i) {
-		QVariant cType = rootNode->child(i)->data(0);
-		if (cType.canConvert<CharacterNode::Type>() &&
-			cType.value<CharacterNode::Type>() == type)
-			return i;
-	}
-	return -1;
-}
-
 int CharacterModel::rowCount(const QModelIndex& parent) const
 {
-	const CharacterNode* parentNode = getNode(parent);
-
-	return parentNode ? parentNode->childCount() : 0;
-}
-
-int CharacterModel::columnCount(const QModelIndex& parent) const
-{
-	Q_UNUSED(parent);
-	return rootNode->columnCount();
+	return map.size();
 }
 
 bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (role != Qt::UserRole)
-		return false;
-
-	CharacterNode* node = getNode(index);
-	bool result = node->setData(index.column(), value);
-
-	if (result)
+	if (index.isValid() && role == Qt::UserRole) {
+		map.insert(index.row(), value);
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::UserRole });
-
-	return result;
-}
-
-bool CharacterModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
-{
-	if (role != Qt::EditRole || orientation != Qt::Horizontal)
-		return false;
-
-	const bool result = rootNode->setData(section, value);
-
-	if (result)
-		emit headerDataChanged(orientation, section, section);
-
-	return result;
+		return true;
+	}
+	return false;
 }
 
 bool CharacterModel::insertRows(int position, int rows, const QModelIndex& parent)
 {
-	CharacterNode* parentNode = getNode(parent);
-	if (!parentNode)
-		return false;
+	Q_UNUSED(parent);
+	beginInsertRows(QModelIndex(), position, position + rows - 1);
 
-	beginInsertRows(parent, position, position + rows - 1);
-	const bool success = parentNode->insertChildren(position, rows);
+	for (QMap<int, QVariant>::const_iterator i = map.lowerBound(position); i != map.upperBound(position + rows); ++i) {
+		map.insert(i.key(), QVariant());
+	}
+
 	endInsertRows();
-
-	return success;
+	return true;
 }
 
 bool CharacterModel::removeRows(int position, int rows, const QModelIndex& parent)
 {
-	CharacterNode* parentNode = getNode(parent);
-	if (!parentNode)
-		return false;
+	Q_UNUSED(parent);
+	beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
-	beginRemoveRows(parent, position, position + rows - 1);
-	const bool success = parentNode->removeChildren(position, rows);
+	for (QMap<int, QVariant>::const_iterator i = map.lowerBound(position); i != map.upperBound(position + rows); ++i) {
+		map.remove(i.key());
+	}
+
 	endRemoveRows();
-
-	return success;
-}
-
-CharacterNode* CharacterModel::getNode(const QModelIndex& index) const
-{
-	if (index.isValid()) {
-		CharacterNode* node = static_cast<CharacterNode*>(index.internalPointer());
-		if (node)
-			return node;
-	}
-	return rootNode;
-}
-
-void CharacterModel::setupModel()
-{
-	QFile loadFile(":/StarfinderCharacterApp/Resources/default.json");
-
-	if (!loadFile.open(QIODevice::ReadOnly)) {
-		qWarning("Error opening file.");
-	}
-
-	QByteArray loadData = loadFile.readAll();
-
-	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
-
-	read(loadDoc.object());
-	loadFile.close();
+	return true;
 }

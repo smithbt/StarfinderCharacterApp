@@ -8,21 +8,15 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	wMap(new QDataWidgetMapper(this)),
 	aMap(new QDataWidgetMapper(this))
 {
-	ui.setupUi(this);
+	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 
-	// setup vector of AbilityWidgets
-	aWdgts.insert(static_cast<int>(Ability::Score::Strength), ui.STR_widget);
-	aWdgts.insert(static_cast<int>(Ability::Score::Dexterity), ui.DEX_widget);
-	aWdgts.insert(static_cast<int>(Ability::Score::Constitution), ui.CON_widget);
-	aWdgts.insert(static_cast<int>(Ability::Score::Intelligence), ui.INT_widget);
-	aWdgts.insert(static_cast<int>(Ability::Score::Wisdom), ui.WIS_widget);
-	aWdgts.insert(static_cast<int>(Ability::Score::Charisma), ui.CHA_widget);
+	ui.setupUi(this);
 
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 
 	wProxy->setSourceModel(pc->model);
 	ui.weaponList->setModel(wProxy);
-	QModelIndex wRoot = pc->model->listTypeRoot(CharacterNode::Type::Weapon);
+	QModelIndex wRoot = pc->model->index(CharacterModel::Key::Weapons);
 	ui.weaponList->setRootIndex(wProxy->mapFromSource(wRoot));
 	ui.weaponList->setModelColumn(1);
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -42,36 +36,25 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 		});
 
 	aProxy->setSourceModel(pc->model);
-	QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
 	aMap->setModel(aProxy);
-	aMap->setRootIndex(aProxy->mapFromSource(aRoot));
-	aMap->setOrientation(Qt::Vertical);
-	aMap->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 	aMap->setItemDelegate(new AbilityDelegate());
-	for (int i = 0; i < aEnum.keyCount(); ++i) {
-		QModelIndex modelIdx = pc->getAbilityIndex(static_cast<Ability::Score>(aEnum.value(i)));
-		aMap->addMapping(aWdgts.at(i), aProxy->mapFromSource(modelIdx).row());
-	}
-	aMap->setCurrentIndex(1);
+	aMap->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+	aMap->addMapping(ui.abilityList_widget, 0);
+	aMap->setCurrentIndex(CharacterModel::Key::Abilities);
 
 
 	connect(pc->model, &CharacterModel::modelReset, this,
 		[=]() {
 			ui.weaponList->reset();
-			QModelIndex wRoot = pc->model->listTypeRoot(CharacterNode::Type::Weapon);
+			QModelIndex wRoot = pc->model->index(CharacterModel::Key::Weapons);
 			ui.weaponList->setRootIndex(wProxy->mapFromSource(wRoot));
 			ui.weaponList->setModelColumn(1);
 
 			wMap->setRootIndex(wProxy->mapFromSource(wRoot));
 			wMap->addMapping(ui.weapon_widget, 1);
 
-			QModelIndex aRoot = pc->model->listTypeRoot(CharacterNode::Type::Ability);
-			aMap->setRootIndex(aProxy->mapFromSource(aRoot));
-			for (int i = 0; i < aEnum.keyCount(); ++i) {
-				QModelIndex modelIdx = pc->getAbilityIndex(static_cast<Ability::Score>(aEnum.value(i)));
-				aMap->addMapping(aWdgts.at(i), aProxy->mapFromSource(modelIdx).row());
-			}
-			aMap->setCurrentIndex(1);
+			aMap->addMapping(ui.abilityList_widget, 0);
+			aMap->setCurrentIndex(CharacterModel::Key::Abilities);
 		});
 
 }
@@ -86,8 +69,9 @@ void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	WeaponDialog dialog(this);
 	if (dialog.exec()) {
-		QVariant w = dialog.newWeapon();
-		pc->addWeapon(w);
+		Weapon* w = dialog.newWeapon();
+		if (w)
+			pc->addWeapon(w);
 	}
 }
 
@@ -95,19 +79,19 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	CharacterDialog dialog(this);
 	if (dialog.exec()) {
-		pc = dialog.newCharacter();
+		readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
+
+		dialog.newCharacter(pc);
 		fileName.clear();
 	}
 }
 
-bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
+void StarfinderCharacterApp::readModelFromFile(QString path)
 {
-	fileName = QFileDialog::getOpenFileName(this, tr("Open file"), "..", tr("JSON Files (*.json)"));
-	QFile loadFile(fileName);
+	QFile loadFile(path);
 
 	if (!loadFile.open(QIODevice::ReadOnly)) {
-		qWarning("Could not open file.");
-		return false;
+		qWarning("Error opening file.");
 	}
 
 	QByteArray loadData = loadFile.readAll();
@@ -116,6 +100,12 @@ bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
 
 	pc->read(loadDoc.object());
 	loadFile.close();
+}
+
+bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
+{
+	fileName = QFileDialog::getOpenFileName(this, tr("Open file"), "..", tr("JSON Files (*.json)"));
+	readModelFromFile(fileName);
 	return true;
 }
 

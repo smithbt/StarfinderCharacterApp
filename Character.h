@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QVariant>
-#include <QVector>
+#include <QMap>
 #include "CharacterModel.h"
 #include "Ability.h"
 #include "Weapon.h"
@@ -12,11 +12,9 @@ public:
 	Character(QObject* parent = nullptr);
 	~Character();
 
-	void insertChild(QVariant& data, QModelIndex& parent = QModelIndex());
-	void setProperty(CharacterNode::Type t, QVariant& value);
-	bool addWeapon(QVariant& value);
+	void setProperty(CharacterModel::Key k, QVariant& value);
+	void addWeapon(Weapon* w);
 
-	QModelIndex getAbilityIndex(Ability::Score s);
 	Ability* getAbility(Ability::Score s);
 	void setAbility(Ability* a);
 

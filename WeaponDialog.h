@@ -12,7 +12,7 @@ public:
 	WeaponDialog(QWidget *parent = Q_NULLPTR);
 	~WeaponDialog();
 
-	QVariant newWeapon();
+	Weapon* newWeapon();
 
 private slots:
 	void updateFields(Weapon::Type);

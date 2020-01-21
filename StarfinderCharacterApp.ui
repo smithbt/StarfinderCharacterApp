@@ -24,7 +24,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="mainTab">
        <attribute name="title">
@@ -34,7 +34,13 @@
         <item row="1" column="0">
          <widget class="QGroupBox" name="abilityBox">
           <property name="title">
-           <string>Ability Scores</string>
+           <string>Abilities</string>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <property name="spacing">
@@ -53,27 +59,12 @@
             <number>4</number>
            </property>
            <item>
-            <widget class="AbilityWidget" name="STR_widget" native="true"/>
-           </item>
-           <item>
-            <widget class="AbilityWidget" name="DEX_widget" native="true"/>
-           </item>
-           <item>
-            <widget class="AbilityWidget" name="CON_widget" native="true"/>
-           </item>
-           <item>
-            <widget class="AbilityWidget" name="INT_widget" native="true"/>
-           </item>
-           <item>
-            <widget class="AbilityWidget" name="WIS_widget" native="true"/>
-           </item>
-           <item>
-            <widget class="AbilityWidget" name="CHA_widget" native="true"/>
+            <widget class="AbilityWidget" name="abilityList_widget" native="true"/>
            </item>
           </layout>
          </widget>
         </item>
-        <item row="0" column="0">
+        <item row="1" column="1">
          <widget class="QGroupBox" name="groupBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

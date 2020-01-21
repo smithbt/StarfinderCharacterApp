@@ -10,70 +10,32 @@ Character::~Character()
 	delete model;
 }
 
-void Character::insertChild(QVariant& data, QModelIndex& parent)
+void Character::setProperty(CharacterModel::Key k, QVariant& value) 
 {
-	if (parent.data(Qt::UserRole).value<CharacterNode::Type>() == CharacterNode::Type::List) {
-		// Get child type from root
-		QModelIndex listTypeIndex = model->index(parent.row(), 1);
-		QVariant type = listTypeIndex.data(Qt::UserRole);
-
-		model->insertRow(0, parent);
-		QModelIndex index = model->index(0, 0, parent);
-		model->setData(index, type);
-		index = model->index(0, 1, parent);
-		model->setData(index, data);
-	}
+	QModelIndex index = model->index(k, 1);
+	model->setData(index, value);
 }
 
-void Character::setProperty(CharacterNode::Type t, QVariant& value) {
-	if (t != CharacterNode::Type::List) {
-		int row = model->typeRow(t);
-		if (row < 0) {
-			model->insertRow(0);
-			model->setData(model->index(0, 0), QVariant::fromValue(t));
-		}
-		QModelIndex index = model->index(row, 1);
-		model->setData(index, value);
-	}
-}
-
-bool Character::addWeapon(QVariant& value)
+void Character::addWeapon(Weapon* w)
 {
-	QModelIndex wpnRoot = model->listTypeRoot(CharacterNode::Type::Weapon);
-	insertChild(value, wpnRoot);
-	return true;
-}
-
-QModelIndex Character::getAbilityIndex(Ability::Score s)
-{
-	QModelIndex aRoot = model->listTypeRoot(CharacterNode::Type::Ability);
-	int count = model->rowCount(aRoot);
-	for (int i = 0; i < count; ++i) {
-		QModelIndex aIndex = model->index(i, 1, aRoot);
-		if (aIndex.data(Qt::UserRole).canConvert<Ability*>() && 
-			aIndex.data(Qt::UserRole).value<Ability*>()->type == s) {
-			return aIndex;
-		}
-	}
-	return QModelIndex();
+	QModelIndex wIndex = model->index(CharacterModel::Key::Weapons, 1);
+	QVector<Weapon*> weapons = model->data(wIndex).value<QVector<Weapon*>>();
+	weapons.append(w);
+	model->setData(wIndex, QVariant::fromValue(weapons));
 }
 
 Ability* Character::getAbility(Ability::Score s)
 {
-	QModelIndex aIndex = getAbilityIndex(s);
-	return aIndex.data(Qt::UserRole).value<Ability*>();
+	QVector<Ability*> abilities = model->data(model->index(CharacterModel::Key::Abilities, 1)).value<QVector<Ability*>>();
+	return abilities.at(static_cast<int>(s));
 }
 
 void Character::setAbility(Ability* a)
 {
-	bool updated = false;
-	QModelIndex aIndex = getAbilityIndex(a->type);
-	updated = model->setData(aIndex, QVariant::fromValue(a));
-
-	if (!updated) {
-		QModelIndex aRoot = model->listTypeRoot(CharacterNode::Type::Ability);
-		insertChild(QVariant::fromValue(a), aRoot);
-	}
+	QModelIndex aIndex =  model->index(CharacterModel::Key::Abilities, 1);
+	QVector<Ability*> abilities = model->data(aIndex).value<QVector<Ability*>>();
+	abilities.insert(static_cast<int>(a->type), a);
+	model->setData(aIndex, QVariant::fromValue(abilities));
 }
 
 void Character::read(const QJsonObject& json)

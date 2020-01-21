@@ -94,7 +94,6 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterModel.cpp" />
     <ClCompile Include="CharacterDialog.cpp" />
-    <ClCompile Include="CharacterNode.cpp" />
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -133,7 +132,6 @@
     <QtMoc Include="CharacterModel.h" />
     <QtMoc Include="CharacterDialog.h" />
     <ClInclude Include="Character.h" />
-    <QtMoc Include="CharacterNode.h" />
     <QtMoc Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>

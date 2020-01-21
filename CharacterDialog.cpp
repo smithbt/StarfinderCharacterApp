@@ -16,10 +16,9 @@ CharacterDialog::~CharacterDialog()
 {
 }
 
-Character* CharacterDialog::newCharacter()
+void CharacterDialog::newCharacter(Character* pc)
 {
-	Character* pc = new Character();
-	pc->setProperty(CharacterNode::Type::Name, QVariant(ui.name_field->text()));
+	pc->setProperty(CharacterModel::Key::Name, QVariant(ui.name_field->text()));
 
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 	for (int i = 0; i < aEnum.keyCount(); ++i) {
@@ -27,6 +26,4 @@ Character* CharacterDialog::newCharacter()
 		Ability* a = new Ability(score, asWdgts[i]->value());
 		pc->setAbility(a);
 	}
-
-	return pc;
 }

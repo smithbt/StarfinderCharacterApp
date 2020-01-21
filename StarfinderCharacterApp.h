@@ -31,6 +31,8 @@ private:
 	QDataWidgetMapper* wMap;
 	QVector<AbilityWidget*> aWdgts;
 
+	void readModelFromFile(QString path);
+
 
 private slots:
 	void customWeaponMenu(QPoint pos);

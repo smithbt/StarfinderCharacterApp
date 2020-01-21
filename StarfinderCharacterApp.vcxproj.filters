@@ -43,9 +43,6 @@
     <ClCompile Include="Ability.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CharacterModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -88,9 +85,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CharacterModel.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="CharacterNode.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Ability.h">

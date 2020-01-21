@@ -28,7 +28,7 @@ WeaponDialog::~WeaponDialog()
 {
 }
 
-QVariant WeaponDialog::newWeapon()
+Weapon* WeaponDialog::newWeapon()
 {
 	if (ui.type_comboBox->currentData(Qt::UserRole).canConvert<Weapon::Type>()) {
 		Weapon* wpn = new Weapon();
@@ -43,9 +43,9 @@ QVariant WeaponDialog::newWeapon()
 		wpn->name = ui.name_lineEdit->text();
 		wpn->special = ui.special_lineEdit->text().split(", ");
 
-		return QVariant::fromValue<Weapon*>(wpn);
+		return wpn;
 	}
-	return QVariant();
+	return nullptr;
 }
 
 Damage* WeaponDialog::parseDamageString(QString dmg)
