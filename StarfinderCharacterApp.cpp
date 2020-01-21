@@ -14,18 +14,14 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 
-	wProxy->setSourceModel(pc->model);
+	wProxy->setSourceModel(pc->getWeaponModel());
 	ui.weaponList->setModel(wProxy);
-	QModelIndex wRoot = pc->model->index(CharacterModel::Key::Weapons);
-	ui.weaponList->setRootIndex(wProxy->mapFromSource(wRoot));
-	ui.weaponList->setModelColumn(1);
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.weaponList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customWeaponMenu(QPoint)));
 
 	wMap->setModel(wProxy);
-	wMap->setRootIndex(wProxy->mapFromSource(wRoot));
 	wMap->setItemDelegate(new WeaponDelegate());
-	wMap->addMapping(ui.weapon_widget, 1);
+	wMap->addMapping(ui.weapon_widget, 0);
 	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
 		wMap, &QDataWidgetMapper::setCurrentModelIndex);
 	connect(wMap, &QDataWidgetMapper::currentIndexChanged, ui.weapon_widget,
@@ -45,13 +41,9 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 
 	connect(pc->model, &CharacterModel::modelReset, this,
 		[=]() {
-			ui.weaponList->reset();
-			QModelIndex wRoot = pc->model->index(CharacterModel::Key::Weapons);
-			ui.weaponList->setRootIndex(wProxy->mapFromSource(wRoot));
-			ui.weaponList->setModelColumn(1);
+			wProxy->setSourceModel(pc->getWeaponModel());
 
-			wMap->setRootIndex(wProxy->mapFromSource(wRoot));
-			wMap->addMapping(ui.weapon_widget, 1);
+			wMap->addMapping(ui.weapon_widget, 0);
 
 			aMap->addMapping(ui.abilityList_widget, 0);
 			aMap->setCurrentIndex(CharacterModel::Key::Abilities);

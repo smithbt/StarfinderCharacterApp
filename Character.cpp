@@ -16,25 +16,36 @@ void Character::setProperty(CharacterModel::Key k, QVariant& value)
 	model->setData(index, value);
 }
 
+WeaponModel* Character::getWeaponModel()
+{
+	QModelIndex wRoot = model->index(CharacterModel::Weapons);
+	if (model->data(wRoot).canConvert<WeaponModel*>())
+		return model->data(wRoot).value<WeaponModel*>();
+	return nullptr;
+}
+
 void Character::addWeapon(Weapon* w)
 {
-	QModelIndex wIndex = model->index(CharacterModel::Key::Weapons, 1);
-	QVector<Weapon*> weapons = model->data(wIndex).value<QVector<Weapon*>>();
-	weapons.append(w);
-	model->setData(wIndex, QVariant::fromValue(weapons));
+	QModelIndex wRoot = model->index(CharacterModel::Weapons);
+	if (model->data(wRoot).canConvert<WeaponModel*>()) {
+		WeaponModel* wm = model->data(wRoot).value<WeaponModel*>();
+		wm->insertRow(0);
+		wm->setData(wm->index(0), QVariant::fromValue(w));
+		model->setData(wRoot, QVariant::fromValue(wm));
+	}
 }
 
 Ability* Character::getAbility(Ability::Score s)
 {
-	QVector<Ability*> abilities = model->data(model->index(CharacterModel::Key::Abilities, 1)).value<QVector<Ability*>>();
+	QVector<Ability*> abilities = model->data(model->index(CharacterModel::Abilities)).value<QVector<Ability*>>();
 	return abilities.at(static_cast<int>(s));
 }
 
 void Character::setAbility(Ability* a)
 {
-	QModelIndex aIndex =  model->index(CharacterModel::Key::Abilities, 1);
+	QModelIndex aIndex =  model->index(CharacterModel::Abilities);
 	QVector<Ability*> abilities = model->data(aIndex).value<QVector<Ability*>>();
-	abilities.insert(static_cast<int>(a->type), a);
+	abilities.replace(static_cast<int>(a->type), a);
 	model->setData(aIndex, QVariant::fromValue(abilities));
 }
 

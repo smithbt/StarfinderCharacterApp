@@ -1,31 +1,18 @@
 #pragma once
 
 #include <QAbstractListModel>
-#include <QJsonDocument>
-#include <QMap>
-#include <QString>
-#include <QVariant>
-#include "Ability.h"
 #include "Weapon.h"
-#include "WeaponModel.h"
 
-class CharacterModel : public QAbstractListModel
+class WeaponModel : public QAbstractListModel
 {
 	Q_OBJECT
 
 public:
-	enum Key : int {
-		Name = 0,
-		Abilities,
-		Weapons
-	};
-	Q_ENUM(Key)
+	WeaponModel(QObject *parent);
+	~WeaponModel();
 
-	CharacterModel(QObject *parent = nullptr);
-	~CharacterModel();
-
-	void read(const QJsonObject& json);
-	void write(QJsonObject& json) const;
+	void read(const QJsonArray& wArray);
+	void write(QJsonArray& wArray) const;
 
 	QVariant data(const QModelIndex& index, int role = Qt::UserRole) const override;
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -39,6 +26,5 @@ public:
 	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 
 private:
-	QMap<int, QVariant> map;
+	QVector<Weapon*> weapons;
 };
-

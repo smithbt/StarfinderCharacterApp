@@ -103,6 +103,7 @@
     <ClCompile Include="WeaponDelegate.cpp" />
     <ClCompile Include="WeaponDialog.cpp" />
     <ClCompile Include="WeaponEditor.cpp" />
+    <ClCompile Include="WeaponModel.cpp" />
     <ClCompile Include="WeaponWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="Damage.h" />
     <ClInclude Include="Resource.h" />
+    <QtMoc Include="WeaponModel.h" />
     <QtMoc Include="WeaponDelegate.h" />
     <QtMoc Include="AbilityWidget.h" />
     <QtMoc Include="AbilityDelegate.h" />

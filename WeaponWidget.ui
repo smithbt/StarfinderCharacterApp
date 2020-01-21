@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>243</width>
-    <height>192</height>
+    <width>405</width>
+    <height>120</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -93,37 +93,6 @@
         </layout>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QGroupBox" name="attack_groupBox">
-        <property name="title">
-         <string>Attack</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <property name="leftMargin">
-          <number>3</number>
-         </property>
-         <property name="topMargin">
-          <number>3</number>
-         </property>
-         <property name="rightMargin">
-          <number>3</number>
-         </property>
-         <property name="bottomMargin">
-          <number>3</number>
-         </property>
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="attack_label">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
       <item row="1" column="3">
        <widget class="QGroupBox" name="range_groupBox">
         <property name="title">
@@ -147,6 +116,37 @@
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="range_label">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="attack_groupBox">
+        <property name="title">
+         <string>Attack</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <property name="leftMargin">
+          <number>3</number>
+         </property>
+         <property name="topMargin">
+          <number>3</number>
+         </property>
+         <property name="rightMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>3</number>
+         </property>
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="attack_label">
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -263,7 +263,7 @@
         </layout>
        </widget>
       </item>
-      <item row="3" column="3">
+      <item row="2" column="0">
        <widget class="QGroupBox" name="bulk_groupBox">
         <property name="title">
          <string>Bulk</string>
@@ -297,7 +297,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="3">
+      <item row="2" column="1">
        <widget class="QGroupBox" name="price_groupBox">
         <property name="title">
          <string>Price</string>
@@ -331,7 +331,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0" rowspan="2" colspan="3">
+      <item row="0" column="4" rowspan="2">
        <widget class="QGroupBox" name="ammo_groupBox">
         <property name="title">
          <string>Capacity/Usage</string>
@@ -367,8 +367,11 @@
           </widget>
          </item>
          <item row="1" column="0" colspan="2">
-          <widget class="QProgressBar" name="progressBar">
+          <widget class="QProgressBar" name="capUse_progressBar">
            <property name="maximum">
+            <number>20</number>
+           </property>
+           <property name="value">
             <number>20</number>
            </property>
            <property name="format">
@@ -379,7 +382,7 @@
         </layout>
        </widget>
       </item>
-      <item row="5" column="0" colspan="4">
+      <item row="2" column="2" colspan="3">
        <widget class="QGroupBox" name="special_groupBox">
         <property name="title">
          <string>Special</string>

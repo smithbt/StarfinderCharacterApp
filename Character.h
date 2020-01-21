@@ -13,6 +13,8 @@ public:
 	~Character();
 
 	void setProperty(CharacterModel::Key k, QVariant& value);
+
+	WeaponModel* getWeaponModel();
 	void addWeapon(Weapon* w);
 
 	Ability* getAbility(Ability::Score s);

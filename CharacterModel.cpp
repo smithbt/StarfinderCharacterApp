@@ -15,27 +15,23 @@ void CharacterModel::read(const QJsonObject& json)
 {
 	beginResetModel();
 
-	if (json.contains("Ability") && json.value("Ability").isArray()) {
-		QVector<Ability*> abilities;
-		QJsonArray aArray = json.value("Ability").toArray();
+	if (json.contains("Abilities") && json.value("Abilities").isArray()) {
+		QVector<Ability*> abilities(6);
+		QJsonArray aArray = json.value("Abilities").toArray();
 		for (int i = 0; i < aArray.size(); ++i) {
 			QJsonObject aObj = aArray.at(i).toObject();
 			Ability* a = new Ability();
 			a->read(aObj);
-			abilities.insert(static_cast<int>(a->type), a);
+			int ai = static_cast<int>(a->type);
+			abilities.replace(ai, a);
 		}
 		map.insert(Key::Abilities, QVariant::fromValue(abilities));
 	}
-	if (json.contains("Weapon") && json.value("Weapon").isArray()) {
-		QVector<Weapon*> weapons;
-		QJsonArray wArray = json.value("Weapon").toArray();
-		for (int i = 0; i < wArray.size(); ++i) {
-			QJsonObject wObj = wArray.at(i).toObject();
-			Weapon* w = new Weapon();
-			w->read(wObj);
-			weapons.append(w);
-		}
-		map.insert(Key::Weapons, QVariant::fromValue(weapons));
+	if (json.contains("Weapons") && json.value("Weapons").isArray()) {
+		WeaponModel* wModel = new WeaponModel(this);
+		QJsonArray wArray = json.value("Weapons").toArray();
+		wModel->read(wArray);
+		map.insert(Key::Weapons, QVariant::fromValue(wModel));
 	}
 	if (json.contains("Name") && json.value("Name").isString()) {
 		map.insert(Key::Name, json.value("Name").toString());
@@ -46,16 +42,12 @@ void CharacterModel::read(const QJsonObject& json)
 void CharacterModel::write(QJsonObject& json) const
 {
 	for (QMap<int, QVariant>::const_iterator i = map.cbegin(); i != map.cend(); ++i) {
-		QString keyString = QVariant::fromValue(i.key()).toString();
+		QString keyString = QMetaEnum::fromType<Key>().valueToKey(i.key());
 		if (i.key() == Key::Name)
 			json.insert(keyString, i.value().toString());
 		if (i.key() == Key::Weapons) {
 			QJsonArray weaponArray;
-			for (Weapon* w : i.value().value<QVector<Weapon*>>()) {
-				QJsonObject wObj;
-				w->write(wObj);
-				weaponArray.append(wObj);
-			}
+			i.value().value<WeaponModel*>()->write(weaponArray);
 			json.insert(keyString, weaponArray);
 		}
 		if (i.key() == Key::Abilities) {
@@ -91,7 +83,7 @@ Qt::ItemFlags CharacterModel::flags(const QModelIndex& index) const
 	if (!index.isValid())
 		return Qt::NoItemFlags;
 
-	return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+	return Qt::ItemIsEditable | QAbstractListModel::flags(index);
 }
 
 QVariant CharacterModel::headerData(int section, Qt::Orientation orientation, int role) const
