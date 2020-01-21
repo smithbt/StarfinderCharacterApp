@@ -2,21 +2,15 @@
 
 
 Weapon::Weapon()
-	:Item(),
-	special(), type(Type::Melee)
-{
-	attackScore = Ability::Score::Strength;
-}
-
-Weapon::Weapon(Type t)
-	:Item(),
-	special(), type(t)
-{
-	if (type == Type::Melee)
-		attackScore = Ability::Score::Strength;
-	else if (type == Type::Ranged)
-		attackScore = Ability::Score::Dexterity;
-}
+	:Item(), 
+	type(Type::Melee), 
+	attackScore(Ability::Score::Strength),
+	damage(new Damage()), 
+	crit(QString("")), 
+	ammo(new Resource()),
+	range(0),
+	special()
+{}
 
 Weapon::~Weapon()
 {
