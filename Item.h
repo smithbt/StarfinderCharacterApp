@@ -13,6 +13,7 @@ public:
 	QString name;
 	int level, price;
 	double bulk;
+	QString description;
 
 	virtual void read(const QJsonObject& json);
 	virtual void write(QJsonObject& json) const;
