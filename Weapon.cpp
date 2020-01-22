@@ -4,9 +4,8 @@
 Weapon::Weapon()
 	:Item(), 
 	type(Type::Melee), 
-	attackScore(Ability::Score::Strength),
 	damage(new Damage()), 
-	crit(QString("")), 
+	crit(), 
 	ammo(new Resource()),
 	range(0),
 	special()

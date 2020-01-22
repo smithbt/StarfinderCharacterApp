@@ -24,11 +24,21 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	wMap->addMapping(ui.weapon_widget, 0);
 	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
 		wMap, &QDataWidgetMapper::setCurrentModelIndex);
-	connect(wMap, &QDataWidgetMapper::currentIndexChanged, ui.weapon_widget,
+	connect(ui.weapon_widget, &WeaponWidget::weaponChanged, 
 		[=]() {
-			Ability* a = pc->getAbility(ui.weapon_widget->getWeapon()->attackScore);
+			int aMod = 0, dMod = 0;
+			switch (ui.weapon_widget->getWeapon()->type) {
+			case Weapon::Type::Melee:
+				aMod = pc->getAbility(Ability::Score::Strength)->modifier();
+				dMod = pc->getAbility(Ability::Score::Strength)->modifier();
+				break;
+			case Weapon::Type::Ranged:
+				aMod = pc->getAbility(Ability::Score::Dexterity)->modifier();
+				break;
+			}
 			// TODO: replace hardcoded BAB with value from PC.
-			ui.weapon_widget->setAttackModifiers(a->modifier(), 0); 
+			ui.weapon_widget->setModifiers(aMod, dMod); 
+			ui.weapon_widget->updateLabels();
 		});
 
 	aProxy->setSourceModel(pc->model);

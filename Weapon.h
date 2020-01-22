@@ -32,7 +32,6 @@ public:
 	int capacity();
 	int usage();
 	Type type;
-	Ability::Score attackScore;
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
