@@ -15,7 +15,7 @@ WeaponDialog::WeaponDialog(QWidget *parent)
 	ui.damage_lineEdit->setCursorPosition(0);
 
 	connect(ui.type_comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-		this, [=]() {this->updateFields(ui.type_comboBox->currentData().value<Weapon::Type>()); });
+		this, SLOT(updateFields));
 	for (int t = 0; t < weaponTypes.keyCount(); ++t) {
 		ui.type_comboBox->addItem(
 			weaponTypes.key(t), QVariant::fromValue<Weapon::Type>(
@@ -62,8 +62,10 @@ Damage* WeaponDialog::parseDamageString(QString dmg)
 	return new Damage(count, size, type);
 }
 
-void WeaponDialog::updateFields(Weapon::Type wt) 
+void WeaponDialog::updateFields()
 {
+	Weapon::Type wt = ui.type_comboBox->currentData().value<Weapon::Type>();
+
 	bool ranged = (wt == Weapon::Type::Ranged);
 	bool melee = (wt == Weapon::Type::Melee);
 

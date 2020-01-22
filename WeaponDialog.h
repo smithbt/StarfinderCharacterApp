@@ -15,7 +15,7 @@ public:
 	Weapon* newWeapon();
 
 private slots:
-	void updateFields(Weapon::Type);
+	void updateFields();
 
 private:
 	Ui::WeaponDialog ui;
