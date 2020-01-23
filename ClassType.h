@@ -21,12 +21,16 @@ public:
 	int hp();
 	int skills();
 
+	void read(const QJsonObject& json);
+	void write(QJsonObject& json) const;
+	QString toString();
+
 private:
 	int calcSave(bool isGood);
 
-	bool fort;
-	bool ref;
-	bool will;
+	bool fortIsGood;
+	bool refIsGood;
+	bool willIsGood;
 	double babRate;
 	int staminaRate;
 	int hpRate;

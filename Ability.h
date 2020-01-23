@@ -26,6 +26,8 @@ public:
 	Score type;
 	int base;
 	int upgrade;
+
+	static Score scoreFromString(QString s);
 };
 
 Q_DECLARE_METATYPE(Ability*)

@@ -37,7 +37,7 @@ void Character::addWeapon(Weapon* w)
 
 Ability* Character::getAbility(Ability::Score s)
 {
-	QVector<Ability*> abilities = model->data(model->index(CharacterModel::Abilities)).value<QVector<Ability*>>();
+	QVector<Ability*> abilities = model->index(CharacterModel::Abilities).data(Qt::UserRole).value<QVector<Ability*>>();
 	return abilities.at(static_cast<int>(s));
 }
 

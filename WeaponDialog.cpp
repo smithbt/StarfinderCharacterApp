@@ -2,13 +2,13 @@
 
 WeaponDialog::WeaponDialog(QWidget *parent)
 	: QDialog(parent), 
-	weaponTypes(QMetaEnum::fromType<Weapon::Type>())
+	weaponTypes(QMetaEnum::fromType<Weapon::Type>()),
+	damageRegEx("^(?<count>\\d+)[d,D](?<size>\\d+)\\s*(?<type>.*)$")
 {
 	ui.setupUi(this);
 	QIntValidator* validPrice = new QIntValidator(ui.price_lineEdit);
 	validPrice->setBottom(0);
 	ui.price_lineEdit->setValidator(validPrice);
-	damageRegEx = QRegularExpression("^(?<count>\\d+)[d,D](?<size>\\d+)\\s*(?<type>.*)$");
 	QRegularExpressionValidator* validDice = new QRegularExpressionValidator(damageRegEx, ui.damage_lineEdit);
 	ui.damage_lineEdit->setValidator(validDice);
 	ui.damage_lineEdit->setPlaceholderText("e.g. 1d6 E & F");
