@@ -94,6 +94,7 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterModel.cpp" />
     <ClCompile Include="CharacterDialog.cpp" />
+    <ClCompile Include="ClassType.cpp" />
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -121,6 +122,7 @@
     <QtRcc Include="StarfinderCharacterApp.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="ClassType.h" />
     <ClInclude Include="Damage.h" />
     <ClInclude Include="Resource.h" />
     <QtMoc Include="WeaponModel.h" />

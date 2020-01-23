@@ -15,7 +15,7 @@ WeaponDialog::WeaponDialog(QWidget *parent)
 	ui.damage_lineEdit->setCursorPosition(0);
 
 	connect(ui.type_comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-		this, SLOT(updateFields));
+		this, &WeaponDialog::updateFields);
 	for (int t = 0; t < weaponTypes.keyCount(); ++t) {
 		ui.type_comboBox->addItem(
 			weaponTypes.key(t), QVariant::fromValue<Weapon::Type>(

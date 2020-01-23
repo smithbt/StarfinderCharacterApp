@@ -17,7 +17,8 @@ public:
 	enum Key : int {
 		Name = 0,
 		Abilities,
-		Weapons
+		Weapons,
+		Classes
 	};
 	Q_ENUM(Key)
 
