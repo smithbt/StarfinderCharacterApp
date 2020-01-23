@@ -12,7 +12,9 @@ Character::~Character()
 
 void Character::setProperty(CharacterModel::Key k, QVariant& value) 
 {
-	QModelIndex index = model->index(k, 1);
+	QModelIndex index = model->index(k);
+	if (!index.isValid())
+		model->insertRow(0);
 	model->setData(index, value);
 }
 

@@ -1,7 +1,5 @@
 {
-"Weapons": [
-    ],
-"Abilities": [
+  "Abilities": [
     {
       "Base Score": 10,
       "Name": "Strength",
@@ -32,6 +30,9 @@
       "Name": "Charisma",
       "Personal Upgrade": 0
     }
-],
-"Name": ""
+  ],
+  "Classes":  "",
+  "Name": "",
+  "Weapons": [
+  ]
 }

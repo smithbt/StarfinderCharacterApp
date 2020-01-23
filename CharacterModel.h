@@ -6,6 +6,7 @@
 #include <QString>
 #include <QVariant>
 #include "Ability.h"
+#include "ClassType.h"
 #include "Weapon.h"
 #include "WeaponModel.h"
 

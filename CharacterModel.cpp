@@ -27,6 +27,12 @@ void CharacterModel::read(const QJsonObject& json)
 		}
 		map.insert(Key::Abilities, QVariant::fromValue(abilities));
 	}
+	if (json.contains("Classes") && json.value("Classes").isObject()) {
+		QJsonObject cObj = json.value("Classes").toObject();
+		ClassType* ct = new ClassType(this);
+		ct->read(cObj);
+		map.insert(Key::Classes, QVariant::fromValue(ct));
+	}
 	if (json.contains("Weapons") && json.value("Weapons").isArray()) {
 		WeaponModel* wModel = new WeaponModel(this);
 		QJsonArray wArray = json.value("Weapons").toArray();
@@ -50,12 +56,17 @@ void CharacterModel::write(QJsonObject& json) const
 			i.value().value<WeaponModel*>()->write(weaponArray);
 			json.insert(keyString, weaponArray);
 		}
+		if (i.key() == Key::Classes) {
+			QJsonObject cObj;
+			i.value().value<ClassType*>()->write(cObj);
+			json.insert(keyString, cObj);
+		}
 		if (i.key() == Key::Abilities) {
 			QJsonArray abilityArray;
 			for (Ability* a : i.value().value<QVector<Ability*>>()) {
 				QJsonObject aObj;
 				a->write(aObj);
-				abilityArray.append(aObj);
+				abilityArray.insert(static_cast<int>(a->type), aObj);
 			}
 			json.insert(keyString, abilityArray);
 		}

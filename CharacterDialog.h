@@ -16,5 +16,6 @@ public:
 
 private:
 	Ui::CharacterDialog ui;
-	QVector<QSpinBox*> asWdgts;
+	QVector<QSpinBox*> asbWdgts;
+	QVector<QSpinBox*> asuWdgts;
 };
