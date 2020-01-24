@@ -1,10 +1,10 @@
 #pragma once
 
-#include <QAbstractTableModel>
+#include <QAbstractListModel>
 #include <QJsonArray>
 #include "Ability.h"
 
-class AbilityModel : public QAbstractTableModel
+class AbilityModel : public QAbstractListModel
 {
 	Q_OBJECT
 
@@ -20,7 +20,6 @@ public:
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 	bool setAbility(Ability* a);
 
