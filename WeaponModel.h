@@ -11,8 +11,8 @@ public:
 	WeaponModel(QObject *parent);
 	~WeaponModel();
 
-	void read(const QJsonArray& wArray);
-	void write(QJsonArray& wArray) const;
+	void read(const QJsonObject& json);
+	void write(QJsonObject& json) const;
 
 	QVariant data(const QModelIndex& index, int role = Qt::UserRole) const override;
 	Qt::ItemFlags flags(const QModelIndex& index) const override;

@@ -11,26 +11,30 @@ WeaponModel::~WeaponModel()
 	qDeleteAll(weapons);
 }
 
-void WeaponModel::read(const QJsonArray& wArray)
+void WeaponModel::read(const QJsonObject& json)
 {
 	beginResetModel();
-
-	for (int i = 0; i < wArray.size(); ++i) {
-		QJsonObject wObj = wArray.at(i).toObject();
-		Weapon* w = new Weapon();
-		w->read(wObj);
-		weapons.append(w);
+	if (json.contains("Weapons") && json.value("Weapons").isArray()) {
+		QJsonArray wArray = json.value("Weapons").toArray();
+		for (int i = 0; i < wArray.size(); ++i) {
+			QJsonObject wObj = wArray.at(i).toObject();
+			Weapon* w = new Weapon();
+			w->read(wObj);
+			weapons.append(w);
+		}
 	}
 	endResetModel();
 }
 
-void WeaponModel::write(QJsonArray& wArray) const
+void WeaponModel::write(QJsonObject& json) const
 {
+	QJsonArray wArray;
 	for (Weapon* w : weapons) {
 		QJsonObject wObj;
 		w->write(wObj);
 		wArray.append(wObj);
 	}
+	json.insert("Weapons", wArray);
 }
 
 QVariant WeaponModel::data(const QModelIndex& index, int role) const

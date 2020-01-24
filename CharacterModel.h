@@ -5,10 +5,7 @@
 #include <QMap>
 #include <QString>
 #include <QVariant>
-#include "Ability.h"
 #include "ClassType.h"
-#include "Weapon.h"
-#include "WeaponModel.h"
 
 class CharacterModel : public QAbstractListModel
 {
@@ -17,8 +14,6 @@ class CharacterModel : public QAbstractListModel
 public:
 	enum Key : int {
 		Name = 0,
-		Abilities,
-		Weapons,
 		Classes
 	};
 	Q_ENUM(Key)

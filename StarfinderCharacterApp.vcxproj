@@ -89,6 +89,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AbilityDelegate.cpp" />
+    <ClCompile Include="AbilityModel.cpp" />
     <ClCompile Include="AbilityWidget.cpp" />
     <ClCompile Include="Ability.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -123,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ClassType.h" />
+    <QtMoc Include="AbilityModel.h" />
     <ClInclude Include="Damage.h" />
     <ClInclude Include="Resource.h" />
     <QtMoc Include="WeaponModel.h" />

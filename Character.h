@@ -3,8 +3,8 @@
 #include <QVariant>
 #include <QMap>
 #include "CharacterModel.h"
-#include "Ability.h"
-#include "Weapon.h"
+#include "AbilityModel.h"
+#include "WeaponModel.h"
 
 class Character
 {
@@ -14,7 +14,6 @@ public:
 
 	void setProperty(CharacterModel::Key k, QVariant& value);
 
-	WeaponModel* getWeaponModel();
 	void addWeapon(Weapon* w);
 
 	Ability* getAbility(Ability::Score s);
@@ -24,5 +23,7 @@ public:
 	void write(QJsonObject& json) const;
 
 	CharacterModel* model;
+	AbilityModel* aModel;
+	WeaponModel* wModel;
 };
 

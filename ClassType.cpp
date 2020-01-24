@@ -16,8 +16,8 @@ ClassType::ClassType(QObject *parent)
 	db = QSqlDatabase::addDatabase("QSQLITE");
 	db.setDatabaseName(":/Resources/Starfinder.sqlite3");
 
-	connect(this, SIGNAL(nameChanged), SLOT(updateClassReference));
-	connect(this, SIGNAL(levelChanged), SLOT(updateLeveledNumbers));
+	connect(this, &ClassType::nameChanged, &ClassType::updateClassReference);
+	connect(this, &ClassType::levelChanged, &ClassType::updateLeveledNumbers);
 }
 
 void ClassType::updateLeveledNumbers()

@@ -59,7 +59,7 @@
             <number>4</number>
            </property>
            <item>
-            <widget class="AbilityWidget" name="abilityList_widget" native="true"/>
+            <widget class="QTableView" name="tableView"/>
            </item>
           </layout>
          </widget>
@@ -346,12 +346,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>AbilityWidget</class>
-   <extends>QWidget</extends>
-   <header>AbilityWidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>WeaponWidget</class>
    <extends>QWidget</extends>

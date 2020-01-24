@@ -1,13 +1,17 @@
 #include "Character.h"
 
 Character::Character(QObject* parent)
-	: model(new CharacterModel(parent))
+	: model(new CharacterModel(parent)),
+	wModel(new WeaponModel(parent)),
+	aModel(new AbilityModel(parent))
 {
 }
 
 Character::~Character()
 {
 	delete model;
+	delete aModel;
+	delete wModel;
 }
 
 void Character::setProperty(CharacterModel::Key k, QVariant& value) 
@@ -18,45 +22,32 @@ void Character::setProperty(CharacterModel::Key k, QVariant& value)
 	model->setData(index, value);
 }
 
-WeaponModel* Character::getWeaponModel()
-{
-	QModelIndex wRoot = model->index(CharacterModel::Weapons);
-	if (model->data(wRoot).canConvert<WeaponModel*>())
-		return model->data(wRoot).value<WeaponModel*>();
-	return nullptr;
-}
-
 void Character::addWeapon(Weapon* w)
 {
-	QModelIndex wRoot = model->index(CharacterModel::Weapons);
-	if (model->data(wRoot).canConvert<WeaponModel*>()) {
-		WeaponModel* wm = model->data(wRoot).value<WeaponModel*>();
-		wm->insertRow(0);
-		wm->setData(wm->index(0), QVariant::fromValue(w));
-		model->setData(wRoot, QVariant::fromValue(wm));
-	}
+	wModel->insertRow(0);
+	wModel->setData(wModel->index(0), QVariant::fromValue(w));
 }
 
 Ability* Character::getAbility(Ability::Score s)
 {
-	QVector<Ability*> abilities = model->index(CharacterModel::Abilities).data(Qt::UserRole).value<QVector<Ability*>>();
-	return abilities.at(static_cast<int>(s));
+	return aModel->index(static_cast<int>(s), 0).data(Qt::UserRole).value<Ability*>();
 }
 
 void Character::setAbility(Ability* a)
 {
-	QModelIndex aIndex =  model->index(CharacterModel::Abilities);
-	QVector<Ability*> abilities = model->data(aIndex).value<QVector<Ability*>>();
-	abilities.replace(static_cast<int>(a->type), a);
-	model->setData(aIndex, QVariant::fromValue(abilities));
+	aModel->setAbility(a);
 }
 
 void Character::read(const QJsonObject& json)
 {
 	model->read(json);
+	wModel->read(json);
+	aModel->read(json);
 }
 
 void Character::write(QJsonObject& json) const
 {
 	model->write(json);
+	wModel->write(json);
+	aModel->write(json);
 }

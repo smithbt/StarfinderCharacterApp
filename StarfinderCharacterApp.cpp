@@ -14,7 +14,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 
-	wProxy->setSourceModel(pc->getWeaponModel());
+	wProxy->setSourceModel(pc->wModel);
 	ui.weaponList->setModel(wProxy);
 	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui.weaponList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customWeaponMenu(QPoint)));
@@ -41,22 +41,13 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 			ui.weapon_widget->updateLabels();
 		});
 
-	aProxy->setSourceModel(pc->model);
-	aMap->setModel(aProxy);
-	aMap->setItemDelegate(new AbilityDelegate());
-	aMap->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
-	aMap->addMapping(ui.abilityList_widget, 0);
-	aMap->setCurrentIndex(CharacterModel::Key::Abilities);
+	aProxy->setSourceModel(pc->aModel);
+	ui.tableView->setModel(aProxy);
 
 
 	connect(pc->model, &CharacterModel::modelReset, this,
 		[=]() {
-			wProxy->setSourceModel(pc->getWeaponModel());
-
 			wMap->addMapping(ui.weapon_widget, 0);
-
-			aMap->addMapping(ui.abilityList_widget, 0);
-			aMap->setCurrentIndex(CharacterModel::Key::Abilities);
 		});
 
 }
