@@ -23,19 +23,19 @@ public:
 
 private:
 	Ui::StarfinderCharacterAppClass ui;
+	QSortFilterProxyModel* proxy;
 	QSortFilterProxyModel* wProxy;
 	QSortFilterProxyModel* aProxy;
 	Character* pc;
 	QString fileName;
 	QDataWidgetMapper* aMap;
 	QDataWidgetMapper* wMap;
-	QVector<AbilityWidget*> aWdgts;
+	QDataWidgetMapper* mapper;
 
 	void readModelFromFile(QString path);
 
 
 private slots:
-	void customWeaponMenu(QPoint pos);
 	void on_actionAdd_Weapon_triggered();
 	void on_actionCharacter_New_triggered();
 	bool on_actionCharacter_Open_triggered();

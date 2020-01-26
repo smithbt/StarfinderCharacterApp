@@ -2,7 +2,7 @@
 
 #include <QAbstractListModel>
 #include <QJsonDocument>
-#include <QMap>
+#include <QVector>
 #include <QString>
 #include <QVariant>
 #include "ClassType.h"
@@ -36,6 +36,6 @@ public:
 	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 
 private:
-	QMap<int, QVariant> map;
+	QVector<QVariant> map;
 };
 

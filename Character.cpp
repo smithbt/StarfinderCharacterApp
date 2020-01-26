@@ -1,7 +1,8 @@
 #include "Character.h"
 
 Character::Character(QObject* parent)
-	: model(new CharacterModel(parent)),
+	: QObject(parent),
+	model(new CharacterModel(parent)),
 	wModel(new WeaponModel(parent)),
 	aModel(new AbilityModel(parent))
 {

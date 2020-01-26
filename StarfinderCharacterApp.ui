@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>308</height>
+    <width>380</width>
+    <height>390</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,16 +31,10 @@
         <string>Main</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="0">
+        <item row="0" column="0">
          <widget class="QGroupBox" name="abilityBox">
           <property name="title">
            <string>Abilities</string>
-          </property>
-          <property name="flat">
-           <bool>true</bool>
-          </property>
-          <property name="checkable">
-           <bool>false</bool>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <property name="spacing">
@@ -64,29 +58,11 @@
           </layout>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+        <item row="0" column="1">
+         <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>GroupBox</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="charName_label">
-             <property name="text">
-              <string>Name</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="charName_field"/>
-           </item>
-          </layout>
          </widget>
         </item>
        </layout>
@@ -250,18 +226,43 @@
         <string>Weapons</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
+        <item row="1" column="0">
          <widget class="QListView" name="weaponList">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="0">
          <widget class="WeaponWidget" name="weapon_widget" native="true"/>
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>GroupBox</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="charName_label">
+         <property name="text">
+          <string>Character Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="charName_field"/>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -271,13 +272,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>422</width>
+     <width>380</width>
      <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Character</string>
+     <string>File</string>
     </property>
     <addaction name="actionCharacter_New"/>
     <addaction name="actionCharacter_Open"/>
@@ -287,7 +288,14 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuCharacter">
+    <property name="title">
+     <string>Character</string>
+    </property>
+    <addaction name="actionAdd_Weapon"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuCharacter"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

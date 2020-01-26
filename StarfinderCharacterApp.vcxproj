@@ -137,7 +137,7 @@
     <QtMoc Include="Ability.h" />
     <QtMoc Include="CharacterModel.h" />
     <QtMoc Include="CharacterDialog.h" />
-    <ClInclude Include="Character.h" />
+    <QtMoc Include="Character.h" />
     <QtMoc Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>

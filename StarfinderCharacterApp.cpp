@@ -3,21 +3,29 @@
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
 	pc(new Character(this)),
+	proxy(new QSortFilterProxyModel(this)),
 	wProxy(new QSortFilterProxyModel(this)),
 	aProxy(new QSortFilterProxyModel(this)),
 	wMap(new QDataWidgetMapper(this)),
-	aMap(new QDataWidgetMapper(this))
+	aMap(new QDataWidgetMapper(this)),
+	mapper(new QDataWidgetMapper(this))
 {
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 
 	ui.setupUi(this);
+	proxy->setSourceModel(pc->model);
+	mapper->setModel(proxy);
+	mapper->setOrientation(Qt::Vertical);
+	mapper->addMapping(ui.charName_field, CharacterModel::Name);
+	mapper->toFirst();
+	//connect(ui.charName_field, &QLineEdit::textChanged, this, [=](QString text) {
+	//	pc->setProperty(CharacterModel::Name, QVariant(text)); });
 
-	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
-
+	aProxy->setSourceModel(pc->aModel);
+	ui.listView->setModel(aProxy);
+	
 	wProxy->setSourceModel(pc->wModel);
 	ui.weaponList->setModel(wProxy);
-	ui.weaponList->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(ui.weaponList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customWeaponMenu(QPoint)));
 
 	wMap->setModel(wProxy);
 	wMap->setItemDelegate(new WeaponDelegate());
@@ -36,27 +44,11 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 				aMod += pc->getAbility(Ability::Score::Dexterity)->modifier();
 				break;
 			}
-			// TODO: replace hardcoded BAB with value from PC.
 			ui.weapon_widget->setModifiers(aMod, dMod); 
 			ui.weapon_widget->updateLabels();
 		});
 
-	aProxy->setSourceModel(pc->aModel);
-	ui.listView->setModel(aProxy);
-
-
-	connect(pc->model, &CharacterModel::modelReset, this,
-		[=]() {
-			wMap->addMapping(ui.weapon_widget, 0);
-		});
-
-}
-
-void StarfinderCharacterApp::customWeaponMenu(QPoint pos) {
-
-	QMenu* menu = new QMenu(this);
-	menu->addAction(ui.actionAdd_Weapon);
-	menu->popup(ui.weaponList->viewport()->mapToGlobal(pos));
+	
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {

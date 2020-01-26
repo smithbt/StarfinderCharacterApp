@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QDebug>
+#include <QSqlError>
 #include <QObject>
 #include <QSqlQueryModel>
 #include "Ability.h"

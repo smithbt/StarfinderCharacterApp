@@ -2,7 +2,7 @@
 
 CharacterModel::CharacterModel(QObject *parent)
 	: QAbstractListModel(parent),
-	map()
+	map(2, QVariant())
 {
 }
 
@@ -19,23 +19,23 @@ void CharacterModel::read(const QJsonObject& json)
 		QJsonObject cObj = json.value("Classes").toObject();
 		ClassType* ct = new ClassType(this);
 		ct->read(cObj);
-		map.insert(Key::Classes, QVariant::fromValue(ct));
+		map.replace(Key::Classes, QVariant::fromValue(ct));
 	}
 	if (json.contains("Name") && json.value("Name").isString()) {
-		map.insert(Key::Name, json.value("Name").toString());
+		map.replace(Key::Name, json.value("Name").toString());
 	}
 	endResetModel();
 }
 
 void CharacterModel::write(QJsonObject& json) const
 {
-	for (QMap<int, QVariant>::const_iterator i = map.cbegin(); i != map.cend(); ++i) {
-		QString keyString = QMetaEnum::fromType<Key>().valueToKey(i.key());
-		if (i.key() == Key::Name)
-			json.insert(keyString, i.value().toString());
-		if (i.key() == Key::Classes) {
+	for (int i = 0; i < map.size(); ++i) {
+		QString keyString = QMetaEnum::fromType<Key>().valueToKey(i);
+		if (i == Key::Name)
+			json.insert(keyString, map.at(i).toString());
+		if (i == Key::Classes) {
 			QJsonObject cObj;
-			i.value().value<ClassType*>()->write(cObj);
+			map.at(i).value<ClassType*>()->write(cObj);
 			json.insert(keyString, cObj);
 		}
 	}
@@ -52,7 +52,7 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 
 
 	if (role == Qt::UserRole)
-		return map.value(key);
+		return map.at(key);
 
 	return QVariant();
 }
@@ -81,7 +81,7 @@ int CharacterModel::rowCount(const QModelIndex& parent) const
 bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
 	if (index.isValid() && role == Qt::UserRole) {
-		map.insert(index.row(), value);
+		map.replace(index.row(), value);
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::UserRole });
 		return true;
 	}
@@ -93,8 +93,8 @@ bool CharacterModel::insertRows(int position, int rows, const QModelIndex& paren
 	Q_UNUSED(parent);
 	beginInsertRows(QModelIndex(), position, position + rows - 1);
 
-	for (QMap<int, QVariant>::const_iterator i = map.lowerBound(position); i != map.upperBound(position + rows); ++i) {
-		map.insert(i.key(), QVariant());
+	for (int i = (position); i < (position + rows); ++i) {
+		map.insert(i, QVariant());
 	}
 
 	endInsertRows();
@@ -106,8 +106,8 @@ bool CharacterModel::removeRows(int position, int rows, const QModelIndex& paren
 	Q_UNUSED(parent);
 	beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
-	for (QMap<int, QVariant>::const_iterator i = map.lowerBound(position); i != map.upperBound(position + rows); ++i) {
-		map.remove(i.key());
+	for (int i = (position); i < (position + rows); ++i) {
+		map.remove(i);
 	}
 
 	endRemoveRows();
