@@ -1,16 +1,22 @@
 #pragma once
 
-#include <QVariant>
-#include <QMap>
+#include <QObject>
 #include "CharacterModel.h"
 #include "AbilityModel.h"
 #include "WeaponModel.h"
 
-class Character
+class Character : QObject
 {
+	Q_OBJECT
+
 public: 
 	Character(QObject* parent = nullptr);
 	~Character();
+
+	int bab();
+	int fort();
+	int ref();
+	int will();
 
 	void setProperty(CharacterModel::Key k, QVariant& value);
 

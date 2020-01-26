@@ -3,7 +3,7 @@
 ClassType::ClassType(QObject *parent)
 	: QObject(parent),
 	m_name(Envoy),
-	model(new QSqlQueryModel),
+	model(new QSqlQueryModel()),
 	m_level(0),
 	m_bab(1),
 	m_fort(0),
@@ -14,7 +14,9 @@ ClassType::ClassType(QObject *parent)
 	m_skill(6)
 {
 	db = QSqlDatabase::addDatabase("QSQLITE");
-	db.setDatabaseName(":/Resources/Starfinder.sqlite3");
+	db.setDatabaseName("./Resources/Starfinder.sqlite3");
+	if (!db.open())
+		qWarning() << db.lastError();
 
 	connect(this, &ClassType::nameChanged, &ClassType::updateClassReference);
 	connect(this, &ClassType::levelChanged, &ClassType::updateLeveledNumbers);
@@ -97,14 +99,14 @@ void ClassType::read(const QJsonObject& json)
 {
 	if (json.contains("Name") && json.value("Name").isString())
 		m_name = nameValue(json.value("Name").toString());
-	if (json.contains("level") && json.value("level").isDouble())
-		m_level = json.value("level").toInt();
+	if (json.contains("Level") && json.value("Level").isDouble())
+		m_level = json.value("Level").toInt();
 }
 
 void ClassType::write(QJsonObject& json) const
 {
 	json.insert("Name", nameString(m_name));
-	json.insert("level", m_level);
+	json.insert("Level", m_level);
 }
 
 QString ClassType::toString()
@@ -115,7 +117,7 @@ QString ClassType::toString()
 
 void ClassType::updateClassReference()
 {
-	model->clear();
+	//model->clear();
 	QString query = QString("SELECT * FROM Classes WHERE Id = %1").arg(m_name);
 	model->setQuery(query, db);
 

@@ -126,6 +126,9 @@
     <QtMoc Include="AbilityModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Character.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="StarfinderCharacterApp.ui">
@@ -153,9 +156,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>

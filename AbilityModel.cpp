@@ -1,7 +1,7 @@
 #include "AbilityModel.h"
 
 AbilityModel::AbilityModel(QObject *parent)
-	: QAbstractTableModel(parent),
+	: QAbstractListModel(parent),
 	abilities(6)
 {
 }
@@ -54,11 +54,7 @@ QVariant AbilityModel::data(const QModelIndex& index, int role) const
 		return QVariant::fromValue(abilities.at(idx));
 
 	if (role == Qt::DisplayRole)
-		switch (index.column()) {
-		case 0: return abilities.at(idx)->name();
-		case 1: return abilities.at(idx)->score();
-		case 2: return abilities.at(idx)->modifier();
-		}
+		return abilities.at(idx)->toString();
 
 	return QVariant();
 }
@@ -68,7 +64,7 @@ Qt::ItemFlags AbilityModel::flags(const QModelIndex& index) const
 	if (!index.isValid())
 		return Qt::NoItemFlags;
 
-	return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+	return Qt::ItemIsEditable | QAbstractListModel::flags(index);
 }
 
 QVariant AbilityModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -77,11 +73,7 @@ QVariant AbilityModel::headerData(int section, Qt::Orientation orientation, int 
 		return QVariant();
 
 	if (orientation == Qt::Horizontal)
-		switch (section) {
-		case 0: return "Ability";
-		case 1: return "Score";
-		case 2: return "Modifier";
-		}
+		return "Ability: Score [Modifier]";
 
 	return QVariant();
 }
@@ -91,15 +83,10 @@ int AbilityModel::rowCount(const QModelIndex& parent) const
 	return abilities.size();
 }
 
-int AbilityModel::columnCount(const QModelIndex& parent) const
-{
-	return 3;
-}
-
 bool AbilityModel::setAbility(Ability* a)
 {
 	const int row = static_cast<int>(a->type);
 	abilities.replace(row, a);
-	emit dataChanged(index(row, 0), index(row, columnCount()), { Qt::DisplayRole, Qt::UserRole });
+	emit dataChanged(index(row, 0), index(row, 0), { Qt::DisplayRole, Qt::UserRole });
 	return true;
 }
