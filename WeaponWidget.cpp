@@ -3,7 +3,8 @@
 WeaponWidget::WeaponWidget(QWidget* parent)
 	: QWidget(parent),
 	weapon(new Weapon()),
-	attackMod(0)
+	attackMod(0),
+	damageMod(0)
 {
 	ui.setupUi(this);
 
