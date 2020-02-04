@@ -9,7 +9,14 @@ class Ability
 {
 	Q_GADGET
 public:
-	enum class Score { Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma };
+	enum Score : int { 
+		Strength = 0, 
+		Dexterity, 
+		Constitution, 
+		Intelligence, 
+		Wisdom, 
+		Charisma 
+	};
 	Q_ENUM(Score)
 
 	Ability(Score s = Score::Strength, int base = 10, int upgrade = 0);
