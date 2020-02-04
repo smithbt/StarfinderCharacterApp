@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>390</height>
+    <width>298</width>
+    <height>383</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -53,7 +53,57 @@
             <number>4</number>
            </property>
            <item>
-            <widget class="QListView" name="listView"/>
+            <widget class="AbilityWidget" name="str_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="dex_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="con_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_13">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="int_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_12">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="wis_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_11">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="cha_widget" native="true"/>
            </item>
           </layout>
          </widget>
@@ -272,7 +322,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>380</width>
+     <width>298</width>
      <height>21</height>
     </rect>
    </property>
@@ -358,6 +408,12 @@
    <class>WeaponWidget</class>
    <extends>QWidget</extends>
    <header>WeaponWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AbilityWidget</class>
+   <extends>QWidget</extends>
+   <header>AbilityWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

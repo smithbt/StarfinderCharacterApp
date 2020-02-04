@@ -10,19 +10,24 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	aMap(new QDataWidgetMapper(this)),
 	mapper(new QDataWidgetMapper(this))
 {
-	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
-
 	ui.setupUi(this);
 	proxy->setSourceModel(pc->model);
 	mapper->setModel(proxy);
 	mapper->setOrientation(Qt::Vertical);
 	mapper->addMapping(ui.charName_field, CharacterModel::Name);
-	mapper->toFirst();
-	//connect(ui.charName_field, &QLineEdit::textChanged, this, [=](QString text) {
-	//	pc->setProperty(CharacterModel::Name, QVariant(text)); });
+	connect(proxy, &QSortFilterProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
 
 	aProxy->setSourceModel(pc->aModel);
-	ui.listView->setModel(aProxy);
+	aMap->setModel(aProxy);
+	aMap->setItemDelegate(new AbilityDelegate(this));
+	aMap->setOrientation(Qt::Vertical);
+	aMap->addMapping(ui.str_widget, Ability::Strength);
+	aMap->addMapping(ui.dex_widget, Ability::Dexterity);
+	aMap->addMapping(ui.con_widget, Ability::Constitution);
+	aMap->addMapping(ui.int_widget, Ability::Intelligence);
+	aMap->addMapping(ui.wis_widget, Ability::Wisdom);
+	aMap->addMapping(ui.cha_widget, Ability::Charisma);
+	connect(aProxy, &QSortFilterProxyModel::modelReset, aMap, &QDataWidgetMapper::toFirst);
 	
 	wProxy->setSourceModel(pc->wModel);
 	ui.weaponList->setModel(wProxy);
@@ -48,6 +53,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 			ui.weapon_widget->updateLabels();
 		});
 
+	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	
 }
 

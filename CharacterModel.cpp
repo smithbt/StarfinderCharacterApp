@@ -51,7 +51,7 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 		return QVariant();
 
 
-	if (role == Qt::UserRole)
+	if (role == Qt::DisplayRole || role == Qt::EditRole)
 		return map.at(key);
 
 	return QVariant();
@@ -65,14 +65,6 @@ Qt::ItemFlags CharacterModel::flags(const QModelIndex& index) const
 	return Qt::ItemIsEditable | QAbstractListModel::flags(index);
 }
 
-QVariant CharacterModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-		return "Value";
-
-	return QVariant();
-}
-
 int CharacterModel::rowCount(const QModelIndex& parent) const
 {
 	return map.size();
@@ -80,9 +72,9 @@ int CharacterModel::rowCount(const QModelIndex& parent) const
 
 bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (index.isValid() && role == Qt::UserRole) {
+	if (index.isValid() && role == Qt::EditRole) {
 		map.replace(index.row(), value);
-		emit dataChanged(index, index, { Qt::DisplayRole, Qt::UserRole });
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
 		return true;
 	}
 	return false;
