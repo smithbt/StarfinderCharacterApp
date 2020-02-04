@@ -49,9 +49,6 @@
     <ClCompile Include="Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WeaponWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,9 +99,6 @@
     <QtMoc Include="Weapon.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="WeaponEditor.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="WeaponWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -138,9 +132,6 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="CharacterDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="WeaponEditor.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="WeaponWidget.ui">
