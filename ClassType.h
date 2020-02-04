@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QDebug>
-#include <QSqlError>
+#include <QFile>
+#include <QJsonDocument>
 #include <QObject>
-#include <QSqlQueryModel>
 #include "Ability.h"
 
 class ClassType : public QObject
@@ -54,15 +54,12 @@ private:
 	int calcSave(bool isGood);
 	Name nameValue(QString n);
 
-	QSqlQueryModel* model;
-	QSqlDatabase db;
-
 	Name m_name;
-
 	int m_level;
-	int m_fort;
-	int m_ref;
-	int m_will;
+
+	bool m_fort;
+	bool m_ref;
+	bool m_will;
 	int m_bab;
 	int m_stamina;
 	int m_hp;

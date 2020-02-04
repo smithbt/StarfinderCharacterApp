@@ -2,8 +2,8 @@
 
 ClassType::ClassType(QObject *parent)
 	: QObject(parent),
+	keyAbility(Ability::Score::Charisma),
 	m_name(Envoy),
-	model(new QSqlQueryModel()),
 	m_level(0),
 	m_bab(1),
 	m_fort(0),
@@ -13,29 +13,11 @@ ClassType::ClassType(QObject *parent)
 	m_hp(6),
 	m_skill(6)
 {
-	db = QSqlDatabase::addDatabase("QSQLITE");
-	db.setDatabaseName("./Resources/Starfinder.sqlite3");
-	if (!db.open())
-		qWarning() << db.lastError();
-
 	connect(this, &ClassType::nameChanged, &ClassType::updateClassReference);
-	connect(this, &ClassType::levelChanged, &ClassType::updateLeveledNumbers);
-}
-
-void ClassType::updateLeveledNumbers()
-{
-	m_bab = m_level * model->index(0, 3).data().toDouble();
-	m_fort = calcSave(model->index(0, 4).data().toBool());
-	m_ref = calcSave(model->index(0, 5).data().toBool());
-	m_will = calcSave(model->index(0, 6).data().toBool());
-	m_stamina = m_level * model->index(0, 7).data().toInt();
-	m_hp = m_level * model->index(0, 8).data().toInt();
-	m_skill = m_level * model->index(0, 9).data().toInt();
 }
 
 ClassType::~ClassType()
 {
-	delete model;
 }
 
 ClassType::Name ClassType::getName()
@@ -62,37 +44,37 @@ void ClassType::setLevel(int level)
 
 int ClassType::fort()
 {
-	return m_fort;
+	return calcSave(m_fort);
 }
 
 int ClassType::ref()
 {
-	return m_ref;
+	return calcSave(m_ref);
 }
 
 int ClassType::will()
 {
-	return m_will;
+	return calcSave(m_will);
 }
 
 int ClassType::bab()
 {
-	return m_bab;
+	return m_bab * m_level;
 }
 
 int ClassType::stamina()
 {
-	return m_stamina;
+	return m_stamina * m_level;
 }
 
 int ClassType::hp()
 {
-	return m_hp;
+	return m_hp * m_level;
 }
 
 int ClassType::skills()
 {
-	return m_skill;
+	return m_skill * m_level;
 }
 
 void ClassType::read(const QJsonObject& json)
@@ -115,21 +97,48 @@ QString ClassType::toString()
 		.arg(nameString(m_name)).arg(m_level).arg(bab()).arg(fort()).arg(ref()).arg(will());
 }
 
+
+void ClassType::updateLeveledNumbers()
+{
+
+}
+
 void ClassType::updateClassReference()
 {
-	//model->clear();
-	QString query = QString("SELECT * FROM Classes WHERE Id = %1").arg(m_name);
-	model->setQuery(query, db);
+	QString path = QString(":/StarfinderCharacterApp/Resources/%1.json").arg(nameString(m_name));
+	QFile classFile(path);
 
-	keyAbility = Ability::scoreFromString(model->index(0, 2).data().toString());
+	if (!classFile.open(QIODevice::ReadOnly)) {
+		qWarning("Error opening file.");
+	}
+
+	QByteArray classData = classFile.readAll();
+
+	QJsonDocument classDoc(QJsonDocument::fromJson(classData));
+
+	QJsonObject classObj = classDoc.object();
+	if (classObj.contains("Key Ability") && classObj.value("Key Ability").isString())
+		keyAbility = Ability::scoreFromString(classObj.value("Key Ability").toString());
+	if (classObj.contains("BAB Rate") && classObj.value("BAB Rate").isDouble())
+		m_bab = classObj.value("BAB Rate").toDouble();
+	if (classObj.contains("Fort Rate") && classObj.value("Fort Rate").isBool())
+		m_fort = classObj.value("Fort Rate").toBool();
+	if (classObj.contains("Ref Rate") && classObj.value("Ref Rate").isBool())
+		m_fort = classObj.value("Ref Rate").toBool();
+	if (classObj.contains("Will Rate") && classObj.value("Will Rate").isBool())
+		m_fort = classObj.value("Will Rate").toBool();
+	if (classObj.contains("Stamina Rate") && classObj.value("Stamina Rate").isDouble())
+		m_stamina = classObj.value("Stamina Rate").toInt();
+	if (classObj.contains("HP Rate") && classObj.value("HP Rate").isDouble())
+		m_hp = classObj.value("HP Rate").toInt();
+	if (classObj.contains("Skill Rate") && classObj.value("Skill Rate").isDouble())
+		m_skill = classObj.value("Skill Rate").toInt();
+	classFile.close();
 }
 
 int ClassType::calcSave(bool isGood)
 {
-	if (isGood)
-		return (2 + (m_level / 2));
-	else
-		return (m_level / 3);
+	return (isGood ? (2 + (m_level / 2)) : (m_level / 3));
 }
 
 ClassType::Name ClassType::nameValue(QString n)
