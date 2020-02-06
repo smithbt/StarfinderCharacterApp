@@ -6,7 +6,6 @@
 #include <QJsonDocument>
 #include <QSortFilterProxyModel>
 #include "ui_StarfinderCharacterApp.h"
-#include "AbilityDelegate.h"
 #include "AbilityWidget.h"
 #include "Character.h"
 #include "CharacterDialog.h"
@@ -26,7 +25,6 @@ private:
 	Ui::StarfinderCharacterAppClass ui;
 	QSortFilterProxyModel* proxy;
 	WeaponProxyModel* wProxy;
-	QSortFilterProxyModel* aProxy;
 	Character* pc;
 	QString fileName;
 	QDataWidgetMapper* aMap;

@@ -61,9 +61,6 @@
     <ClCompile Include="WeaponDelegate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbilityDelegate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -109,9 +106,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WeaponDelegate.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="AbilityDelegate.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WeaponModel.h">

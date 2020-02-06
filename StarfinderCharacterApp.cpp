@@ -5,7 +5,6 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	pc(new Character(this)),
 	proxy(new QSortFilterProxyModel(this)),
 	wProxy(new WeaponProxyModel(this)),
-	aProxy(new QSortFilterProxyModel(this)),
 	wMap(new QDataWidgetMapper(this)),
 	aMap(new QDataWidgetMapper(this)),
 	mapper(new QDataWidgetMapper(this))
@@ -17,17 +16,15 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.charName_field, CharacterModel::Name);
 	connect(proxy, &QSortFilterProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
 
-	aProxy->setSourceModel(pc->aModel);
-	aMap->setModel(aProxy);
-	aMap->setItemDelegate(new AbilityDelegate(this));
+	aMap->setModel(pc->aModel);
 	aMap->setOrientation(Qt::Vertical);
-	aMap->addMapping(ui.str_widget, Ability::Strength);
-	aMap->addMapping(ui.dex_widget, Ability::Dexterity);
-	aMap->addMapping(ui.con_widget, Ability::Constitution);
-	aMap->addMapping(ui.int_widget, Ability::Intelligence);
-	aMap->addMapping(ui.wis_widget, Ability::Wisdom);
-	aMap->addMapping(ui.cha_widget, Ability::Charisma);
-	connect(aProxy, &QSortFilterProxyModel::modelReset, aMap, &QDataWidgetMapper::toFirst);
+	aMap->addMapping(ui.str_widget, Ability::Strength, "ability");
+	aMap->addMapping(ui.dex_widget, Ability::Dexterity, "ability");
+	aMap->addMapping(ui.con_widget, Ability::Constitution, "ability");
+	aMap->addMapping(ui.int_widget, Ability::Intelligence, "ability");
+	aMap->addMapping(ui.wis_widget, Ability::Wisdom, "ability");
+	aMap->addMapping(ui.cha_widget, Ability::Charisma, "ability");
+	connect(pc->aModel, &QSortFilterProxyModel::modelReset, aMap, &QDataWidgetMapper::toFirst);
 	
 	wProxy->setSourceModel(pc->wModel);
 	wProxy->setAbilityModel(pc->aModel);
