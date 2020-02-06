@@ -4,6 +4,7 @@
 #include <QPainter>
 #include "WeaponWidget.h"
 #include "Weapon.h"
+#include "WeaponProxyModel.h"
 
 class WeaponDelegate : public QStyledItemDelegate
 {

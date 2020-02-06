@@ -105,6 +105,7 @@
     <ClCompile Include="WeaponDelegate.cpp" />
     <ClCompile Include="WeaponDialog.cpp" />
     <ClCompile Include="WeaponModel.cpp" />
+    <ClCompile Include="WeaponProxyModel.cpp" />
     <ClCompile Include="WeaponWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +122,7 @@
     <QtRcc Include="StarfinderCharacterApp.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="WeaponProxyModel.h" />
     <QtMoc Include="ClassType.h" />
     <QtMoc Include="AbilityModel.h" />
     <ClInclude Include="Damage.h" />

@@ -79,6 +79,9 @@
     <ClCompile Include="AbilityModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponProxyModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="StarfinderCharacterApp.h">
@@ -121,6 +124,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Character.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WeaponProxyModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

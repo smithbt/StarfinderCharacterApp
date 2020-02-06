@@ -4,7 +4,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
 	pc(new Character(this)),
 	proxy(new QSortFilterProxyModel(this)),
-	wProxy(new QSortFilterProxyModel(this)),
+	wProxy(new WeaponProxyModel(this)),
 	aProxy(new QSortFilterProxyModel(this)),
 	wMap(new QDataWidgetMapper(this)),
 	aMap(new QDataWidgetMapper(this)),
@@ -30,28 +30,14 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	connect(aProxy, &QSortFilterProxyModel::modelReset, aMap, &QDataWidgetMapper::toFirst);
 	
 	wProxy->setSourceModel(pc->wModel);
+	wProxy->setAbilityModel(pc->aModel);
 	ui.weaponList->setModel(wProxy);
 
 	wMap->setModel(wProxy);
-	wMap->setItemDelegate(new WeaponDelegate());
+	wMap->setItemDelegate(new WeaponDelegate(this));
 	wMap->addMapping(ui.weapon_widget, 0);
 	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
 		wMap, &QDataWidgetMapper::setCurrentModelIndex);
-	connect(ui.weapon_widget, &WeaponWidget::weaponChanged, 
-		[=]() {
-			int aMod = pc->bab(), dMod = 0;
-			switch (ui.weapon_widget->getWeapon()->type) {
-			case Weapon::Type::Melee:
-				aMod += pc->getAbility(Ability::Score::Strength)->modifier();
-				dMod += pc->getAbility(Ability::Score::Strength)->modifier();
-				break;
-			case Weapon::Type::Ranged:
-				aMod += pc->getAbility(Ability::Score::Dexterity)->modifier();
-				break;
-			}
-			ui.weapon_widget->setModifiers(aMod, dMod); 
-			ui.weapon_widget->updateLabels();
-		});
 
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	

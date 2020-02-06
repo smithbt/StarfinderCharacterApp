@@ -2,7 +2,7 @@
 
 WeaponWidget::WeaponWidget(QWidget* parent)
 	: QWidget(parent),
-	weapon(new Weapon()),
+	weapon(nullptr),
 	attackMod(0),
 	damageMod(0)
 {
@@ -12,6 +12,7 @@ WeaponWidget::WeaponWidget(QWidget* parent)
 		weapon->ammo->adjustCurrent(-1); emit weaponChanged(weapon); });
 	connect(ui.reload_pushButton, &QPushButton::clicked, this, [=]() { 
 		weapon->ammo->current = weapon->ammo->max; emit weaponChanged(weapon); });
+	connect(this, &WeaponWidget::weaponChanged, &WeaponWidget::updateLabels);
 }
 
 WeaponWidget::~WeaponWidget()

@@ -2,7 +2,7 @@
 
 AbilityWidget::AbilityWidget(QWidget *parent)
 	: QWidget(parent),
-	ability(new Ability())
+	ability(nullptr)
 {
 	ui.setupUi(this);
 

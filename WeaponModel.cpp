@@ -46,11 +46,8 @@ QVariant WeaponModel::data(const QModelIndex& index, int role) const
 	if (idx >= weapons.size() || idx < 0) // out of range
 		return QVariant();
 
-	if (role == Qt::UserRole)
+	if (role == Qt::DisplayRole || role == Qt::EditRole)
 		return QVariant::fromValue(weapons.at(idx));
-
-	if (role == Qt::DisplayRole)
-		return weapons.at(idx)->toString();
 
 	return QVariant();
 }
@@ -63,14 +60,6 @@ Qt::ItemFlags WeaponModel::flags(const QModelIndex& index) const
 	return Qt::ItemIsEditable | QAbstractListModel::flags(index);
 }
 
-QVariant WeaponModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-		return "Weapon";
-
-	return QVariant();
-}
-
 int WeaponModel::rowCount(const QModelIndex& parent) const
 {
 	return weapons.size();
@@ -78,9 +67,9 @@ int WeaponModel::rowCount(const QModelIndex& parent) const
 
 bool WeaponModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (index.isValid() && role == Qt::UserRole && value.canConvert<Weapon*>()) {
-		weapons.insert(index.row(), value.value<Weapon*>());
-		emit dataChanged(index, index, { Qt::DisplayRole, Qt::UserRole });
+	if (index.isValid() && role == Qt::EditRole && value.canConvert<Weapon*>()) {
+		weapons.replace(index.row(), value.value<Weapon*>());
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
 		return true;
 	}
 	return false;
@@ -92,7 +81,7 @@ bool WeaponModel::insertRows(int position, int rows, const QModelIndex& parent)
 	beginInsertRows(QModelIndex(), position, position + rows - 1);
 
 	for (int i = position; i < (position + rows); ++i) {
-		weapons.insert(i, new Weapon());
+		weapons.insert(i, nullptr);
 	}
 
 	endInsertRows();

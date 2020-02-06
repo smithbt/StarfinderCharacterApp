@@ -13,6 +13,7 @@
 #include "Weapon.h"
 #include "WeaponDelegate.h"
 #include "WeaponDialog.h"
+#include "WeaponProxyModel.h"
 
 class StarfinderCharacterApp : public QMainWindow
 {
@@ -24,7 +25,7 @@ public:
 private:
 	Ui::StarfinderCharacterAppClass ui;
 	QSortFilterProxyModel* proxy;
-	QSortFilterProxyModel* wProxy;
+	WeaponProxyModel* wProxy;
 	QSortFilterProxyModel* aProxy;
 	Character* pc;
 	QString fileName;

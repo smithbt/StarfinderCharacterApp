@@ -45,9 +45,12 @@ WeaponDelegate::~WeaponDelegate()
 
 void WeaponDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
-	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
-		Weapon* wpn = index.data(Qt::UserRole).value<Weapon*>();
+	if (index.data(WeaponProxyModel::WeaponRole).canConvert<Weapon*>()) {
+		Weapon* wpn = index.data(WeaponProxyModel::WeaponRole).value<Weapon*>();
+		int aMod = index.data(WeaponProxyModel::AttackRole).toInt();
+		int dMod = index.data(WeaponProxyModel::DamageRole).toInt();
 		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
+		wpnEditor->setModifiers(aMod, dMod);
 		wpnEditor->setWeapon(wpn);
 	}
 	else {
@@ -57,9 +60,9 @@ void WeaponDelegate::setEditorData(QWidget* editor, const QModelIndex& index) co
 
 void WeaponDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
-	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
+	if (index.data(WeaponProxyModel::WeaponRole).canConvert<Weapon*>()) {
 		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
-		model->setData(index, QVariant::fromValue(wpnEditor->getWeapon()),Qt::UserRole);
+		model->setData(index, QVariant::fromValue(wpnEditor->getWeapon()));
 	}
 	else {
 		QStyledItemDelegate::setModelData(editor, model, index);
