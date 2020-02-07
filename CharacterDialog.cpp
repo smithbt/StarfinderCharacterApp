@@ -45,7 +45,10 @@ void CharacterDialog::newCharacter(Character* pc)
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 	for (int i = 0; i < aEnum.keyCount(); ++i) {
 		Ability::Score score = static_cast<Ability::Score>(aEnum.value(i));
-		Ability* a = new Ability(score, asbWdgts.at(i)->value(), asuWdgts.at(i)->value());
+		Ability* a = new Ability();
+		a->type = score; 
+		a->setBase(asbWdgts.at(i)->value());
+		a->setUpgrade(asuWdgts.at(i)->value());
 		pc->setAbility(a);
 	}
 }

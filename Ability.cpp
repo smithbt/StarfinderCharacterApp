@@ -1,7 +1,8 @@
 #include "Ability.h"
 
-Ability::Ability(Score type, int base, int upgrade)
-	: type(type), base(base), upgrade(upgrade)
+Ability::Ability(QObject* parent)
+	: QObject(parent), 
+	type(Strength), base(10), upgrade(0)
 {
 }
 
@@ -37,10 +38,38 @@ QString Ability::name() const
 	return QVariant::fromValue(type).toString();
 }
 
+int Ability::getBase() const
+{
+	return base;
+}
+
+int Ability::getUpgrade() const
+{
+	return upgrade;
+}
+
 QString Ability::toString() const
 {
     QString mod = QString::asprintf("%+i", modifier());
     return QString("%1: %2 [%3]").arg(name()).arg(score()).arg(mod);
+}
+
+void Ability::setBase(int b)
+{
+	if (b != base) {
+		base = b;
+		emit baseChanged(base);
+		emit scoreChanged(score());
+	}
+}
+
+void Ability::setUpgrade(int u)
+{
+	if (u != upgrade) {
+		upgrade = u;
+		emit upgradeChanged(upgrade);
+		emit scoreChanged(score());
+	}
 }
 
 Ability::Score Ability::scoreFromString(QString s)

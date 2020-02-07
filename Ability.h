@@ -2,12 +2,17 @@
 
 #include <cmath>
 #include <QMetaEnum>
+#include <QObject>
 #include <QJsonObject>
 #include <QStringList>
 
-class Ability
+class Ability : public QObject
 {
-	Q_GADGET
+	Q_OBJECT
+	Q_PROPERTY(int base READ getBase WRITE setBase NOTIFY baseChanged)
+	Q_PROPERTY(int upgrade READ getUpgrade WRITE setUpgrade NOTIFY upgradeChanged)
+	Q_PROPERTY(int score READ score STORED false NOTIFY scoreChanged)
+
 public:
 	enum Score : int { 
 		Strength = 0, 
@@ -19,7 +24,7 @@ public:
 	};
 	Q_ENUM(Score)
 
-	Ability(Score s = Score::Strength, int base = 10, int upgrade = 0);
+	Ability(QObject* parent = nullptr);
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
@@ -28,14 +33,23 @@ public:
 	int modifier() const;
 	QString name() const;
 
-	QString toString() const;
-
+	int getBase() const;
+	int getUpgrade() const;
 	Score type;
+
+	QString toString() const;
+	static Score scoreFromString(QString s);
+
+public slots:
+	void setBase(int b);
+	void setUpgrade(int u);
+
+signals:
+	void scoreChanged(int);
+	void baseChanged(int);
+	void upgradeChanged(int);
+
+private:
 	int base;
 	int upgrade;
-
-	static Score scoreFromString(QString s);
 };
-
-Q_DECLARE_METATYPE(Ability*)
-Q_DECLARE_OPAQUE_POINTER(Ability*)
