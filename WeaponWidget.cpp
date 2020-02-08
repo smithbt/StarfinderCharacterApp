@@ -51,3 +51,19 @@ void WeaponWidget::updateLabels()
 	ui.bulk_label->setNum(weapon->bulk);
 	ui.special_label->setText(weapon->special.join(", "));
 }
+
+void WeaponWidget::paintEvent(QPaintEvent* event)
+{
+	QPainter painter(this);
+}
+
+void WeaponWidget::mouseMoveEvent(QMouseEvent* event)
+{
+	QWidget::mouseMoveEvent(event);
+}
+
+void WeaponWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+	emit editingFinished();
+	QWidget::mouseReleaseEvent(event);
+}

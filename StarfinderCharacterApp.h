@@ -20,6 +20,7 @@ class StarfinderCharacterApp : public QMainWindow
 
 public:
 	StarfinderCharacterApp(QWidget *parent = Q_NULLPTR);
+	~StarfinderCharacterApp();
 
 private:
 	Ui::StarfinderCharacterAppClass ui;
@@ -28,7 +29,6 @@ private:
 	Character* pc;
 	QString fileName;
 	QDataWidgetMapper* aMap;
-	QDataWidgetMapper* wMap;
 	QDataWidgetMapper* mapper;
 
 	void readModelFromFile(QString path);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QPainter>
 #include "ui_WeaponWidget.h"
 #include "Weapon.h"
 
@@ -23,6 +24,12 @@ public slots:
 
 signals:
 	void weaponChanged(Weapon*);
+	void editingFinished();
+
+protected:
+	void paintEvent(QPaintEvent* event) override;
+	void mouseMoveEvent(QMouseEvent* event) override;
+	void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
 	Ui::WeaponWidget ui;

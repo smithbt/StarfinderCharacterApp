@@ -5,7 +5,6 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	pc(new Character(this)),
 	proxy(new QSortFilterProxyModel(this)),
 	wProxy(new WeaponProxyModel(this)),
-	wMap(new QDataWidgetMapper(this)),
 	aMap(new QDataWidgetMapper(this)),
 	mapper(new QDataWidgetMapper(this))
 {
@@ -29,15 +28,19 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	wProxy->setSourceModel(pc->wModel);
 	wProxy->setAbilityModel(pc->aModel);
 	ui.weaponList->setModel(wProxy);
-
-	wMap->setModel(wProxy);
-	wMap->setItemDelegate(new WeaponDelegate(this));
-	wMap->addMapping(ui.weapon_widget, 0);
-	connect(ui.weaponList->selectionModel(), &QItemSelectionModel::currentRowChanged,
-		wMap, &QDataWidgetMapper::setCurrentModelIndex);
+	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	
+}
+
+StarfinderCharacterApp::~StarfinderCharacterApp()
+{
+	delete pc;
+	delete proxy;
+	delete wProxy;
+	delete aMap;
+	delete mapper;
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
