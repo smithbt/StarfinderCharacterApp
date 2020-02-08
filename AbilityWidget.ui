@@ -144,6 +144,9 @@
         <property name="correctionMode">
          <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
         </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
         <property name="value">
          <number>10</number>
         </property>
@@ -166,6 +169,9 @@
         </property>
         <property name="correctionMode">
          <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
         </property>
         <property name="prefix">
          <string>+</string>
