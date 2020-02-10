@@ -74,5 +74,5 @@ void Ability::setUpgrade(int u)
 
 Ability::Score Ability::scoreFromString(QString s)
 {
-	return static_cast<Score>(QMetaEnum::fromType<Score>().keyToValue(s.toUtf8()));
+	return static_cast<Score>(QMetaEnum::fromType<Score>().keyToValue(s.toLocal8Bit()));
 }

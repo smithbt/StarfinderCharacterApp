@@ -30,7 +30,7 @@ void Weapon::read(const QJsonObject& json)
 	Item::read(json);
 	if (json.contains("Type") && json.value("Type").isString()) {
 		QString t = json.value("Type").toString();
-		type = static_cast<Type>(QMetaEnum::fromType<Type>().keyToValue(t.toUtf8()));
+		type = static_cast<Type>(QMetaEnum::fromType<Type>().keyToValue(t.toLocal8Bit()));
 	}
 	if (json.contains("special") && json.value("special").isArray()) {
 		QJsonArray wpnProps = json.value("special").toArray();
