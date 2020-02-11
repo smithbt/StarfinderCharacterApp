@@ -16,6 +16,7 @@ void WeaponModel::read(const QJsonObject& json)
 	beginResetModel();
 	if (json.contains("Weapons") && json.value("Weapons").isArray()) {
 		QJsonArray wArray = json.value("Weapons").toArray();
+		weapons.clear();
 		for (int i = 0; i < wArray.size(); ++i) {
 			QJsonObject wObj = wArray.at(i).toObject();
 			Weapon* w = new Weapon();

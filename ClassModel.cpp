@@ -18,6 +18,7 @@ void ClassModel::read(const QJsonObject& json)
     beginResetModel();
     if (json.contains("Classes") && json.value("Classes").isArray()) {
         QJsonArray cArray = json.value("Classes").toArray();
+        m_classes.clear();
         for (int i = 0; i < cArray.size(); ++i) {
             QJsonObject cObj = cArray.at(i).toObject();
             ClassLevelPair clp;
