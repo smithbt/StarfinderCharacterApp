@@ -29,6 +29,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	wProxy->setAbilityModel(pc->aModel);
 	ui.weaponList->setModel(wProxy);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
+	connect(pc, &Character::babChanged, wProxy, &WeaponProxyModel::setBAB);
 
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	

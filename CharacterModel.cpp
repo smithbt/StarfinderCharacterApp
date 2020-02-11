@@ -2,7 +2,7 @@
 
 CharacterModel::CharacterModel(QObject *parent)
 	: QAbstractListModel(parent),
-	map(2, QVariant())
+	map(1, QVariant())
 {
 }
 
@@ -15,12 +15,6 @@ void CharacterModel::read(const QJsonObject& json)
 {
 	beginResetModel();
 
-	if (json.contains("Classes") && json.value("Classes").isObject()) {
-		QJsonObject cObj = json.value("Classes").toObject();
-		ClassType* ct = new ClassType(this);
-		ct->read(cObj);
-		map.replace(Key::Classes, QVariant::fromValue(ct));
-	}
 	if (json.contains("Name") && json.value("Name").isString()) {
 		map.replace(Key::Name, json.value("Name").toString());
 	}
@@ -33,11 +27,6 @@ void CharacterModel::write(QJsonObject& json) const
 		QString keyString = QMetaEnum::fromType<Key>().valueToKey(i);
 		if (i == Key::Name)
 			json.insert(keyString, map.at(i).toString());
-		if (i == Key::Classes) {
-			QJsonObject cObj;
-			map.at(i).value<ClassType*>()->write(cObj);
-			json.insert(keyString, cObj);
-		}
 	}
 }
 

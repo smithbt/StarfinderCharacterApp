@@ -4,8 +4,11 @@ Character::Character(QObject* parent)
 	: QObject(parent),
 	model(new CharacterModel(parent)),
 	wModel(new WeaponModel(parent)),
-	aModel(new AbilityModel(parent))
+	aModel(new AbilityModel(parent)),
+	cModel(new ClassModel(parent))
 {
+	connect(cModel, &ClassModel::dataChanged, [this](QModelIndex, QModelIndex, QVector<int> roles) mutable { 
+		if (roles.contains(ClassModel::BAB)) emit babChanged(bab()); });
 }
 
 Character::~Character()
@@ -13,26 +16,16 @@ Character::~Character()
 	delete model;
 	delete aModel;
 	delete wModel;
+	delete cModel;
 }
 
 int Character::bab()
 {
-	return model->index(CharacterModel::Classes).data().value<ClassType*>()->bab();
-}
-
-int Character::fort()
-{
-	return model->index(CharacterModel::Classes).data().value<ClassType*>()->fort();
-}
-
-int Character::ref()
-{
-	return model->index(CharacterModel::Classes).data().value<ClassType*>()->ref();
-}
-
-int Character::will()
-{
-	return model->index(CharacterModel::Classes).data().value<ClassType*>()->will();
+	int bab = 0;
+	for (int i = 0; i < cModel->rowCount(); ++i) {
+		bab += cModel->index(i).data(ClassModel::BAB).toInt();
+	}
+	return bab;
 }
 
 void Character::setProperty(CharacterModel::Key k, QVariant& value) 
@@ -41,6 +34,14 @@ void Character::setProperty(CharacterModel::Key k, QVariant& value)
 	if (!index.isValid())
 		model->insertRow(k);
 	model->setData(model->index(k), value);
+}
+
+void Character::setClassLevelPair(QString name, int level)
+{
+	cModel->insertRow(0);
+	cModel->setItemData(cModel->index(0), { 
+		{ClassModel::Name,	name},
+		{ClassModel::Level,	level} });
 }
 
 void Character::addWeapon(Weapon* w)
@@ -64,6 +65,7 @@ void Character::read(const QJsonObject& json)
 	model->read(json);
 	wModel->read(json);
 	aModel->read(json);
+	cModel->read(json);
 }
 
 void Character::write(QJsonObject& json) const
@@ -71,4 +73,5 @@ void Character::write(QJsonObject& json) const
 	model->write(json);
 	wModel->write(json);
 	aModel->write(json);
+	cModel->write(json);
 }

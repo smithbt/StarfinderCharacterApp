@@ -1,0 +1,3 @@
+ID,Class_Name,Key_Ability,BAB_Rate,Fort_isGood,Ref_isGood,Will_isGood,Stamina_Rate,HP_Rate,Skill_Rate
+0,Envoy,Charisma,0.75,FALSE,TRUE,TRUE,6,6,8
+1,Mechanic,Intelligence,0.75,TRUE,TRUE,FALSE,6,6,4

@@ -7,10 +7,10 @@ CharacterDialog::CharacterDialog(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	QMetaEnum classes = QMetaEnum::fromType<ClassType::Name>();
-	for (int c = 0; c < classes.keyCount(); ++c) {
-		ui.class_comboBox->addItem(classes.key(c), classes.value(c));
-	}
+	//QMetaEnum classes = QMetaEnum::fromType<ClassModel::Name>();
+	//for (int c = 0; c < classes.keyCount(); ++c) {
+	//	ui.class_comboBox->addItem(classes.key(c), classes.value(c));
+	//}
 
 	asbWdgts.replace(static_cast<int>(Ability::Score::Strength), ui.STR_score);
 	asbWdgts.replace(static_cast<int>(Ability::Score::Dexterity), ui.DEX_score);
@@ -37,10 +37,7 @@ void CharacterDialog::newCharacter(Character* pc)
 {
 	pc->setProperty(CharacterModel::Name, QVariant(ui.name_field->text()));
 
-	ClassType* ct = new ClassType(pc->model);
-	ct->setName(ui.class_comboBox->currentData().value<ClassType::Name>());
-	ct->setLevel(ui.level_spinBox->value());
-	pc->setProperty(CharacterModel::Classes, QVariant::fromValue(ct));
+	pc->setClassLevelPair(ui.class_comboBox->currentText(), ui.level_spinBox->value());
 
 	QMetaEnum aEnum = QMetaEnum::fromType<Ability::Score>();
 	for (int i = 0; i < aEnum.keyCount(); ++i) {

@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/StarfinderCharacterApp">
         <file>Resources/default.json</file>
-        <file>Resources/Envoy.json</file>
-        <file>Resources/Mechanic.json</file>
+        <file>Resources/classes.csv</file>
     </qresource>
 </RCC>

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QJsonObject>
 #include <QJsonDocument>
-#include <QVector>
+#include <QMetaEnum>
 #include <QString>
+#include <QVector>
 #include <QVariant>
-#include "ClassType.h"
 
 class CharacterModel : public QAbstractListModel
 {
@@ -13,8 +14,7 @@ class CharacterModel : public QAbstractListModel
 
 public:
 	enum Key : int {
-		Name = 0,
-		Classes
+		Name = 0
 	};
 	Q_ENUM(Key)
 

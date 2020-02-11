@@ -70,13 +70,13 @@
     <ClCompile Include="WeaponModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ClassType.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AbilityModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WeaponProxyModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,9 +111,6 @@
     <QtMoc Include="WeaponModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ClassType.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="AbilityModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -121,6 +118,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WeaponProxyModel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ClassModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
