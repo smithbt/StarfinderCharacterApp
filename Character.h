@@ -10,12 +10,18 @@ class Character : public QObject
 {
 	Q_OBJECT
 	Q_PROPERTY(int bab READ bab STORED false NOTIFY babChanged)
+	Q_PROPERTY(int fortitude READ fortitude STORED false NOTIFY fortitudeChanged)
+	Q_PROPERTY(int reflex READ reflex STORED false NOTIFY reflexChanged)
+	Q_PROPERTY(int will READ will STORED false NOTIFY willChanged)
 
 public: 
 	Character(QObject* parent = nullptr);
 	~Character();
 
 	int bab();
+	int fortitude();
+	int reflex();
+	int will();
 
 	void setProperty(CharacterModel::Key k, QVariant& value);
 	void setClassLevelPair(QString name, int level);
@@ -35,5 +41,8 @@ public:
 
 signals:
 	void babChanged(int);
+	void fortitudeChanged(int);
+	void reflexChanged(int);
+	void willChanged(int);
 };
 

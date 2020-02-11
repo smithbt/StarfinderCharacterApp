@@ -31,6 +31,10 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 	connect(pc, &Character::babChanged, wProxy, &WeaponProxyModel::setBAB);
 
+	connect(pc, &Character::fortitudeChanged, ui.fortLabel, QOverload<int>::of(&QLabel::setNum));
+	connect(pc, &Character::reflexChanged, ui.refLabel, QOverload<int>::of(&QLabel::setNum));
+	connect(pc, &Character::willChanged, ui.willLabel, QOverload<int>::of(&QLabel::setNum));
+
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	
 }

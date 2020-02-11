@@ -7,8 +7,17 @@ Character::Character(QObject* parent)
 	aModel(new AbilityModel(parent)),
 	cModel(new ClassModel(parent))
 {
-	connect(cModel, &ClassModel::dataChanged, [this](QModelIndex, QModelIndex, QVector<int> roles) mutable { 
-		if (roles.contains(ClassModel::BAB)) emit babChanged(bab()); });
+	connect(cModel, &ClassModel::dataChanged, [this](QModelIndex, QModelIndex, QVector<int> roles) {
+		if (roles.contains(ClassModel::BAB)) emit babChanged(bab());
+		if (roles.contains(ClassModel::Fortitude)) emit fortitudeChanged(fortitude());
+		if (roles.contains(ClassModel::Reflex)) emit reflexChanged(reflex());
+		if (roles.contains(ClassModel::Will)) emit willChanged(will()); });
+	connect(cModel, &ClassModel::modelReset, [this]() {
+		emit babChanged(bab());
+		emit fortitudeChanged(fortitude());
+		emit reflexChanged(reflex());
+		emit willChanged(will());
+		});
 }
 
 Character::~Character()
@@ -26,6 +35,33 @@ int Character::bab()
 		bab += cModel->index(i).data(ClassModel::BAB).toInt();
 	}
 	return bab;
+}
+
+int Character::fortitude()
+{
+	int save = getAbility(Ability::Constitution)->modifier();
+	for (int i = 0; i < cModel->rowCount(); ++i) {
+		save += cModel->index(i).data(ClassModel::Fortitude).toInt();
+	}
+	return save;
+}
+
+int Character::reflex()
+{
+	int save = getAbility(Ability::Dexterity)->modifier();
+	for (int i = 0; i < cModel->rowCount(); ++i) {
+		save += cModel->index(i).data(ClassModel::Reflex).toInt();
+	}
+	return save;
+}
+
+int Character::will()
+{
+	int save = getAbility(Ability::Wisdom)->modifier();
+	for (int i = 0; i < cModel->rowCount(); ++i) {
+		save += cModel->index(i).data(ClassModel::Will).toInt();
+	}
+	return save;
 }
 
 void Character::setProperty(CharacterModel::Key k, QVariant& value) 
