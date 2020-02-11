@@ -209,9 +209,9 @@ bool ClassModel::createReferenceTable()
         entry.name = dataList.at(0);
         entry.keyAbility = Ability::scoreFromString(dataList.at(1));
         entry.bab_rate = dataList.at(2).toDouble();
-        entry.fort_isGood = dataList.at(3).toInt();
-        entry.ref_isGood = dataList.at(4).toInt();
-        entry.will_isGood = dataList.at(5).toInt();
+        entry.fort_isGood = dataList.at(3).compare("FALSE", Qt::CaseInsensitive); // if value is FALSE, compare() returns 0.
+        entry.ref_isGood = dataList.at(4).compare("FALSE", Qt::CaseInsensitive); // if value is FALSE, compare() returns 0.
+        entry.will_isGood = dataList.at(5).compare("FALSE", Qt::CaseInsensitive); // if value is FALSE, compare() returns 0.
         entry.stamina_rate = dataList.at(6).toInt();
         entry.hp_rate = dataList.at(7).toInt();
         entry.skill_rate = dataList.at(8).toInt();
