@@ -7,7 +7,7 @@
 class AbilityWidget : public QWidget
 {
 	Q_OBJECT
-	Q_PROPERTY(Ability* ability READ getAbility WRITE setAbility NOTIFY abilityChanged)
+	Q_PROPERTY(Ability* ability READ getAbility WRITE setAbility)
 
 public:
 	AbilityWidget(QWidget *parent = Q_NULLPTR);
@@ -15,9 +15,6 @@ public:
 
 	void setAbility(Ability* a);
 	Ability* getAbility() const;
-
-signals:
-	void abilityChanged(Ability*);
 
 private:
 	Ui::AbilityWidget ui;

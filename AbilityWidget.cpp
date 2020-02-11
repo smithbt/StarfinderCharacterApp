@@ -6,16 +6,6 @@ AbilityWidget::AbilityWidget(QWidget *parent)
 {
 	ui.setupUi(this);
 	ui.edit_frame->setVisible(false);
-
-	connect(this, &AbilityWidget::abilityChanged, [=]() {
-		ui.ability_pushButton->setText(ability->name());
-		ui.score_label->setNum(ability->score());
-		ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier())));
-		ui.base_spinBox->setValue(ability->getBase());
-		ui.upgrade_spinBox->setValue(ability->getUpgrade());
-	});
-
-	
 }
 
 AbilityWidget::~AbilityWidget()
@@ -37,12 +27,15 @@ void AbilityWidget::setAbility(Ability* a)
 			connect(ability, &Ability::baseChanged, ui.base_spinBox, &QSpinBox::setValue);
 			connect(ui.base_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), ability, &Ability::setBase);
 
-			connect(ability, &Ability::scoreChanged, ui.score_label, [=]() {
-				ui.score_label->setNum(ability->score()); });
+			connect(ability, &Ability::scoreChanged, ui.score_label, QOverload<int>::of(&QLabel::setNum));
 			connect(ability, &Ability::scoreChanged, ui.mod_label, [=]() {
 				ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier()))); });
 		}
-		emit abilityChanged(ability);
+		ui.ability_pushButton->setText(ability->name());
+		ui.score_label->setNum(ability->score());
+		ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier())));
+		ui.base_spinBox->setValue(ability->getBase());
+		ui.upgrade_spinBox->setValue(ability->getUpgrade());
 	}
 }
 
