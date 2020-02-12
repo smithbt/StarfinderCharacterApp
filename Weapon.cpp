@@ -19,12 +19,12 @@ Weapon::~Weapon()
 
 int Weapon::capacity()
 {
-	return ammo->max;
+	return ammo->max();
 }
 
 int Weapon::usage()
 {
-	return ammo->step;
+	return ammo->step();
 }
 
 void Weapon::read(const QJsonObject& json)

@@ -79,6 +79,9 @@
     <ClCompile Include="ClassModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="StarfinderCharacterApp.h">
@@ -129,6 +132,9 @@
     <QtMoc Include="Item.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ResourceWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="StarfinderCharacterApp.ui">
@@ -144,6 +150,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AbilityWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ResourceWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
