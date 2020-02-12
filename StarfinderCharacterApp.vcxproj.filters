@@ -123,6 +123,12 @@
     <QtMoc Include="ClassModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Item.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="StarfinderCharacterApp.ui">
@@ -147,12 +153,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Damage.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -1,13 +1,15 @@
 #pragma once
 
+#include <QObject>
 #include <QJsonObject>
 #include <QString>
 
-class Item
+class Item : public QObject
 {
+	Q_OBJECT
 
 public: 
-	Item();
+	Item(QObject* parent = nullptr);
 	virtual ~Item();
 
 	QString name;

@@ -1,7 +1,8 @@
 #include "Item.h"
 
-Item::Item()
-	: name(QString()), level(0), price(0), bulk(0.0)
+Item::Item(QObject* parent)
+	: QObject(parent),
+	name(QString()), level(0), price(0), bulk(0.0)
 {
 }
 

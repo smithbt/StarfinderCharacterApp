@@ -1,18 +1,20 @@
 #include "Weapon.h"
 
 
-Weapon::Weapon()
-	:Item(), 
+Weapon::Weapon(QObject* parent)
+	: Item(parent), 
 	type(Type::Melee), 
 	damage(new Damage()), 
 	crit(), 
-	ammo(new Resource()),
+	ammo(new Resource(this)),
 	range(0),
 	special()
 {}
 
 Weapon::~Weapon()
 {
+	delete damage;
+	delete ammo;
 }
 
 int Weapon::capacity()

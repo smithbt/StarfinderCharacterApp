@@ -1,7 +1,7 @@
 #include "Resource.h"
 
-Resource::Resource(int current, int max, int step)
-	: current(current), max(max), step(step)
+Resource::Resource(QObject* parent, int current, int max, int step)
+	: QObject(parent), current(current), max(max), step(step)
 {
 
 }
