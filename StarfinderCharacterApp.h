@@ -1,12 +1,12 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QDebug>
 #include <QDataWidgetMapper>
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QSortFilterProxyModel>
 #include "ui_StarfinderCharacterApp.h"
-#include "AbilityWidget.h"
 #include "Character.h"
 #include "CharacterDialog.h"
 #include "Weapon.h"

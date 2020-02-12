@@ -33,5 +33,10 @@
   ],
   "Classes": [],
   "Name": "",
+  "Stamina": {
+    "Current": 0,
+    "Maximum": 0,
+    "Step": 1
+  },
   "Weapons": []
 }

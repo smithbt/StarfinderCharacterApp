@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>485</width>
-    <height>572</height>
+    <height>552</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -192,16 +192,6 @@
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="initiativeBox">
-            <property name="title">
-             <string>Initiative</string>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QGroupBox" name="armorBox">
             <property name="title">
@@ -247,119 +237,50 @@
             </layout>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QGroupBox" name="healthBox">
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="initiativeBox">
             <property name="title">
-             <string>Health</string>
+             <string>Initiative</string>
             </property>
             <property name="flat">
              <bool>true</bool>
             </property>
-            <layout class="QGridLayout" name="gridLayout_6">
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="font">
-                <font>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="5">
+           <widget class="QGroupBox" name="weaponsBox">
+            <property name="title">
+             <string>Weapons</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_8">
+             <property name="leftMargin">
+              <number>3</number>
+             </property>
+             <property name="topMargin">
+              <number>3</number>
+             </property>
+             <property name="rightMargin">
+              <number>3</number>
+             </property>
+             <property name="bottomMargin">
+              <number>3</number>
+             </property>
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QListView" name="weaponList">
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
                </property>
-               <property name="text">
-                <string>Resolve</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="font">
-                <font>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Stamina</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label">
-               <property name="font">
-                <font>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Hit Points</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QSpinBox" name="spinBox_2"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBox"/>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_9">
-               <property name="font">
-                <font>
-                 <italic>true</italic>
-                </font>
-               </property>
-               <property name="text">
-                <string>Current</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QSpinBox" name="spinBox_3"/>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="label_10">
-               <property name="font">
-                <font>
-                 <italic>true</italic>
-                </font>
-               </property>
-               <property name="text">
-                <string>Maximum</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_11">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_12">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="2">
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0" colspan="3">
-              <widget class="Line" name="line">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0" colspan="3">
-              <widget class="Line" name="line_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+               <property name="editTriggers">
+                <set>QAbstractItemView::CurrentChanged</set>
                </property>
               </widget>
              </item>
@@ -452,42 +373,101 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="1" rowspan="5">
-           <widget class="QGroupBox" name="weaponsBox">
+          <item row="3" column="0">
+           <widget class="QGroupBox" name="healthBox">
             <property name="title">
-             <string>Weapons</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <string>Health</string>
             </property>
             <property name="flat">
              <bool>true</bool>
             </property>
-            <layout class="QGridLayout" name="gridLayout_8">
-             <property name="leftMargin">
-              <number>3</number>
-             </property>
-             <property name="topMargin">
-              <number>3</number>
-             </property>
-             <property name="rightMargin">
-              <number>3</number>
-             </property>
-             <property name="bottomMargin">
-              <number>3</number>
-             </property>
-             <property name="spacing">
-              <number>2</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="QListView" name="weaponList">
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="editTriggers">
-                <set>QAbstractItemView::CurrentChanged</set>
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="1" column="2">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>TextLabel</string>
                </property>
               </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_10">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Maximum</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBox"/>
+             </item>
+             <item row="5" column="2">
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QSpinBox" name="spinBox_3"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Hit Points</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Resolve</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_9">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Current</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0" colspan="3">
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="3">
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="3">
+              <widget class="ResourceWidget" name="staminaWidget" native="true"/>
              </item>
             </layout>
            </widget>
@@ -614,6 +594,12 @@
    <class>AbilityWidget</class>
    <extends>QWidget</extends>
    <header>AbilityWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ResourceWidget</class>
+   <extends>QWidget</extends>
+   <header>ResourceWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

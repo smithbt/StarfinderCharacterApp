@@ -2,7 +2,7 @@
 
 CharacterModel::CharacterModel(QObject *parent)
 	: QAbstractListModel(parent),
-	map(1, QVariant())
+	map(keyCount, QVariant())
 {
 }
 
@@ -18,15 +18,25 @@ void CharacterModel::read(const QJsonObject& json)
 	if (json.contains("Name") && json.value("Name").isString()) {
 		map.replace(Key::Name, json.value("Name").toString());
 	}
+	if (json.contains("Stamina") && json.value("Stamina").isObject()) {
+		QJsonObject staminaObject = json.value("Stamina").toObject();
+		Resource* stamina = new Resource(this);
+		stamina->read(staminaObject);
+		map.replace(Key::Stamina, QVariant::fromValue(stamina));
+	}
 	endResetModel();
 }
 
 void CharacterModel::write(QJsonObject& json) const
 {
 	for (int i = 0; i < map.size(); ++i) {
-		QString keyString = QMetaEnum::fromType<Key>().valueToKey(i);
-		if (i == Key::Name)
-			json.insert(keyString, map.at(i).toString());
+		if (i == Name)
+			json.insert("Name", map.at(i).toString());
+		if (i == Stamina) {
+			QJsonObject staminaObject;
+			map.at(i).value<Resource*>()->write(staminaObject);
+			json.insert("Stamina", staminaObject);
+		}
 	}
 }
 
@@ -67,30 +77,4 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		return true;
 	}
 	return false;
-}
-
-bool CharacterModel::insertRows(int position, int rows, const QModelIndex& parent)
-{
-	Q_UNUSED(parent);
-	beginInsertRows(QModelIndex(), position, position + rows - 1);
-
-	for (int i = (position); i < (position + rows); ++i) {
-		map.insert(i, QVariant());
-	}
-
-	endInsertRows();
-	return true;
-}
-
-bool CharacterModel::removeRows(int position, int rows, const QModelIndex& parent)
-{
-	Q_UNUSED(parent);
-	beginRemoveRows(QModelIndex(), position, position + rows - 1);
-
-	for (int i = (position); i < (position + rows); ++i) {
-		map.remove(i);
-	}
-
-	endRemoveRows();
-	return true;
 }

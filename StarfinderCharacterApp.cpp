@@ -13,6 +13,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->setModel(proxy);
 	mapper->setOrientation(Qt::Vertical);
 	mapper->addMapping(ui.charName_field, CharacterModel::Name);
+	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
 	connect(proxy, &QSortFilterProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
 
 	aMap->setModel(pc->aModel);
@@ -78,7 +79,9 @@ void StarfinderCharacterApp::readModelFromFile(QString path)
 
 	QByteArray loadData = loadFile.readAll();
 
-	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData));
+	QJsonParseError *error = new QJsonParseError();
+	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData, error));
+	qDebug() << error->errorString();
 
 	pc->read(loadDoc.object());
 	loadFile.close();

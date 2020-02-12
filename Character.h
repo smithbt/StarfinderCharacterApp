@@ -22,6 +22,7 @@ public:
 	int fortitude();
 	int reflex();
 	int will();
+	int stamina();
 
 	void setProperty(CharacterModel::Key k, QVariant& value);
 	void setClassLevelPair(QString name, int level);

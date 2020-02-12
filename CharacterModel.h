@@ -7,6 +7,7 @@
 #include <QString>
 #include <QVector>
 #include <QVariant>
+#include "Resource.h"
 
 class CharacterModel : public QAbstractListModel
 {
@@ -14,9 +15,11 @@ class CharacterModel : public QAbstractListModel
 
 public:
 	enum Key : int {
-		Name = 0
+		Name = 0,
+		Stamina
 	};
 	Q_ENUM(Key)
+	const static int keyCount = 2;
 
 	CharacterModel(QObject *parent = nullptr);
 	~CharacterModel();
@@ -30,9 +33,6 @@ public:
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
 	bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-
-	bool insertRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
-	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 
 private:
 	QVector<QVariant> map;

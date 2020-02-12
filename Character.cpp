@@ -2,16 +2,17 @@
 
 Character::Character(QObject* parent)
 	: QObject(parent),
-	model(new CharacterModel(parent)),
-	wModel(new WeaponModel(parent)),
-	aModel(new AbilityModel(parent)),
-	cModel(new ClassModel(parent))
+	model(new CharacterModel(this)),
+	wModel(new WeaponModel(this)),
+	aModel(new AbilityModel(this)),
+	cModel(new ClassModel(this))
 {
 	connect(cModel, &ClassModel::dataChanged, [this](QModelIndex, QModelIndex, QVector<int> roles) {
 		if (roles.contains(ClassModel::BAB)) emit babChanged(bab());
 		if (roles.contains(ClassModel::Fortitude)) emit fortitudeChanged(fortitude());
 		if (roles.contains(ClassModel::Reflex)) emit reflexChanged(reflex());
-		if (roles.contains(ClassModel::Will)) emit willChanged(will()); });
+		if (roles.contains(ClassModel::Will)) emit willChanged(will()); 
+		});
 	connect(cModel, &ClassModel::modelReset, [this]() {
 		emit babChanged(bab());
 		emit fortitudeChanged(fortitude());
@@ -64,11 +65,19 @@ int Character::will()
 	return save;
 }
 
+int Character::stamina()
+{
+	int conMod = getAbility(Ability::Constitution)->modifier();
+	int stamina = 0;
+	for (int i = 0; i < cModel->rowCount(); ++i) {
+		stamina += (cModel->index(i).data(ClassModel::Stamina).toInt() 
+			+ (conMod * cModel->index(i).data(ClassModel::Level).toInt()));
+	}
+	return stamina;
+}
+
 void Character::setProperty(CharacterModel::Key k, QVariant& value) 
 {
-	QModelIndex index = model->index(k);
-	if (!index.isValid())
-		model->insertRow(k);
 	model->setData(model->index(k), value);
 }
 
