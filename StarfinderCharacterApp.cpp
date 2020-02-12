@@ -3,7 +3,7 @@
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
 	pc(new Character(this)),
-	proxy(new QSortFilterProxyModel(this)),
+	proxy(new QIdentityProxyModel(this)),
 	wProxy(new WeaponProxyModel(this)),
 	mapper(new QDataWidgetMapper(this))
 {
@@ -19,7 +19,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.int_widget, CharacterModel::Intelligence, "ability");
 	mapper->addMapping(ui.wis_widget, CharacterModel::Wisdom, "ability");
 	mapper->addMapping(ui.cha_widget, CharacterModel::Charisma, "ability");
-	connect(proxy, &QSortFilterProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
+	connect(proxy, &QIdentityProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
 	
 	wProxy->setSourceModel(pc->wModel);
 	wProxy->setCharacterModel(pc->model);

@@ -5,7 +5,7 @@
 #include <QDataWidgetMapper>
 #include <QFileDialog>
 #include <QJsonDocument>
-#include <QSortFilterProxyModel>
+#include <QIdentityProxyModel>
 #include "ui_StarfinderCharacterApp.h"
 #include "Character.h"
 #include "Weapon.h"
@@ -23,7 +23,7 @@ public:
 
 private:
 	Ui::StarfinderCharacterAppClass ui;
-	QSortFilterProxyModel* proxy;
+	QIdentityProxyModel* proxy;
 	WeaponProxyModel* wProxy;
 	Character* pc;
 	QString fileName;
