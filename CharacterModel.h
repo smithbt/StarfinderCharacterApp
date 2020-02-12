@@ -7,6 +7,7 @@
 #include <QString>
 #include <QVector>
 #include <QVariant>
+#include "Ability.h"
 #include "Resource.h"
 
 class CharacterModel : public QAbstractListModel
@@ -14,12 +15,23 @@ class CharacterModel : public QAbstractListModel
 	Q_OBJECT
 
 public:
-	enum Key : int {
+	enum RowIndex : int {
+		// Strings
 		Name = 0,
-		Stamina
+
+		// Resources
+		Stamina,
+
+		// Ability Scores
+		Strength,
+		Dexterity,
+		Constitution,
+		Intelligence,
+		Wisdom,
+		Charisma
 	};
-	Q_ENUM(Key)
-	const static int keyCount = 2;
+	Q_ENUM(RowIndex)
+	const static int rows = 8;
 
 	CharacterModel(QObject *parent = nullptr);
 	~CharacterModel();

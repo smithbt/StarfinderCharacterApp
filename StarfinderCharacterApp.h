@@ -8,7 +8,6 @@
 #include <QSortFilterProxyModel>
 #include "ui_StarfinderCharacterApp.h"
 #include "Character.h"
-#include "CharacterDialog.h"
 #include "Weapon.h"
 #include "WeaponDelegate.h"
 #include "WeaponDialog.h"
@@ -28,7 +27,6 @@ private:
 	WeaponProxyModel* wProxy;
 	Character* pc;
 	QString fileName;
-	QDataWidgetMapper* aMap;
 	QDataWidgetMapper* mapper;
 
 	void readModelFromFile(QString path);

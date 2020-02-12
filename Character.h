@@ -2,7 +2,6 @@
 
 #include <QObject>
 #include "CharacterModel.h"
-#include "AbilityModel.h"
 #include "WeaponModel.h"
 #include "ClassModel.h"
 
@@ -24,19 +23,17 @@ public:
 	int will();
 	int stamina();
 
-	void setProperty(CharacterModel::Key k, QVariant& value);
+	void setProperty(CharacterModel::RowIndex row, QVariant& value);
+	QVariant getProperty(CharacterModel::RowIndex row);
+
 	void setClassLevelPair(QString name, int level);
 
 	void addWeapon(Weapon* w);
-
-	Ability* getAbility(Ability::Score s);
-	void setAbility(Ability* a);
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 
 	CharacterModel* model;
-	AbilityModel* aModel;
 	WeaponModel* wModel;
 	ClassModel* cModel;
 

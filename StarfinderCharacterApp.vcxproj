@@ -88,12 +88,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AbilityModel.cpp" />
     <ClCompile Include="AbilityWidget.cpp" />
     <ClCompile Include="Ability.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterModel.cpp" />
-    <ClCompile Include="CharacterDialog.cpp" />
     <ClCompile Include="ClassModel.cpp" />
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="main.cpp" />
@@ -113,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AbilityWidget.ui" />
-    <QtUic Include="CharacterDialog.ui" />
     <QtUic Include="ResourceWidget.ui" />
     <QtUic Include="StarfinderCharacterApp.ui" />
     <QtUic Include="WeaponDialog.ui" />
@@ -125,7 +122,6 @@
   <ItemGroup>
     <QtMoc Include="ResourceWidget.h" />
     <QtMoc Include="WeaponProxyModel.h" />
-    <QtMoc Include="AbilityModel.h" />
     <QtMoc Include="ClassModel.h" />
     <ClInclude Include="Damage.h" />
     <QtMoc Include="Resource.h" />
@@ -136,7 +132,6 @@
     <QtMoc Include="WeaponWidget.h" />
     <QtMoc Include="Ability.h" />
     <QtMoc Include="CharacterModel.h" />
-    <QtMoc Include="CharacterDialog.h" />
     <QtMoc Include="Character.h" />
     <QtMoc Include="Weapon.h" />
   </ItemGroup>

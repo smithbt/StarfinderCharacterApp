@@ -37,9 +37,6 @@
     <ClCompile Include="WeaponDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Ability.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,9 +67,6 @@
     <ClCompile Include="WeaponModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbilityModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WeaponProxyModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -88,9 +82,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WeaponDialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="CharacterDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CharacterModel.h">
@@ -112,9 +103,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WeaponModel.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="AbilityModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Character.h">
@@ -141,9 +129,6 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="WeaponDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="CharacterDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="WeaponWidget.ui">

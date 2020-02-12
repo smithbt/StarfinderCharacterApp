@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QIdentityProxyModel>
-#include "AbilityModel.h"
+#include "CharacterModel.h"
 #include "Weapon.h"
 
 class WeaponProxyModel : public QIdentityProxyModel
@@ -19,7 +19,7 @@ public:
 	~WeaponProxyModel();
 
 	void setBAB(int b);
-	void setAbilityModel(AbilityModel* am);
+	void setCharacterModel(CharacterModel* cm);
 
 	QVariant data(const QModelIndex& index, int role) const override;
 
@@ -27,5 +27,5 @@ public:
 
 private:
 	int bab;
-	AbilityModel* aModel;
+	CharacterModel* cModel;
 };

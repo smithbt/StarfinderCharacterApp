@@ -5,7 +5,6 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	pc(new Character(this)),
 	proxy(new QSortFilterProxyModel(this)),
 	wProxy(new WeaponProxyModel(this)),
-	aMap(new QDataWidgetMapper(this)),
 	mapper(new QDataWidgetMapper(this))
 {
 	ui.setupUi(this);
@@ -14,20 +13,16 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->setOrientation(Qt::Vertical);
 	mapper->addMapping(ui.charName_field, CharacterModel::Name);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
+	mapper->addMapping(ui.str_widget, CharacterModel::Strength, "ability");
+	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity, "ability");
+	mapper->addMapping(ui.con_widget, CharacterModel::Constitution, "ability");
+	mapper->addMapping(ui.int_widget, CharacterModel::Intelligence, "ability");
+	mapper->addMapping(ui.wis_widget, CharacterModel::Wisdom, "ability");
+	mapper->addMapping(ui.cha_widget, CharacterModel::Charisma, "ability");
 	connect(proxy, &QSortFilterProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
-
-	aMap->setModel(pc->aModel);
-	aMap->setOrientation(Qt::Vertical);
-	aMap->addMapping(ui.str_widget, Ability::Strength, "ability");
-	aMap->addMapping(ui.dex_widget, Ability::Dexterity, "ability");
-	aMap->addMapping(ui.con_widget, Ability::Constitution, "ability");
-	aMap->addMapping(ui.int_widget, Ability::Intelligence, "ability");
-	aMap->addMapping(ui.wis_widget, Ability::Wisdom, "ability");
-	aMap->addMapping(ui.cha_widget, Ability::Charisma, "ability");
-	connect(pc->aModel, &QSortFilterProxyModel::modelReset, aMap, &QDataWidgetMapper::toFirst);
 	
 	wProxy->setSourceModel(pc->wModel);
-	wProxy->setAbilityModel(pc->aModel);
+	wProxy->setCharacterModel(pc->model);
 	ui.weaponList->setModel(wProxy);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 	connect(pc, &Character::babChanged, wProxy, &WeaponProxyModel::setBAB);
@@ -45,7 +40,6 @@ StarfinderCharacterApp::~StarfinderCharacterApp()
 	delete pc;
 	delete proxy;
 	delete wProxy;
-	delete aMap;
 	delete mapper;
 }
 
@@ -60,13 +54,9 @@ void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 
 void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
-	CharacterDialog dialog(this);
-	if (dialog.exec()) {
-		readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
-
-		dialog.newCharacter(pc);
-		fileName.clear();
-	}
+	qWarning("New Character functions not implemented.");
+	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
+	fileName.clear();
 }
 
 void StarfinderCharacterApp::readModelFromFile(QString path)

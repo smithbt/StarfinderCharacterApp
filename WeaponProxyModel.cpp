@@ -3,7 +3,7 @@
 WeaponProxyModel::WeaponProxyModel(QObject* parent)
 	: QIdentityProxyModel(parent),
 	bab(0),
-	aModel(nullptr)
+	cModel(nullptr)
 {
 }
 
@@ -16,9 +16,9 @@ void WeaponProxyModel::setBAB(int b)
 	bab = b;
 }
 
-void WeaponProxyModel::setAbilityModel(AbilityModel* am)
+void WeaponProxyModel::setCharacterModel(CharacterModel* cm)
 {
-	aModel = am;
+	cModel = cm;
 }
 
 QVariant WeaponProxyModel::data(const QModelIndex& index, int role) const
@@ -40,11 +40,11 @@ QVariant WeaponProxyModel::data(const QModelIndex& index, int role) const
 		int dMod = 0;
 		switch (w->type) {
 		case Weapon::Type::Melee:
-			aMod = (bab + aModel->index(Ability::Strength).data().value<Ability*>()->modifier());
-			dMod = (aModel->index(Ability::Strength).data().value<Ability*>()->modifier());
+			aMod = (bab + cModel->index(CharacterModel::Strength).data().value<Ability*>()->modifier());
+			dMod = (cModel->index(CharacterModel::Strength).data().value<Ability*>()->modifier());
 			break;
 		case Weapon::Type::Ranged:
-			aMod = (bab + aModel->index(Ability::Dexterity).data().value<Ability*>()->modifier());
+			aMod = (bab + cModel->index(CharacterModel::Dexterity).data().value<Ability*>()->modifier());
 			break;
 		default:
 			aMod = bab;
