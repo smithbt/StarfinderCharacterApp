@@ -36,7 +36,9 @@ Weapon* WeaponDialog::newWeapon()
 		wpn->range = ui.range_spinBox->value();
 		wpn->damage = parseDamageString(ui.damage_lineEdit->text());
 		wpn->crit = ui.crit_lineEdit->text();
-		wpn->ammo = new Resource(0, ui.capacity_spinBox->value(), ui.usage_spinBox->value());
+		wpn->ammo->current = ui.capacity_spinBox->value();
+		wpn->ammo->max = ui.capacity_spinBox->value();
+		wpn->ammo->step = ui.usage_spinBox->value();
 		wpn->level = ui.level_spinBox->value();
 		wpn->price = ui.price_lineEdit->text().toInt();
 		wpn->bulk = ui.bulk_doubleSpinBox->value();

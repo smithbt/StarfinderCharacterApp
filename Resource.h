@@ -9,7 +9,7 @@ class Resource : public QObject
 	Q_OBJECT
 
 public:
-	Resource(QObject* parent = nullptr, int current = 1, int max = 1, int step = 1);
+	Resource(QObject* parent = nullptr);
 
 	int current;
 	int max;
