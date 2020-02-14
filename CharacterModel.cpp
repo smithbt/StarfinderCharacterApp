@@ -16,8 +16,8 @@ void CharacterModel::read(const QJsonObject& json)
 	beginResetModel();
 
 	// Parse Strings
-	if (json.contains("Name") && json.value("Name").isString()) {
-		map.replace(Name, json.value("Name").toString());
+	if (json.contains("CharacterName") && json.value("CharacterName").isString()) {
+		map.replace(CharacterName, json.value("CharacterName").toString());
 	}
 	// Parse Ints
 	for (int iValue = BAB; iValue <= Will; ++iValue) {
@@ -53,7 +53,7 @@ void CharacterModel::write(QJsonObject& json) const
 	for (int i = 0; i < map.size(); ++i) {
 		QString key = QMetaEnum::fromType<RowIndex>().valueToKey(i);
 		if (map.at(i).canConvert<QString>()) {
-			if (i == Name)
+			if (i == CharacterName)
 				json.insert(key, map.at(i).toString());
 		}
 		if (map.at(i).canConvert<int>()) {

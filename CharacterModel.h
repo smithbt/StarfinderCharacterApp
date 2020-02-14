@@ -20,7 +20,7 @@ private:
 public:
 	enum RowIndex : int {
 		// Strings
-		Name = 0,
+		CharacterName = 0,
 
 		// Ints
 		BAB,
@@ -40,6 +40,14 @@ public:
 		Charisma
 	};
 	Q_ENUM(RowIndex)
+
+	enum {
+		ResourceCurrentRole,
+		ResourceMaxRole,
+		AbilityTypeRole,
+		AbilityBaseRole,
+		AbilityUpgradeRole
+	};
 
 	CharacterModel(QObject *parent = nullptr);
 	~CharacterModel();

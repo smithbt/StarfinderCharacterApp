@@ -11,7 +11,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	proxy->setSourceModel(pc->model);
 	mapper->setModel(proxy);
 	mapper->setOrientation(Qt::Vertical);
-	mapper->addMapping(ui.charName_field, CharacterModel::Name);
+	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
 	mapper->addMapping(ui.str_widget, CharacterModel::Strength, "ability");
 	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity, "ability");
