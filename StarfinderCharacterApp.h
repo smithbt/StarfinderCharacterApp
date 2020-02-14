@@ -29,7 +29,7 @@ private:
 	QString fileName;
 	QDataWidgetMapper* mapper;
 
-	void readModelFromFile(QString path);
+	bool readModelFromFile(QString path);
 
 private slots:
 	void on_actionAdd_Weapon_triggered();

@@ -41,12 +41,13 @@ StarfinderCharacterApp::~StarfinderCharacterApp()
 	delete mapper;
 }
 
-void StarfinderCharacterApp::readModelFromFile(QString path)
+bool StarfinderCharacterApp::readModelFromFile(QString path)
 {
 	QFile loadFile(path);
 
 	if (!loadFile.open(QIODevice::ReadOnly)) {
 		qWarning("Error opening file.");
+		return false;
 	}
 
 	QByteArray loadData = loadFile.readAll();
@@ -57,6 +58,7 @@ void StarfinderCharacterApp::readModelFromFile(QString path)
 
 	pc->read(loadDoc.object());
 	loadFile.close();
+	return true;
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
@@ -78,8 +80,7 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
 {
 	fileName = QFileDialog::getOpenFileName(this, tr("Open file"), "..", tr("JSON Files (*.json)"));
-	readModelFromFile(fileName);
-	return true;
+	return readModelFromFile(fileName);
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
