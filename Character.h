@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include "CreatorWizard.h"
 #include "CharacterModel.h"
 #include "WeaponModel.h"
 #include "ClassModel.h"
@@ -12,6 +13,8 @@ class Character : public QObject
 public: 
 	Character(QObject* parent = nullptr);
 	~Character();
+
+	void runWizard();
 
 	int stamina();
 

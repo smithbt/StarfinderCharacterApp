@@ -93,6 +93,7 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterModel.cpp" />
     <ClCompile Include="ClassModel.cpp" />
+    <ClCompile Include="CreatorWizard.cpp" />
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -111,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AbilityWidget.ui" />
+    <QtUic Include="CreatorWizard.ui" />
     <QtUic Include="ResourceWidget.ui" />
     <QtUic Include="StarfinderCharacterApp.ui" />
     <QtUic Include="WeaponDialog.ui" />
@@ -123,6 +125,7 @@
     <QtMoc Include="ResourceWidget.h" />
     <QtMoc Include="WeaponProxyModel.h" />
     <QtMoc Include="ClassModel.h" />
+    <QtMoc Include="CreatorWizard.h" />
     <ClInclude Include="Damage.h" />
     <QtMoc Include="Resource.h" />
     <QtMoc Include="WeaponModel.h" />
