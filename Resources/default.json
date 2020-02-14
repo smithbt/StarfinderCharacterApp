@@ -10,34 +10,34 @@
     "Step": 1
   },
   "Strength": {
-    "Base Score": 10,
+    "Base": 10,
     "Name": "Strength",
-    "Personal Upgrade": 0
+    "Upgrade": 0
   },
   "Dexterity": {
-    "Base Score": 10,
+    "Base": 10,
     "Name": "Dexterity",
-    "Personal Upgrade": 0
+    "Upgrade": 0
   },
   "Constitution": {
-    "Base Score": 10,
+    "Base": 10,
     "Name": "Constitution",
-    "Personal Upgrade": 0
+    "Upgrade": 0
   },
   "Intelligence": {
-    "Base Score": 10,
+    "Base": 10,
     "Name": "Intelligence",
-    "Personal Upgrade": 0
+    "Upgrade": 0
   },
   "Wisdom": {
-    "Base Score": 10,
+    "Base": 10,
     "Name": "Wisdom",
-    "Personal Upgrade": 0
+    "Upgrade": 0
   },
   "Charisma": {
-    "Base Score": 10,
+    "Base": 10,
     "Name": "Charisma",
-    "Personal Upgrade": 0
+    "Upgrade": 0
   },
   "Classes": [],
   "Weapons": []

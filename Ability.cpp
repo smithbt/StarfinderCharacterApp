@@ -10,17 +10,17 @@ void Ability::read(const QJsonObject& json)
 {
 	if (json.contains("Name") && json["Name"].isString())
 		type = scoreFromString(json.value("Name").toString());
-	if (json.contains("Base Score") && json["Base Score"].isDouble())
-		base = json["Base Score"].toInt();
-	if (json.contains("Personal Upgrade") && json["Personal Upgrade"].isDouble())
-		upgrade = json["Personal Upgrade"].toInt();
+	if (json.contains("Base") && json["Base"].isDouble())
+		base = json["Base"].toInt();
+	if (json.contains("Upgrade") && json["Upgrade"].isDouble())
+		upgrade = json["Upgrade"].toInt();
 }
 
 void Ability::write(QJsonObject& json) const
 {
 	json.insert("Name", name());
-	json.insert("Base Score", base);
-	json.insert("Personal Upgrade", upgrade);
+	json.insert("Base", base);
+	json.insert("Upgrade", upgrade);
 }
 
 int Ability::score() const
