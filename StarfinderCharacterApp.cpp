@@ -41,22 +41,6 @@ StarfinderCharacterApp::~StarfinderCharacterApp()
 	delete mapper;
 }
 
-void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
-	WeaponDialog dialog(this);
-	if (dialog.exec()) {
-		Weapon* w = dialog.newWeapon();
-		if (w)
-			pc->addWeapon(w);
-	}
-}
-
-void StarfinderCharacterApp::on_actionCharacter_New_triggered()
-{
-	qWarning("New Character functions not implemented.");
-	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
-	fileName.clear();
-}
-
 void StarfinderCharacterApp::readModelFromFile(QString path)
 {
 	QFile loadFile(path);
@@ -73,6 +57,22 @@ void StarfinderCharacterApp::readModelFromFile(QString path)
 
 	pc->read(loadDoc.object());
 	loadFile.close();
+}
+
+void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
+	WeaponDialog dialog(this);
+	if (dialog.exec()) {
+		Weapon* w = dialog.newWeapon();
+		if (w)
+			pc->addWeapon(w);
+	}
+}
+
+void StarfinderCharacterApp::on_actionCharacter_New_triggered()
+{
+	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
+	pc->runWizard();
+	fileName.clear();
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()

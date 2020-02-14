@@ -19,7 +19,7 @@ public:
 	int stamina();
 
 	void setProperty(CharacterModel::RowIndex row, QVariant& value, int role = Qt::EditRole);
-	QVariant getProperty(CharacterModel::RowIndex row);
+	QVariant getProperty(CharacterModel::RowIndex row, int role = Qt::DisplayRole);
 
 	void setClassLevelPair(QString name, int level);
 

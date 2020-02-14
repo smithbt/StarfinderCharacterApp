@@ -2,7 +2,6 @@
 
 #include <QAbstractListModel>
 #include <QJsonObject>
-#include <QJsonDocument>
 #include <QMetaEnum>
 #include <QString>
 #include <QVector>
@@ -13,6 +12,10 @@
 class CharacterModel : public QAbstractListModel
 {
 	Q_OBJECT
+
+private:
+	QVector<QVariant> map;
+	const static int rows = 12;
 
 public:
 	enum RowIndex : int {
@@ -37,7 +40,6 @@ public:
 		Charisma
 	};
 	Q_ENUM(RowIndex)
-	const static int rows = 12;
 
 	CharacterModel(QObject *parent = nullptr);
 	~CharacterModel();
@@ -52,7 +54,5 @@ public:
 
 	bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-private:
-	QVector<QVariant> map;
 };
 

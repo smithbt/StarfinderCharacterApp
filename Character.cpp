@@ -79,9 +79,9 @@ void Character::setProperty(CharacterModel::RowIndex k, QVariant& value, int rol
 	model->setData(model->index(k), value, role);
 }
 
-QVariant Character::getProperty(CharacterModel::RowIndex row)
+QVariant Character::getProperty(CharacterModel::RowIndex row, int role)
 {
-	return model->index(row).data();
+	return model->index(row).data(role);
 }
 
 void Character::setClassLevelPair(QString name, int level)
