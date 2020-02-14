@@ -18,7 +18,6 @@ public:
 	WeaponProxyModel(QObject *parent);
 	~WeaponProxyModel();
 
-	void setBAB(int b);
 	void setCharacterModel(CharacterModel* cm);
 
 	QVariant data(const QModelIndex& index, int role) const override;
@@ -26,6 +25,5 @@ public:
 	virtual QHash<int, QByteArray> roleNames() const override;
 
 private:
-	int bab;
 	CharacterModel* cModel;
 };

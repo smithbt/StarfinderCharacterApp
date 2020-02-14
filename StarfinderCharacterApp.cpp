@@ -19,17 +19,15 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.int_widget, CharacterModel::Intelligence, "ability");
 	mapper->addMapping(ui.wis_widget, CharacterModel::Wisdom, "ability");
 	mapper->addMapping(ui.cha_widget, CharacterModel::Charisma, "ability");
+	mapper->addMapping(ui.fortLabel, CharacterModel::Fortitude, "text");
+	mapper->addMapping(ui.refLabel, CharacterModel::Reflex, "text");
+	mapper->addMapping(ui.willLabel, CharacterModel::Will, "text");
 	connect(proxy, &QIdentityProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
 	
 	wProxy->setSourceModel(pc->wModel);
 	wProxy->setCharacterModel(pc->model);
 	ui.weaponList->setModel(wProxy);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
-	connect(pc, &Character::babChanged, wProxy, &WeaponProxyModel::setBAB);
-
-	connect(pc, &Character::fortitudeChanged, ui.fortLabel, QOverload<int>::of(&QLabel::setNum));
-	connect(pc, &Character::reflexChanged, ui.refLabel, QOverload<int>::of(&QLabel::setNum));
-	connect(pc, &Character::willChanged, ui.willLabel, QOverload<int>::of(&QLabel::setNum));
 
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	

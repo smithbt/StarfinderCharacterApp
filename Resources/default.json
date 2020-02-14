@@ -1,4 +1,14 @@
 {
+  "Name": "",
+  "BAB": 0,
+  "Fortitude": 0,
+  "Reflex": 0,
+  "Will": 0,
+  "Stamina": {
+    "Current": 0,
+    "Maximum": 0,
+    "Step": 1
+  },
   "Strength": {
     "Base Score": 10,
     "Name": "Strength",
@@ -30,11 +40,5 @@
     "Personal Upgrade": 0
   },
   "Classes": [],
-  "Name": "",
-  "Stamina": {
-    "Current": 0,
-    "Maximum": 0,
-    "Step": 1
-  },
   "Weapons": []
 }

@@ -19,6 +19,12 @@ void CharacterModel::read(const QJsonObject& json)
 	if (json.contains("Name") && json.value("Name").isString()) {
 		map.replace(Name, json.value("Name").toString());
 	}
+	// Parse Ints
+	for (int iValue = BAB; iValue <= Will; ++iValue) {
+		QString iKey = QMetaEnum::fromType<RowIndex>().valueToKey(iValue);
+		if (json.contains(iKey) && json.value(iKey).isDouble())
+			map.replace(iValue, json.value(iKey).toInt());
+	}
 
 	// Parse Resources
 	if (json.contains("Stamina") && json.value("Stamina").isObject()) {
@@ -49,6 +55,11 @@ void CharacterModel::write(QJsonObject& json) const
 		if (map.at(i).canConvert<QString>()) {
 			if (i == Name)
 				json.insert(key, map.at(i).toString());
+		}
+		if (map.at(i).canConvert<int>()) {
+			if (i >= BAB && i <= Will) {
+				json.insert(key, map.at(i).toInt());
+			}
 		}
 		if (map.at(i).canConvert<Resource*>()) {
 			if (i == Stamina) {

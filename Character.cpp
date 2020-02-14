@@ -7,16 +7,10 @@ Character::Character(QObject* parent)
 	cModel(new ClassModel(this))
 {
 	connect(cModel, &ClassModel::dataChanged, [this](QModelIndex, QModelIndex, QVector<int> roles) {
-		if (roles.contains(ClassModel::BAB)) emit babChanged(bab());
-		if (roles.contains(ClassModel::Fortitude)) emit fortitudeChanged(fortitude());
-		if (roles.contains(ClassModel::Reflex)) emit reflexChanged(reflex());
-		if (roles.contains(ClassModel::Will)) emit willChanged(will()); 
-		});
-	connect(cModel, &ClassModel::modelReset, [this]() {
-		emit babChanged(bab());
-		emit fortitudeChanged(fortitude());
-		emit reflexChanged(reflex());
-		emit willChanged(will());
+		if (roles.contains(ClassModel::BAB)) setProperty(CharacterModel::BAB, QVariant(bab()));
+		if (roles.contains(ClassModel::Fortitude)) setProperty(CharacterModel::Fortitude, QVariant(fortitude()));
+		if (roles.contains(ClassModel::Reflex)) setProperty(CharacterModel::Reflex, QVariant(reflex()));
+		if (roles.contains(ClassModel::Will)) setProperty(CharacterModel::Will, QVariant(will()));
 		});
 }
 
@@ -74,9 +68,9 @@ int Character::stamina()
 	return stamina;
 }
 
-void Character::setProperty(CharacterModel::RowIndex k, QVariant& value) 
+void Character::setProperty(CharacterModel::RowIndex k, QVariant& value, int role)
 {
-	model->setData(model->index(k), value);
+	model->setData(model->index(k), value, role);
 }
 
 QVariant Character::getProperty(CharacterModel::RowIndex row)

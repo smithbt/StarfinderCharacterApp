@@ -19,6 +19,12 @@ public:
 		// Strings
 		Name = 0,
 
+		// Ints
+		BAB,
+		Fortitude,
+		Reflex,
+		Will,
+
 		// Resources
 		Stamina,
 
@@ -31,7 +37,7 @@ public:
 		Charisma
 	};
 	Q_ENUM(RowIndex)
-	const static int rows = 8;
+	const static int rows = 12;
 
 	CharacterModel(QObject *parent = nullptr);
 	~CharacterModel();
