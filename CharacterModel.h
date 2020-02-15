@@ -42,11 +42,11 @@ public:
 	Q_ENUM(RowIndex)
 
 	enum {
-		ResourceCurrentRole,
-		ResourceMaxRole,
-		AbilityTypeRole,
-		AbilityBaseRole,
-		AbilityUpgradeRole
+		Resource_CurrentRole = Qt::UserRole + 1,
+		Resource_MaxRole,
+		Ability_TypeRole,
+		Ability_BaseRole,
+		Ability_UpgradeRole
 	};
 
 	CharacterModel(QObject *parent = nullptr);

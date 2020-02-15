@@ -107,9 +107,10 @@ bool ClassModel::setData(const QModelIndex& index, const QVariant& value, int ro
         ClassLevelPair clp = m_classes.at(row);
         if (value.toString() != clp.name) {
             clp.name = value.toString();
+            m_classes.replace(row, clp);
             emit dataChanged(index, index, { Name });
+            return true;
         }
-        m_classes.replace(row, clp);
     }
 
     if (role == Level) {
@@ -139,9 +140,10 @@ bool ClassModel::setData(const QModelIndex& index, const QVariant& value, int ro
                 changedRoles.append(Will);
 
 
+            m_classes.replace(row, clp);
             emit dataChanged(index, index, changedRoles);
+            return true;
         }
-        m_classes.replace(row, clp);
     }
 
     return false;

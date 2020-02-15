@@ -14,6 +14,7 @@ CharacterModel::~CharacterModel()
 void CharacterModel::read(const QJsonObject& json)
 {
 	beginResetModel();
+	map.clear();
 
 	// Parse Strings
 	if (json.contains("CharacterName") && json.value("CharacterName").isString()) {
@@ -80,16 +81,23 @@ void CharacterModel::write(QJsonObject& json) const
 
 QVariant CharacterModel::data(const QModelIndex& index, int role) const
 {
-	const int key = index.row();
 	if (!index.isValid()) // invalid index
 		return QVariant();
 
+	const int key = index.row();
 	if (key >= map.size() || key < 0) // out of range
 		return QVariant();
 
-
 	if (role == Qt::DisplayRole || role == Qt::EditRole)
 		return map.at(key);
+
+	if (role == Resource_MaxRole && map.at(key).canConvert<Resource*>()) {
+		return map.at(key).value<Resource*>()->max();
+	}
+
+	if (role == Resource_CurrentRole && map.at(key).canConvert<Resource*>()) {
+		return map.at(key).value<Resource*>()->current();
+	}
 
 	return QVariant();
 }
@@ -109,10 +117,34 @@ int CharacterModel::rowCount(const QModelIndex& parent) const
 
 bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (index.isValid() && role == Qt::EditRole) {
+	if (!index.isValid())
+		return false;
+
+	const int key = index.row();
+	if (key > map.size() || key < 0)
+		return false;
+
+	if (role == Qt::EditRole || Qt::DisplayRole) {
 		map.replace(index.row(), value);
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
 		return true;
 	}
+
+	if (map.at(key).canConvert<Resource*>()) {
+		Resource* rsrc = map.at(key).value<Resource*>();
+		if (role == Resource_MaxRole && rsrc->max() != value.toInt()) {
+			rsrc->setMax(value.toInt());
+			map.replace(key, QVariant::fromValue(rsrc));
+			emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
+			return true;
+		}
+		if (role == Resource_CurrentRole && rsrc->current() != value.toInt()) {
+			rsrc->setCurrent(value.toInt());
+			map.replace(key, QVariant::fromValue(rsrc));
+			emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, Resource_CurrentRole });
+			return true;
+		}
+	}
+
 	return false;
 }
