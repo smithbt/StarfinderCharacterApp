@@ -8,6 +8,7 @@
 #include <QIdentityProxyModel>
 #include "ui_StarfinderCharacterApp.h"
 #include "Character.h"
+#include "CreatorWizard.h"
 #include "Weapon.h"
 #include "WeaponDelegate.h"
 #include "WeaponDialog.h"

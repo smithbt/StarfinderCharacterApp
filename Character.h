@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QObject>
-#include "CreatorWizard.h"
 #include "CharacterModel.h"
 #include "WeaponModel.h"
 #include "ClassModel.h"
@@ -13,10 +12,6 @@ class Character : public QObject
 public: 
 	Character(QObject* parent = nullptr);
 	~Character();
-
-	void runWizard();
-
-	int stamina();
 
 	void setProperty(CharacterModel::RowIndex row, QVariant& value, int role = Qt::EditRole);
 	QVariant getProperty(CharacterModel::RowIndex row, int role = Qt::DisplayRole);
@@ -37,5 +32,6 @@ private:
 	int fortitude();
 	int reflex();
 	int will();
+	int stamina();
 };
 

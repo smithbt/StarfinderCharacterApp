@@ -73,7 +73,10 @@ void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
-	pc->runWizard();
+	CreatorWizard creator;
+	if (creator.exec()) {
+
+	}
 	fileName.clear();
 }
 

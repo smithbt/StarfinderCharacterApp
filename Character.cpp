@@ -21,12 +21,6 @@ Character::~Character()
 	delete cModel;
 }
 
-void Character::runWizard()
-{
-	CreatorWizard wizard;
-	wizard.setClassList(cModel->allClassNames());
-}
-
 int Character::bab()
 {
 	int bab = 0;
