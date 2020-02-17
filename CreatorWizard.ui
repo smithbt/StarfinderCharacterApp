@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>399</width>
     <height>466</height>
    </rect>
   </property>
@@ -21,10 +21,16 @@
     <string>Enter information about your race here</string>
    </property>
    <layout class="QFormLayout" name="formLayout">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="raceNameLabel">
       <property name="text">
        <string>Race</string>
+      </property>
+      <property name="buddy">
+       <cstring>raceNameEdit</cstring>
       </property>
      </widget>
     </item>
@@ -35,6 +41,9 @@
      <widget class="QLabel" name="racialHPLabel">
       <property name="text">
        <string>Hit Points</string>
+      </property>
+      <property name="buddy">
+       <cstring>racialHPSpinBox</cstring>
       </property>
      </widget>
     </item>
@@ -72,6 +81,9 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QTableWidget" name="rFeaturesWidget">
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
          <column>
           <property name="text">
            <string>Feature</string>
@@ -94,10 +106,16 @@
     <string>Theme</string>
    </property>
    <layout class="QFormLayout" name="formLayout_3">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Name</string>
+      </property>
+      <property name="buddy">
+       <cstring>tNamelineEdit</cstring>
       </property>
      </widget>
     </item>
@@ -109,6 +127,9 @@
       <property name="text">
        <string>Ability Score</string>
       </property>
+      <property name="buddy">
+       <cstring>tAbilityComboBox</cstring>
+      </property>
      </widget>
     </item>
     <item row="1" column="1">
@@ -119,6 +140,9 @@
       <property name="text">
        <string>Skill</string>
       </property>
+      <property name="buddy">
+       <cstring>tSkillComboBox</cstring>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
@@ -127,7 +151,7 @@
     <item row="3" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox_3">
       <property name="title">
-       <string>GroupBox</string>
+       <string>Features</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
@@ -135,6 +159,9 @@
          <property name="columnCount">
           <number>2</number>
          </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
          <row>
           <property name="text">
            <string>1</string>
@@ -157,7 +184,7 @@
          </row>
          <column>
           <property name="text">
-           <string>Feature</string>
+           <string>Name</string>
           </property>
          </column>
          <column>
@@ -180,10 +207,16 @@
     <string>Enter your class and level</string>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>Class</string>
+      </property>
+      <property name="buddy">
+       <cstring>classComboBox</cstring>
       </property>
      </widget>
     </item>
@@ -195,6 +228,9 @@
       <property name="text">
        <string>Key Ability Score</string>
       </property>
+      <property name="buddy">
+       <cstring>comboBox_3</cstring>
+      </property>
      </widget>
     </item>
     <item row="1" column="1">
@@ -204,6 +240,9 @@
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Level</string>
+      </property>
+      <property name="buddy">
+       <cstring>levelSpinBox</cstring>
       </property>
      </widget>
     </item>
@@ -220,6 +259,9 @@
     <string>Adjust your Ability scores</string>
    </property>
    <layout class="QFormLayout" name="formLayout_4">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+    </property>
     <item row="0" column="0">
      <widget class="QLabel" name="pointsLabel">
       <property name="text">
@@ -231,6 +273,9 @@
      <widget class="QLabel" name="strLabel">
       <property name="text">
        <string>Strength</string>
+      </property>
+      <property name="buddy">
+       <cstring>strSpinBox</cstring>
       </property>
      </widget>
     </item>
@@ -249,6 +294,9 @@
       <property name="text">
        <string>Dexterity</string>
       </property>
+      <property name="buddy">
+       <cstring>dexSpinBox</cstring>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
@@ -265,6 +313,9 @@
      <widget class="QLabel" name="conLabel">
       <property name="text">
        <string>Constitution</string>
+      </property>
+      <property name="buddy">
+       <cstring>conSpinBox</cstring>
       </property>
      </widget>
     </item>
@@ -283,6 +334,9 @@
       <property name="text">
        <string>Intelligence</string>
       </property>
+      <property name="buddy">
+       <cstring>intSpinBox</cstring>
+      </property>
      </widget>
     </item>
     <item row="4" column="1">
@@ -299,6 +353,9 @@
      <widget class="QLabel" name="wisLabel">
       <property name="text">
        <string>Wisdom</string>
+      </property>
+      <property name="buddy">
+       <cstring>wisSpinBox</cstring>
       </property>
      </widget>
     </item>
@@ -317,6 +374,9 @@
       <property name="text">
        <string>Charisma</string>
       </property>
+      <property name="buddy">
+       <cstring>chaSpinBox</cstring>
+      </property>
      </widget>
     </item>
     <item row="6" column="1">
@@ -328,6 +388,45 @@
        <number>10</number>
       </property>
      </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="detailsPage">
+   <property name="title">
+    <string>Final Details</string>
+   </property>
+   <property name="subTitle">
+    <string>Enter personal details about your character here.</string>
+   </property>
+   <layout class="QFormLayout" name="formLayout_5">
+    <property name="fieldGrowthPolicy">
+     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Character Name</string>
+      </property>
+      <property name="buddy">
+       <cstring>characterNameLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="characterNameLineEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Player Name</string>
+      </property>
+      <property name="buddy">
+       <cstring>playerNameLineEdit</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="playerNameLineEdit"/>
     </item>
    </layout>
   </widget>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QStringList>
 #include <QWizard>
 #include "ui_CreatorWizard.h"
@@ -16,6 +18,10 @@ public:
 
 	void accept() override;
 
+	QJsonObject jsonData();
+
 private:
 	Ui::CreatorWizard ui;
+	QHash<QString, QSpinBox*> abilitySpinBoxes;
+	QJsonObject json;
 };
