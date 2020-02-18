@@ -35,8 +35,3 @@ void ResourceWidget::setResource(Resource* resource)
 		}
 	}
 }
-
-void ResourceWidget::setResourceName(const QString name)
-{
-	ui.nameLabel->setText(name);
-}

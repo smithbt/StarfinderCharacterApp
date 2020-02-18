@@ -16,8 +16,6 @@ public:
 	Resource* getResource() const;
 	void setResource(Resource* resource);
 
-	void setResourceName(const QString name);
-
 private:
 	Ui::ResourceWidget ui;
 	Resource* m_resource;
