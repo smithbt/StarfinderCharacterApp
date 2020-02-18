@@ -23,6 +23,13 @@ void Ability::write(QJsonObject& json) const
 	json.insert("Upgrade", upgrade);
 }
 
+QJsonObject Ability::toJsonObject() const
+{
+	QJsonObject json;
+	write(json);
+	return json;
+}
+
 int Ability::score() const
 {
 	return base + upgrade;

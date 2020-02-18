@@ -28,6 +28,7 @@ public:
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
+	QJsonObject toJsonObject() const;
 
 	int score() const;
 	int modifier() const;

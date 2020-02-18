@@ -17,8 +17,6 @@ public:
 	Weapon* getWeapon() const;
 	void setWeapon(Weapon* w);
 
-	void setModifiers(int atkMod, int dmgMod);
-
 public slots:
 	void updateLabels();
 
@@ -34,6 +32,4 @@ protected:
 private:
 	Ui::WeaponWidget ui;
 	Weapon* weapon;
-	int attackMod;
-	int damageMod;
 };

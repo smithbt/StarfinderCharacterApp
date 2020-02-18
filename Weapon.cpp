@@ -68,6 +68,13 @@ void Weapon::write(QJsonObject& json) const
 	json.insert("Crit", crit);
 }
 
+QJsonObject Weapon::toJsonObject() const
+{
+	QJsonObject json;
+	write(json);
+	return json;
+}
+
 QString Weapon::toString() const
 {
 	QString output = Item::toString();

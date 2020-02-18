@@ -29,8 +29,11 @@ public:
 	int capacity();
 	int usage();
 	Type type;
+	int attackMod;
+	int damageMod;
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
+	QJsonObject toJsonObject() const;
 	QString toString() const;
 };

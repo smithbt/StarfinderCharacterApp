@@ -2,9 +2,7 @@
 
 WeaponWidget::WeaponWidget(QWidget* parent)
 	: QWidget(parent),
-	weapon(nullptr),
-	attackMod(0),
-	damageMod(0)
+	weapon(nullptr)
 {
 	ui.setupUi(this);
 
@@ -30,18 +28,12 @@ void WeaponWidget::setWeapon(Weapon* w)
 	emit weaponChanged(weapon);
 }
 
-void WeaponWidget::setModifiers(int atkMod, int dmgMod)
-{
-	attackMod = atkMod;
-	damageMod = dmgMod;
-}
-
 void WeaponWidget::updateLabels()
 {
 	ui.name_label->setText(weapon->name);
 	ui.level_label->setNum(weapon->level);
-	ui.attack_label->setText(QString::asprintf("%+i", attackMod));
-	QString dmgString = QString::asprintf("%1%+i %3", damageMod).arg(weapon->damage->dice()).arg(weapon->damage->type);
+	ui.attack_label->setText(QString::asprintf("%+i", weapon->attackMod));
+	QString dmgString = QString::asprintf("%1%+i %3", weapon->damageMod).arg(weapon->damage->dice()).arg(weapon->damage->type);
 	ui.damagelabel->setText(dmgString);
 	ui.crit_label->setText(weapon->crit);
 	ui.range_label->setText(QString("%1 ft.").arg(weapon->range));
