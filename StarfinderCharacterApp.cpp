@@ -20,7 +20,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.refLabel, Character::Reflex, "text");
 	mapper->addMapping(ui.willLabel, Character::Will, "text");
 	connect(mapper, &QDataWidgetMapper::currentIndexChanged, wModel, [=](int index) {
-		wModel->setWeaponList(pcModel->index(index, Character::Weapons).data().value<QVector<Weapon*>>()); });
+		wModel->setCharacter(pcModel->index(index, Character::Weapons).data(Qt::UserRole).value<Character*>()); });
 	ui.weaponList->setModel(wModel);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 
@@ -54,7 +54,8 @@ bool StarfinderCharacterApp::readModelFromFile(QString path)
 	
 	Character* pc = new Character(pcModel);
 	pc->read(loadDoc.object());
-	pcModel->insertCharacter(pc);
+	pcModel->insertRow(0);
+	pcModel->setData(pcModel->index(0, 0), QVariant::fromValue(pc), Qt::UserRole);
 	mapper->setCurrentIndex(0);
 	loadFile.close();
 	return true;
@@ -64,8 +65,12 @@ void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	WeaponDialog dialog(this);
 	if (dialog.exec()) {
 		Weapon* w = dialog.newWeapon();
-		if (w)
-			pcModel->getCharacter(mapper->currentIndex())->addWeapon(w);
+		if (w) {
+			QModelIndex weaponNode = pcModel->index(mapper->currentIndex(), Character::Weapons);
+			QVector<Weapon*> ws = weaponNode.data().value<QVector<Weapon*>>();
+			ws.append(w);
+			pcModel->setData(weaponNode, QVariant::fromValue(ws));
+		}
 	}
 }
 
@@ -95,7 +100,7 @@ bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
 	}
 
 	QJsonObject pcObj;
-	pcModel->getCharacter(mapper->currentIndex())->write(pcObj);
+	pcModel->index(mapper->currentIndex(), 0).data(Qt::UserRole).value<Character*>()->write(pcObj);
 	QJsonDocument saveDoc(pcObj);
 	saveFile.write(saveDoc.toJson());
 	saveFile.close();

@@ -62,8 +62,6 @@ public:
 
 	void setClassLevelPair(QString name, int level);
 
-	void addWeapon(Weapon* w);
-
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 	QJsonObject toJsonObject() const;

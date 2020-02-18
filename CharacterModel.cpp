@@ -24,7 +24,8 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 	if (role == Qt::DisplayRole || role == Qt::EditRole)
 		return QVariant::fromValue(pcs.at(row)->getProperty(index.column()));
 
-	
+	if (role == Qt::UserRole)
+		return QVariant::fromValue(pcs.at(row));
 
 	return QVariant();
 }
@@ -59,22 +60,17 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 	if (role == Qt::EditRole || Qt::DisplayRole) {
 		Character* thisPC = pcs.at(row);
 		thisPC->setProperty(index.column(), value);
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
+		return true;
+	}
+
+	if (role == Qt::UserRole && value.canConvert<Character*>()) {
+		pcs.insert(row, value.value<Character*>());
+		emit dataChanged(this->index(row, 0), this->index(row, columns), { Qt::DisplayRole, Qt::EditRole, Qt::UserRole });
+		return true;
 	}
 
 	return false;
-}
-
-bool CharacterModel::insertCharacter(Character* pc)
-{
-	insertRow(0);
-	pcs.insert(0, pc);
-	emit dataChanged(index(0, 0), index(0, columns), { Qt::DisplayRole, Qt::EditRole });
-	return false;
-}
-
-Character* CharacterModel::getCharacter(int row)
-{
-	return pcs.at(row);
 }
 
 bool CharacterModel::insertRows(int position, int rows, const QModelIndex& parent)
@@ -96,7 +92,8 @@ bool CharacterModel::removeRows(int position, int rows, const QModelIndex& paren
 	beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
 	for (int i = position; i < (position + rows); ++i) {
-		pcs.removeAt(i);
+		Character* pc = pcs.takeAt(i);
+		delete pc;
 	}
 
 	endRemoveRows();

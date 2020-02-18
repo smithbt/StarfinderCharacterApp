@@ -24,10 +24,10 @@ public:
 	bool insertRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 
-	void setWeaponList(QVector<Weapon*> list);
+	void setCharacter(Character* pc);
 
 private:
-	QVector<Weapon*> weapons;
+	Character* m_pc;
 };
 
 class WeaponDelegate : public QStyledItemDelegate

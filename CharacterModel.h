@@ -27,8 +27,5 @@ public:
 
 	bool insertRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
-
-	bool insertCharacter(Character* pc);
-	Character* getCharacter(int row);
 };
 

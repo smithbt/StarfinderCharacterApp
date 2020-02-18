@@ -116,11 +116,6 @@ void Character::setClassLevelPair(QString name, int level)
 		{ClassModel::Level,	level} });
 }
 
-void Character::addWeapon(Weapon* w)
-{
-	weapons.append(w);
-}
-
 void Character::read(const QJsonObject& json)
 {
 	// Parse Strings

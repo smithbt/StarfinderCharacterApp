@@ -2,7 +2,7 @@
 
 WeaponModel::WeaponModel(QObject* parent)
 	: QAbstractListModel(parent),
-	weapons()
+	m_pc(nullptr)
 {
 }
 
@@ -12,13 +12,13 @@ QVariant WeaponModel::data(const QModelIndex& index, int role) const
 	if (!index.isValid()) // invalid index
 		return QVariant();
 
-	if (idx >= weapons.size() || idx < 0) // out of range
+	if (idx >= m_pc->getProperty(Character::Weapons).value<QVector<Weapon*>>().size() || idx < 0) // out of range
 		return QVariant();
 
+	Weapon* w = m_pc->getProperty(Character::Weapons).value<QVector<Weapon*>>().at(idx);
 	if (role == Qt::UserRole)
-		return QVariant::fromValue(weapons.at(idx));
+		return QVariant::fromValue(w);
 
-	const Weapon* w = weapons.at(idx);
 	if (role == Qt::DisplayRole) {
 		QString attack = QString::asprintf("%+i", w->attackMod);
 		QString damage = w->damage->dice() + QString::asprintf("%+i ", w->damageMod) + w->damage->type;
@@ -39,13 +39,15 @@ Qt::ItemFlags WeaponModel::flags(const QModelIndex& index) const
 
 int WeaponModel::rowCount(const QModelIndex& parent) const
 {
-	return weapons.size();
+	if (m_pc)
+		return m_pc->getProperty(Character::Weapons).value<QVector<Weapon*>>().size();
+	return 0;
 }
 
 bool WeaponModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
 	if (index.isValid() && role == Qt::EditRole && value.canConvert<Weapon*>()) {
-		weapons.replace(index.row(), value.value<Weapon*>());
+		m_pc->getProperty(Character::Weapons).value<QVector<Weapon*>>().replace(index.row(), value.value<Weapon*>());
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
 		return true;
 	}
@@ -58,7 +60,7 @@ bool WeaponModel::insertRows(int position, int rows, const QModelIndex& parent)
 	beginInsertRows(QModelIndex(), position, position + rows - 1);
 
 	for (int i = position; i < (position + rows); ++i) {
-		weapons.insert(i, nullptr);
+		m_pc->getProperty(Character::Weapons).value<QVector<Weapon*>>().insert(i, nullptr);
 	}
 
 	endInsertRows();
@@ -71,18 +73,18 @@ bool WeaponModel::removeRows(int position, int rows, const QModelIndex& parent)
 	beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
 	for (int i = position; i < (position + rows); ++i) {
-		weapons.removeAt(i);
+		m_pc->getProperty(Character::Weapons).value<QVector<Weapon*>>().removeAt(i);
 	}
 
 	endRemoveRows();
 	return true;
 }
 
-void WeaponModel::setWeaponList(QVector<Weapon*> list)
+void WeaponModel::setCharacter(Character* pc)
 {
-	if (list != weapons) {
+	if (pc != m_pc) {
 		beginResetModel();
-		weapons = list;
+		m_pc = pc;
 		endResetModel();
 	}
 }
