@@ -2,23 +2,23 @@
 
 Ability::Ability(QObject* parent)
 	: QObject(parent), 
-	type(Strength), base(10), upgrade(0)
+	m_name("Strength"), base(10), upgrade(0)
 {
 }
 
 void Ability::read(const QJsonObject& json)
 {
 	if (json.contains("Name") && json["Name"].isString())
-		type = scoreFromString(json.value("Name").toString());
+		m_name = json.value("Name").toString();
 	if (json.contains("Base") && json["Base"].isDouble())
-		base = json["Base"].toInt();
+		base = json.value("Base").toInt();
 	if (json.contains("Upgrade") && json["Upgrade"].isDouble())
-		upgrade = json["Upgrade"].toInt();
+		upgrade = json.value("Upgrade").toInt();
 }
 
 void Ability::write(QJsonObject& json) const
 {
-	json.insert("Name", name());
+	json.insert("Name", m_name);
 	json.insert("Base", base);
 	json.insert("Upgrade", upgrade);
 }
@@ -42,7 +42,7 @@ int Ability::modifier() const
 
 QString Ability::name() const
 {
-	return QVariant::fromValue(type).toString();
+	return m_name;
 }
 
 int Ability::getBase() const
@@ -79,7 +79,7 @@ void Ability::setUpgrade(int u)
 	}
 }
 
-Ability::Score Ability::scoreFromString(QString s)
+void Ability::setName(QString name)
 {
-	return static_cast<Score>(QMetaEnum::fromType<Score>().keyToValue(s.toLocal8Bit()));
+	m_name = name;
 }

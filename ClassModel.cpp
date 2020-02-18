@@ -209,7 +209,7 @@ bool ClassModel::createReferenceTable()
         int idx = dataList.takeFirst().toInt();
         ClassEntry entry;
         entry.name = dataList.at(0);
-        entry.keyAbility = Ability::scoreFromString(dataList.at(1));
+        entry.keyAbility = dataList.at(1);
         entry.bab_rate = dataList.at(2).toDouble();
         entry.fort_isGood = dataList.at(3).compare("FALSE", Qt::CaseInsensitive); // if value is FALSE, compare() returns 0.
         entry.ref_isGood = dataList.at(4).compare("FALSE", Qt::CaseInsensitive); // if value is FALSE, compare() returns 0.

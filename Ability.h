@@ -14,15 +14,6 @@ class Ability : public QObject
 	Q_PROPERTY(int score READ score STORED false NOTIFY scoreChanged)
 
 public:
-	enum Score : int { 
-		Strength = 0, 
-		Dexterity, 
-		Constitution, 
-		Intelligence, 
-		Wisdom, 
-		Charisma 
-	};
-	Q_ENUM(Score)
 
 	Ability(QObject* parent = nullptr);
 
@@ -36,14 +27,13 @@ public:
 
 	int getBase() const;
 	int getUpgrade() const;
-	Score type;
 
 	QString toString() const;
-	static Score scoreFromString(QString s);
 
 public slots:
 	void setBase(int b);
 	void setUpgrade(int u);
+	void setName(QString name);
 
 signals:
 	void scoreChanged(int);
@@ -53,4 +43,5 @@ signals:
 private:
 	int base;
 	int upgrade;
+	QString m_name;
 };

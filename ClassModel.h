@@ -78,7 +78,7 @@ private:
 
 	struct ClassEntry {
 		QString name;
-		Ability::Score keyAbility;
+		QString keyAbility;
 		double bab_rate;
 		bool fort_isGood;
 		bool ref_isGood;
