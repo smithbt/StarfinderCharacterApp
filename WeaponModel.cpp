@@ -6,38 +6,6 @@ WeaponModel::WeaponModel(QObject* parent)
 {
 }
 
-WeaponModel::~WeaponModel()
-{
-	qDeleteAll(weapons);
-}
-
-void WeaponModel::read(const QJsonObject& json)
-{
-	beginResetModel();
-	if (json.contains("Weapons") && json.value("Weapons").isArray()) {
-		QJsonArray wArray = json.value("Weapons").toArray();
-		weapons.clear();
-		for (int i = 0; i < wArray.size(); ++i) {
-			QJsonObject wObj = wArray.at(i).toObject();
-			Weapon* w = new Weapon();
-			w->read(wObj);
-			weapons.append(w);
-		}
-	}
-	endResetModel();
-}
-
-void WeaponModel::write(QJsonObject& json) const
-{
-	QJsonArray wArray;
-	for (Weapon* w : weapons) {
-		QJsonObject wObj;
-		w->write(wObj);
-		wArray.append(wObj);
-	}
-	json.insert("Weapons", wArray);
-}
-
 QVariant WeaponModel::data(const QModelIndex& index, int role) const
 {
 	const int idx = index.row();
@@ -47,8 +15,16 @@ QVariant WeaponModel::data(const QModelIndex& index, int role) const
 	if (idx >= weapons.size() || idx < 0) // out of range
 		return QVariant();
 
-	if (role == Qt::DisplayRole || role == Qt::EditRole)
+	if (role == Qt::UserRole)
 		return QVariant::fromValue(weapons.at(idx));
+
+	const Weapon* w = weapons.at(idx);
+	if (role == Qt::DisplayRole) {
+		QString attack = QString::asprintf("%+i", w->attackMod);
+		QString damage = w->damage->dice() + QString::asprintf("%+i ", w->damageMod) + w->damage->type;
+		QString listing = QString("%1: %2 / %3").arg(w->name).arg(attack).arg(damage);
+		return listing;
+	}
 
 	return QVariant();
 }
@@ -100,4 +76,86 @@ bool WeaponModel::removeRows(int position, int rows, const QModelIndex& parent)
 
 	endRemoveRows();
 	return true;
+}
+
+void WeaponModel::setWeaponList(QVector<Weapon*> list)
+{
+	if (list != weapons) {
+		beginResetModel();
+		weapons = list;
+		endResetModel();
+	}
+}
+
+WeaponDelegate::WeaponDelegate(QWidget* parent)
+	: QStyledItemDelegate(parent)
+{
+}
+
+void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
+		Weapon* w = index.data(Qt::UserRole).value<Weapon*>();
+		WeaponWidget ww;
+		ww.setWeapon(w);
+		ww.setGeometry(option.rect);
+
+		if (option.state & QStyle::State_Selected)
+			painter->fillRect(option.rect, option.palette.highlight());
+		else
+			painter->fillRect(option.rect, option.palette.background());
+
+		painter->save();
+		painter->drawPixmap(option.rect, ww.grab());
+		painter->restore();
+	}
+	else QStyledItemDelegate::paint(painter, option, index);
+}
+
+QSize WeaponDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+	if (index.data(Qt::UserRole).canConvert<Weapon*>())
+		return WeaponWidget(0).sizeHint();
+	return QStyledItemDelegate::sizeHint(option, index);
+}
+
+QWidget* WeaponDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
+		WeaponWidget* editor = new WeaponWidget(parent);
+		connect(editor, &WeaponWidget::editingFinished,
+			this, &WeaponDelegate::commitAndCloseEditor);
+		return editor;
+	}
+	return QStyledItemDelegate::createEditor(parent, option, index);
+}
+
+void WeaponDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
+{
+	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
+		Weapon* wpn = index.data(Qt::UserRole).value<Weapon*>();
+		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
+		wpnEditor->setWeapon(wpn);
+	}
+	else {
+		QStyledItemDelegate::setEditorData(editor, index);
+	}
+}
+
+void WeaponDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+{
+	if (index.data(Qt::UserRole).canConvert<Weapon*>()) {
+		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
+		model->setData(index, QVariant::fromValue(wpnEditor->getWeapon()));
+	}
+	else {
+		QStyledItemDelegate::setModelData(editor, model, index);
+	}
+}
+
+void WeaponDelegate::commitAndCloseEditor()
+{
+	WeaponWidget* editor = qobject_cast<WeaponWidget*>(sender());
+	emit commitData(editor);
+	emit closeEditor(editor);
 }

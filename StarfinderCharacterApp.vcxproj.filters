@@ -34,9 +34,6 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Ability.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,9 +52,6 @@
     <ClCompile Include="AbilityWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponDelegate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,9 +61,6 @@
     <ClCompile Include="WeaponModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponProxyModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ClassModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -77,6 +68,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CreatorWizard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,16 +96,7 @@
     <QtMoc Include="AbilityWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="WeaponDelegate.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="WeaponModel.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="Character.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="WeaponProxyModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ClassModel.h">
@@ -127,6 +112,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CreatorWizard.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WeaponModel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

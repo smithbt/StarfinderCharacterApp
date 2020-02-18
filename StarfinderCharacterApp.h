@@ -5,14 +5,11 @@
 #include <QDataWidgetMapper>
 #include <QFileDialog>
 #include <QJsonDocument>
-#include <QIdentityProxyModel>
 #include "ui_StarfinderCharacterApp.h"
-#include "Character.h"
+#include "CharacterModel.h"
 #include "CreatorWizard.h"
-#include "Weapon.h"
-#include "WeaponDelegate.h"
 #include "WeaponDialog.h"
-#include "WeaponProxyModel.h"
+#include "WeaponModel.h"
 
 class StarfinderCharacterApp : public QMainWindow
 {
@@ -24,9 +21,8 @@ public:
 
 private:
 	Ui::StarfinderCharacterAppClass ui;
-	QIdentityProxyModel* proxy;
-	WeaponProxyModel* wProxy;
-	Character* pc;
+	WeaponModel* wModel;
+	CharacterModel* pcModel;
 	QString fileName;
 	QDataWidgetMapper* mapper;
 

@@ -2,32 +2,29 @@
 
 StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	: QMainWindow(parent),
-	pc(new Character(this)),
-	proxy(new QIdentityProxyModel(this)),
-	wProxy(new WeaponProxyModel(this)),
+	wModel(new WeaponModel(this)),
+	pcModel(new CharacterModel(this)),
 	mapper(new QDataWidgetMapper(this))
 {
 	ui.setupUi(this);
-	proxy->setSourceModel(pc->model);
-	mapper->setModel(proxy);
-	mapper->setOrientation(Qt::Vertical);
-	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
-	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
-	mapper->addMapping(ui.str_widget, CharacterModel::Strength, "ability");
-	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity, "ability");
-	mapper->addMapping(ui.con_widget, CharacterModel::Constitution, "ability");
-	mapper->addMapping(ui.int_widget, CharacterModel::Intelligence, "ability");
-	mapper->addMapping(ui.wis_widget, CharacterModel::Wisdom, "ability");
-	mapper->addMapping(ui.cha_widget, CharacterModel::Charisma, "ability");
-	mapper->addMapping(ui.fortLabel, CharacterModel::Fortitude, "text");
-	mapper->addMapping(ui.refLabel, CharacterModel::Reflex, "text");
-	mapper->addMapping(ui.willLabel, CharacterModel::Will, "text");
-	connect(proxy, &QIdentityProxyModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
-	
-	wProxy->setSourceModel(pc->wModel);
-	wProxy->setCharacterModel(pc->model);
-	ui.weaponList->setModel(wProxy);
+	mapper->setModel(pcModel);
+	mapper->addMapping(ui.charName_field, Character::CharacterName);
+	mapper->addMapping(ui.staminaWidget, Character::Stamina, "resource");
+	mapper->addMapping(ui.str_widget, Character::Strength, "ability");
+	mapper->addMapping(ui.dex_widget, Character::Dexterity, "ability");
+	mapper->addMapping(ui.con_widget, Character::Constitution, "ability");
+	mapper->addMapping(ui.int_widget, Character::Intelligence, "ability");
+	mapper->addMapping(ui.wis_widget, Character::Wisdom, "ability");
+	mapper->addMapping(ui.cha_widget, Character::Charisma, "ability");
+	mapper->addMapping(ui.fortLabel, Character::Fortitude, "text");
+	mapper->addMapping(ui.refLabel, Character::Reflex, "text");
+	mapper->addMapping(ui.willLabel, Character::Will, "text");
+	connect(mapper, &QDataWidgetMapper::currentIndexChanged, wModel, [=](int index) {
+		wModel->setWeaponList(pcModel->index(index, Character::Weapons).data().value<QVector<Weapon*>>()); });
+	ui.weaponList->setModel(wModel);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
+
+	connect(pcModel, &CharacterModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
 
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	
@@ -35,9 +32,8 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 
 StarfinderCharacterApp::~StarfinderCharacterApp()
 {
-	delete pc;
-	delete proxy;
-	delete wProxy;
+	delete pcModel;
+	delete wModel;
 	delete mapper;
 }
 
@@ -55,8 +51,11 @@ bool StarfinderCharacterApp::readModelFromFile(QString path)
 	QJsonParseError *error = new QJsonParseError();
 	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData, error));
 	qDebug() << error->errorString();
-
+	
+	Character* pc = new Character(pcModel);
 	pc->read(loadDoc.object());
+	pcModel->insertCharacter(pc);
+	mapper->setCurrentIndex(0);
 	loadFile.close();
 	return true;
 }
@@ -66,17 +65,15 @@ void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 	if (dialog.exec()) {
 		Weapon* w = dialog.newWeapon();
 		if (w)
-			pc->addWeapon(w);
+			pcModel->getCharacter(mapper->currentIndex())->addWeapon(w);
 	}
 }
 
 void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
-	CreatorWizard creator;
-	if (creator.exec()) {
-
-	}
+	CreatorWizard* creator = new CreatorWizard(this);
+	creator->open();
 	fileName.clear();
 }
 
@@ -98,7 +95,7 @@ bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
 	}
 
 	QJsonObject pcObj;
-	pc->write(pcObj);
+	pcModel->getCharacter(mapper->currentIndex())->write(pcObj);
 	QJsonDocument saveDoc(pcObj);
 	saveFile.write(saveDoc.toJson());
 	saveFile.close();

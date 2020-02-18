@@ -101,10 +101,8 @@
     <ClCompile Include="ResourceWidget.cpp" />
     <ClCompile Include="StarfinderCharacterApp.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="WeaponDelegate.cpp" />
     <ClCompile Include="WeaponDialog.cpp" />
     <ClCompile Include="WeaponModel.cpp" />
-    <ClCompile Include="WeaponProxyModel.cpp" />
     <ClCompile Include="WeaponWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +120,12 @@
     <QtRcc Include="StarfinderCharacterApp.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="WeaponModel.h" />
     <QtMoc Include="ResourceWidget.h" />
-    <QtMoc Include="WeaponProxyModel.h" />
     <QtMoc Include="ClassModel.h" />
     <QtMoc Include="CreatorWizard.h" />
     <ClInclude Include="Damage.h" />
     <QtMoc Include="Resource.h" />
-    <QtMoc Include="WeaponModel.h" />
-    <QtMoc Include="WeaponDelegate.h" />
     <QtMoc Include="AbilityWidget.h" />
     <QtMoc Include="Item.h" />
     <QtMoc Include="WeaponWidget.h" />
