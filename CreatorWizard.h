@@ -14,14 +14,12 @@ public:
 	CreatorWizard(QWidget *parent = Q_NULLPTR);
 	~CreatorWizard();
 
-	void setClassList(QStringList classes);
-
 	void accept() override;
 
-	QJsonObject jsonData();
+signals:
+	void characterDataReady(QJsonObject);
 
 private:
 	Ui::CreatorWizard ui;
 	QHash<QString, QSpinBox*> abilitySpinBoxes;
-	QJsonObject json;
 };

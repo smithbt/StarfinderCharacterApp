@@ -52,10 +52,7 @@ bool StarfinderCharacterApp::readModelFromFile(QString path)
 	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData, error));
 	qDebug() << error->errorString();
 	
-	Character* pc = new Character(pcModel);
-	pc->read(loadDoc.object());
-	pcModel->insertRow(0);
-	pcModel->setData(pcModel->index(0, CharacterModel::Object), QVariant::fromValue(pc));
+	pcModel->insertRowFromJson(loadDoc.object());
 	mapper->setCurrentIndex(0);
 	loadFile.close();
 	return true;
@@ -76,6 +73,10 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	CreatorWizard* creator = new CreatorWizard(this);
+	connect(creator, &CreatorWizard::characterDataReady, [=](QJsonObject json) {
+		pcModel->insertRowFromJson(json);
+		mapper->setCurrentIndex(0);
+		});
 	creator->open();
 	fileName.clear();
 }
