@@ -76,6 +76,13 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	CreatorWizard* creator = new CreatorWizard(this);
+	connect(creator, &CreatorWizard::characterDataReady, [=](QJsonObject json) {
+		Character* pc = new Character(pcModel);
+		pc->read(json);
+		pcModel->insertRow(0);
+		pcModel->setData(pcModel->index(0, CharacterModel::Object), QVariant::fromValue(pc));
+		mapper->setCurrentIndex(0);
+		});
 	creator->open();
 	fileName.clear();
 }
