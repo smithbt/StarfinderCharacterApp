@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QMetaEnum>
 #include <QObject>
 #include "Ability.h"
 #include "Resource.h"
@@ -27,46 +26,54 @@ private:
 	QVector<Weapon*> weapons;
 
 public:
-	enum ColumnIndex : int {
-		// Strings
-		CharacterName = 0,
-
-		// Ints
-		BAB,
-		Fortitude, Reflex, Will,
-
-		// Resources
-		Stamina,
-
-		// Ability Scores
-		Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma,
-
-		// models, lists
-		Weapons
-	};
-	Q_ENUM(ColumnIndex)
-
-	enum {
-		Resource_CurrentRole = Qt::UserRole + 1,
-		Resource_MaxRole,
-		Ability_TypeRole,
-		Ability_BaseRole,
-		Ability_UpgradeRole
-	};
 
 	Character(QObject* parent = nullptr);
 	~Character();
 
-	void setProperty(int prop, const QVariant& value, int role = Qt::EditRole);
-	QVariant getProperty(int prop, int role = Qt::DisplayRole) const;
+	// Getters
+	QString getCharacterName() const;
+	int getBAB() const;
+	int getFortitude() const;
+	int getReflex() const;
+	int getWill() const;
+	Resource* getStamina() const;
+	Ability* getStrength() const;
+	Ability* getDexterity() const;
+	Ability* getConstitution() const;
+	Ability* getIntelligence() const;
+	Ability* getWisdom() const;
+	Ability* getCharisma() const;
+	
+	// Setters
+	void setCharacterName(const QString name);
+	//void setBAB() const;
+	//void setFortitude() const;
+	//void setReflex() const;
+	//void setWill() const;
+	//void setStamina() const;
+	//void setStrength() const;
+	//void setDexterity() const;
+	//void setConstitution() const;
+	//void setIntelligence() const;
+	//void setWisdom() const;
+	//void setCharisma() const;
 
-	void setClassLevelPair(QString name, int level);
+	// Weapon Management Methods
+	QVector<Weapon*> getWeapons() const;
+	void setWeapons(const QVector<Weapon*> newWeapons);
+	Weapon* getWeaponAt(int index) const;
+	void setWeaponAt(int index, Weapon* weapon);
+	void insertWeaponAt(int index, Weapon* weapon);
+	void removeWeaponAt(int index);
+	int getWeaponCount() const;
 
+	// read/write methods
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
 	QJsonObject toJsonObject() const;
 
-	ClassModel* cModel;
+signals:
+	void weaponListChanged(QVector<Weapon*>);
 
 };
 

@@ -2,8 +2,7 @@
 
 CharacterModel::CharacterModel(QObject* parent)
 	: QAbstractTableModel(parent),
-	pcs(),
-	columns(QMetaEnum::fromType<Character::ColumnIndex>().keyCount())
+	pcs()
 {
 }
 
@@ -21,12 +20,24 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 	if (row >= pcs.size() || row < 0) // out of range
 		return QVariant();
 
-	if (role == Qt::DisplayRole || role == Qt::EditRole)
-		return QVariant::fromValue(pcs.at(row)->getProperty(index.column()));
-
-	if (role == Qt::UserRole)
-		return QVariant::fromValue(pcs.at(row));
-
+	if (role == Qt::DisplayRole || role == Qt::EditRole) {
+		switch (index.column()) {
+		case Object: return QVariant::fromValue(pcs.at(index.row()));
+		case CharacterName: return pcs.at(index.row())->getCharacterName();
+		case BAB: return pcs.at(index.row())->getBAB();
+		case Fortitude: return pcs.at(index.row())->getFortitude();
+		case Reflex: return pcs.at(index.row())->getReflex();
+		case Will: return pcs.at(index.row())->getWill();
+		case Stamina: return QVariant::fromValue(pcs.at(index.row())->getStamina());
+		case Strength: return QVariant::fromValue(pcs.at(index.row())->getStrength());
+		case Dexterity: return QVariant::fromValue(pcs.at(index.row())->getDexterity());
+		case Constitution: return QVariant::fromValue(pcs.at(index.row())->getConstitution());
+		case Intelligence: return QVariant::fromValue(pcs.at(index.row())->getIntelligence());
+		case Wisdom: return QVariant::fromValue(pcs.at(index.row())->getWisdom());
+		case Charisma: return QVariant::fromValue(pcs.at(index.row())->getCharisma());
+		case Weapons: return QVariant::fromValue(pcs.at(index.row())->getWeapons());
+		}
+	}
 	return QVariant();
 }
 
@@ -59,14 +70,44 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 
 	if (role == Qt::EditRole || Qt::DisplayRole) {
 		Character* thisPC = pcs.at(row);
-		thisPC->setProperty(index.column(), value);
+		switch (index.column()) {
+		case Object:
+			if (value.canConvert<Character*>()) {
+				pcs.replace(row, value.value<Character*>());
+				emit dataChanged(this->index(row, 0), this->index(row, (columns - 1)), { Qt::DisplayRole, Qt::EditRole });
+				return true;
+			}
+			break;
+		case CharacterName: 
+			thisPC->setCharacterName(value.toString());
+			break;
+		case BAB:
+			break;
+		case Fortitude:
+			break;
+		case Reflex:
+			break;
+		case Will:
+			break;
+		case Stamina:
+			break;
+		case Strength:
+			break;
+		case Dexterity:
+			break;
+		case Constitution:
+			break;
+		case Intelligence:
+			break;
+		case Wisdom:
+			break;
+		case Charisma:
+			break;
+		case Weapons:
+			thisPC->setWeapons(value.value<QVector<Weapon*>>());
+			break;
+		}
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
-		return true;
-	}
-
-	if (role == Qt::UserRole && value.canConvert<Character*>()) {
-		pcs.insert(row, value.value<Character*>());
-		emit dataChanged(this->index(row, 0), this->index(row, columns), { Qt::DisplayRole, Qt::EditRole, Qt::UserRole });
 		return true;
 	}
 

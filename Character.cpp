@@ -14,10 +14,8 @@ Character::Character(QObject* parent)
 	intelligence(new Ability(this)),
 	wisdom(new Ability(this)),
 	charisma(new Ability(this)),
-	weapons(),
-	cModel(new ClassModel(this))
+	weapons()
 {
-	connect(cModel, &ClassModel::dataChanged, [this](QModelIndex, QModelIndex, QVector<int> roles) {});
 }
 
 Character::~Character()
@@ -32,88 +30,113 @@ Character::~Character()
 	delete charisma;
 
 	qDeleteAll(weapons);
-	delete cModel;
 }
 
-void Character::setProperty(int prop, const QVariant& value, int role)
+QString Character::getCharacterName() const
 {
-	switch (prop) {
-	case CharacterName: 
-		characterName = value.toString();
-		break;
-	case BAB: 
-		bab = value.toInt();
-		break;
-	case Fortitude: 
-		fortitude = value.toInt();
-		break;
-	case Reflex: 
-		reflex = value.toInt();
-		break;
-	case Will: 
-		will = value.toInt();
-		break;
-	case Stamina: 
-		if (value.canConvert<Resource*>())
-			stamina = value.value<Resource*>();
-		break;
-	case Strength:
-		if (value.canConvert<Ability*>())
-			strength = value.value<Ability*>();
-		break;
-	case Dexterity:
-		if (value.canConvert<Ability*>())
-			dexterity = value.value<Ability*>();
-		break;
-	case Constitution:
-		if (value.canConvert<Ability*>())
-			constitution = value.value<Ability*>();
-		break;
-	case Intelligence:
-		if (value.canConvert<Ability*>())
-			intelligence = value.value<Ability*>();
-		break;
-	case Wisdom:
-		if (value.canConvert<Ability*>())
-			wisdom = value.value<Ability*>();
-		break;
-	case Charisma:
-		if (value.canConvert<Ability*>())
-			charisma = value.value<Ability*>();
-		break;
-	case Weapons:
-		if (value.canConvert<QVector<Weapon*>>())
-			weapons = value.value<QVector<Weapon*>>();
-		break;
+	return characterName;
+}
+
+int Character::getBAB() const
+{
+	return bab;
+}
+
+int Character::getFortitude() const
+{
+	return fortitude;
+}
+
+int Character::getReflex() const
+{
+	return reflex;
+}
+
+int Character::getWill() const
+{
+	return will;
+}
+
+Resource* Character::getStamina() const
+{
+	return stamina;
+}
+
+Ability* Character::getStrength() const
+{
+	return strength;
+}
+
+Ability* Character::getDexterity() const
+{
+	return dexterity;
+}
+
+Ability* Character::getConstitution() const
+{
+	return constitution;
+}
+
+Ability* Character::getIntelligence() const
+{
+	return intelligence;
+}
+
+Ability* Character::getWisdom() const
+{
+	return wisdom;
+}
+
+Ability* Character::getCharisma() const
+{
+	return charisma;
+}
+
+void Character::setCharacterName(const QString name)
+{
+	characterName = name;
+}
+
+QVector<Weapon*> Character::getWeapons() const
+{
+	return weapons;
+}
+
+void Character::setWeapons(const QVector<Weapon*> newWeapons)
+{
+	if (newWeapons != weapons) {
+		weapons = newWeapons;
+		emit weaponListChanged(weapons);
 	}
 }
 
-QVariant Character::getProperty(int prop, int role) const
+Weapon* Character::getWeaponAt(int index) const
 {
-	switch (prop) {
-	case CharacterName: return characterName;
-	case BAB: return bab;
-	case Fortitude: return fortitude;
-	case Reflex: return reflex;
-	case Will: return will;
-	case Stamina: return QVariant::fromValue(stamina);
-	case Strength: return QVariant::fromValue(strength);
-	case Dexterity: return QVariant::fromValue(dexterity);
-	case Constitution: return QVariant::fromValue(constitution);
-	case Intelligence: return QVariant::fromValue(intelligence);
-	case Wisdom: return QVariant::fromValue(wisdom);
-	case Charisma: return QVariant::fromValue(charisma);
-	case Weapons: return QVariant::fromValue(weapons);
-	}
-	return QVariant();
+	return weapons.at(index);
 }
 
-void Character::setClassLevelPair(QString name, int level)
+void Character::setWeaponAt(int index, Weapon* weapon)
 {
-	cModel->insertRow(0);
-	cModel->setItemData(cModel->index(0), { 
-		{ClassModel::Name,	name},
-		{ClassModel::Level,	level} });
+	weapons.replace(index, weapon);
+	emit weaponListChanged(weapons);
+}
+
+void Character::insertWeaponAt(int index, Weapon* weapon)
+{
+	weapons.insert(index, weapon);
+	emit weaponListChanged(weapons);
+}
+
+void Character::removeWeaponAt(int index)
+{
+	Weapon* w = weapons.takeAt(index);
+	delete w;
+	emit weaponListChanged(weapons);
+}
+
+int Character::getWeaponCount() const
+{
+	return weapons.size();
 }
 
 void Character::read(const QJsonObject& json)
@@ -173,7 +196,6 @@ void Character::read(const QJsonObject& json)
 			weapons.append(w);
 		}
 	}
-	cModel->read(json);
 }
 
 void Character::write(QJsonObject& json) const
@@ -199,7 +221,6 @@ void Character::write(QJsonObject& json) const
 	for (Weapon* w : weapons)
 		wArray.append(w->toJsonObject());
 	json.insert("Weapons", wArray);
-	cModel->write(json);
 }
 
 QJsonObject Character::toJsonObject() const

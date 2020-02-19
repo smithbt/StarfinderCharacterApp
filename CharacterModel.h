@@ -10,9 +10,36 @@ class CharacterModel : public QAbstractTableModel
 
 private:
 	QVector<Character*> pcs;
-	int columns;
+	const static int columns = 14; 
 
 public:
+	enum ColumnIndex : int {
+		Object = 0,
+		
+		// Strings
+		CharacterName,
+
+		// Ints
+		BAB,
+		Fortitude, Reflex, Will,
+
+		// Resources
+		Stamina,
+
+		// Ability Scores
+		Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma,
+
+		// models, lists
+		Weapons
+	};
+
+	enum {
+		Resource_CurrentRole = Qt::UserRole + 1,
+		Resource_MaxRole,
+		Ability_TypeRole,
+		Ability_BaseRole,
+		Ability_UpgradeRole
+	};
 
 	CharacterModel(QObject *parent = nullptr);
 	~CharacterModel();
