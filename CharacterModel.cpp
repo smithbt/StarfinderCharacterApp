@@ -29,12 +29,12 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 		case Reflex: return pcs.at(index.row())->getReflex();
 		case Will: return pcs.at(index.row())->getWill();
 		case Stamina: return QVariant::fromValue(pcs.at(index.row())->getStamina());
-		case Strength: return QVariant::fromValue(pcs.at(index.row())->getStrength());
-		case Dexterity: return QVariant::fromValue(pcs.at(index.row())->getDexterity());
-		case Constitution: return QVariant::fromValue(pcs.at(index.row())->getConstitution());
-		case Intelligence: return QVariant::fromValue(pcs.at(index.row())->getIntelligence());
-		case Wisdom: return QVariant::fromValue(pcs.at(index.row())->getWisdom());
-		case Charisma: return QVariant::fromValue(pcs.at(index.row())->getCharisma());
+		case Strength: return QVariant::fromValue(pcs.at(index.row())->getAbility("Strength"));
+		case Dexterity: return QVariant::fromValue(pcs.at(index.row())->getAbility("Dexterity"));
+		case Constitution: return QVariant::fromValue(pcs.at(index.row())->getAbility("Constitution"));
+		case Intelligence: return QVariant::fromValue(pcs.at(index.row())->getAbility("Intelligence"));
+		case Wisdom: return QVariant::fromValue(pcs.at(index.row())->getAbility("Wisdom"));
+		case Charisma: return QVariant::fromValue(pcs.at(index.row())->getAbility("Charisma"));
 		case Weapons: return QVariant::fromValue(pcs.at(index.row())->getWeapons());
 		}
 	}
@@ -90,18 +90,25 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		case Will:
 			break;
 		case Stamina:
+			thisPC->setStamina(value.value<Resource*>());
 			break;
 		case Strength:
+			thisPC->setAbility("Strength", value.value<Ability*>());
 			break;
 		case Dexterity:
+			thisPC->setAbility("Dexterity", value.value<Ability*>());
 			break;
 		case Constitution:
+			thisPC->setAbility("Constitution", value.value<Ability*>());
 			break;
 		case Intelligence:
+			thisPC->setAbility("Intelligence", value.value<Ability*>());
 			break;
 		case Wisdom:
+			thisPC->setAbility("Wisdom", value.value<Ability*>());
 			break;
 		case Charisma:
+			thisPC->setAbility("Charisma", value.value<Ability*>());
 			break;
 		case Weapons:
 			thisPC->setWeapons(value.value<QVector<Weapon*>>());

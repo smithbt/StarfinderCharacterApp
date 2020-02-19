@@ -8,12 +8,13 @@ Character::Character(QObject* parent)
 	reflex(0),
 	will(0),
 	stamina(new Resource(this)),
-	strength(new Ability(this)),
-	dexterity(new Ability(this)),
-	constitution(new Ability(this)),
-	intelligence(new Ability(this)),
-	wisdom(new Ability(this)),
-	charisma(new Ability(this)),
+	abilities({
+		{"Strength", new Ability(this) },
+		{"Dexterity", new Ability(this) },
+		{"Constitution", new Ability(this) },
+		{"Intelligence", new Ability(this) },
+		{"Wisdom", new Ability(this) },
+		{"Charisma", new Ability(this) }, }),
 	weapons()
 {
 }
@@ -22,12 +23,7 @@ Character::~Character()
 {
 	delete stamina;
 
-	delete strength;
-	delete dexterity;
-	delete constitution;
-	delete intelligence;
-	delete wisdom;
-	delete charisma;
+	qDeleteAll(abilities);
 
 	qDeleteAll(weapons);
 }
@@ -62,39 +58,27 @@ Resource* Character::getStamina() const
 	return stamina;
 }
 
-Ability* Character::getStrength() const
+Ability* Character::getAbility(const QString abilityName) const
 {
-	return strength;
-}
-
-Ability* Character::getDexterity() const
-{
-	return dexterity;
-}
-
-Ability* Character::getConstitution() const
-{
-	return constitution;
-}
-
-Ability* Character::getIntelligence() const
-{
-	return intelligence;
-}
-
-Ability* Character::getWisdom() const
-{
-	return wisdom;
-}
-
-Ability* Character::getCharisma() const
-{
-	return charisma;
+	if (abilities.contains(abilityName))
+		return abilities.value(abilityName);
+	return nullptr;
 }
 
 void Character::setCharacterName(const QString name)
 {
 	characterName = name;
+}
+
+void Character::setStamina(Resource* s)
+{
+	stamina = s;
+}
+
+void Character::setAbility(const QString abilityName, Ability* a)
+{
+	if (abilities.contains(abilityName))
+		abilities.insert(abilityName, a);
 }
 
 QVector<Weapon*> Character::getWeapons() const
@@ -160,22 +144,18 @@ void Character::read(const QJsonObject& json)
 		stamina->read(json.value("Stamina").toObject());
 
 	// Parse Abilities
-	if (json.contains("Strength") && json.value("Strength").isObject())
-		strength->read(json.value("Strength").toObject());
-	if (json.contains("Dexterity") && json.value("Dexterity").isObject())
-		dexterity->read(json.value("Dexterity").toObject());
-	if (json.contains("Constitution") && json.value("Constitution").isObject()) 
-		constitution->read(json.value("Constitution").toObject());
-	if (json.contains("Intelligence") && json.value("Intelligence").isObject()) 
-		intelligence->read(json.value("Intelligence").toObject());
-	if (json.contains("Wisdom") && json.value("Wisdom").isObject()) 
-		wisdom->read(json.value("Wisdom").toObject());
-	if (json.contains("Charisma") && json.value("Charisma").isObject()) 
-		charisma->read(json.value("Charisma").toObject());
+	if (json.contains("Abilities") && json.value("Abilities").isObject()) {
+		QJsonObject aObject = json.value("Abilities").toObject();
+		for (QHash<QString, Ability*>::Iterator i = abilities.begin(); i != abilities.end(); ++i)
+			if (aObject.contains(i.key()) && aObject.value(i.key()).isObject()) {
+				i.value()->read(aObject.value(i.key()).toObject());
+			}
+	}
 
 	if (json.contains("Weapons") && json.value("Weapons").isArray()) {
 		QJsonArray wArray = json.value("Weapons").toArray();
 		qDeleteAll(weapons);
+		weapons.clear();
 		for (int i = 0; i < wArray.size(); ++i) {
 			QJsonObject wObj = wArray.at(i).toObject();
 			Weapon* w = new Weapon(this);
@@ -184,11 +164,11 @@ void Character::read(const QJsonObject& json)
 			int dMod = 0;
 			switch (w->type) {
 			case Weapon::Type::Melee:
-				aMod += strength->modifier();
-				dMod = (strength->modifier());
+				aMod += abilities.value("Strength")->modifier();
+				dMod = (abilities.value("Strength")->modifier());
 				break;
 			case Weapon::Type::Ranged:
-				aMod += dexterity->modifier();
+				aMod += abilities.value("Dexterity")->modifier();
 				break;
 			}
 			w->attackMod = aMod;
@@ -210,12 +190,10 @@ void Character::write(QJsonObject& json) const
 	json.insert("Stamina", stamina->toJsonObject());
 
 	// Abilities
-	json.insert("Strength", strength->toJsonObject());
-	json.insert("Dexterity", dexterity->toJsonObject());
-	json.insert("Constitution", constitution->toJsonObject());
-	json.insert("Intelligence", intelligence->toJsonObject());
-	json.insert("Wisdom", wisdom->toJsonObject());
-	json.insert("Charisma", charisma->toJsonObject());
+	QJsonObject aObject;
+	for (QHash<QString, Ability*>::ConstIterator i = abilities.begin(); i != abilities.end(); ++i)
+		aObject.insert(i.key(), i.value()->toJsonObject());
+	json.insert("Abilities", aObject);
 	
 	QJsonArray wArray;
 	for (Weapon* w : weapons)

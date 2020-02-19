@@ -17,12 +17,7 @@ private:
 	int reflex;
 	int will;
 	Resource* stamina;
-	Ability* strength;
-	Ability* dexterity;
-	Ability* constitution;
-	Ability* intelligence;
-	Ability* wisdom;
-	Ability* charisma;
+	QHash<QString, Ability*> abilities;
 	QVector<Weapon*> weapons;
 
 public:
@@ -37,12 +32,7 @@ public:
 	int getReflex() const;
 	int getWill() const;
 	Resource* getStamina() const;
-	Ability* getStrength() const;
-	Ability* getDexterity() const;
-	Ability* getConstitution() const;
-	Ability* getIntelligence() const;
-	Ability* getWisdom() const;
-	Ability* getCharisma() const;
+	Ability* getAbility(const QString abilityName) const;
 	
 	// Setters
 	void setCharacterName(const QString name);
@@ -50,13 +40,8 @@ public:
 	//void setFortitude() const;
 	//void setReflex() const;
 	//void setWill() const;
-	//void setStamina() const;
-	//void setStrength() const;
-	//void setDexterity() const;
-	//void setConstitution() const;
-	//void setIntelligence() const;
-	//void setWisdom() const;
-	//void setCharisma() const;
+	void setStamina(Resource* s);
+	void setAbility(const QString abilityName, Ability* a);
 
 	// Weapon Management Methods
 	QVector<Weapon*> getWeapons() const;
