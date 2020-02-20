@@ -114,6 +114,15 @@ void Character::setWeapons(const QVector<Weapon*> newWeapons)
 
 Weapon* Character::getWeaponAt(int index) const
 {
+	switch (weapons[index]->type) {
+	case Weapon::Type::Melee:
+		weapons[index]->attackMod = bab + abilities.value("Strength")->modifier();
+		weapons[index]->damageMod = abilities.value("Strength")->modifier();
+		break;
+	case Weapon::Type::Ranged:
+		weapons[index]->attackMod = bab + abilities.value("Dexterity")->modifier();
+		break;
+	}
 	return weapons.at(index);
 }
 
@@ -182,19 +191,6 @@ void Character::read(const QJsonObject& json)
 			QJsonObject wObj = wArray.at(i).toObject();
 			Weapon* w = new Weapon(this);
 			w->read(wObj);
-			int aMod = bab;
-			int dMod = 0;
-			switch (w->type) {
-			case Weapon::Type::Melee:
-				aMod += abilities.value("Strength")->modifier();
-				dMod = (abilities.value("Strength")->modifier());
-				break;
-			case Weapon::Type::Ranged:
-				aMod += abilities.value("Dexterity")->modifier();
-				break;
-			}
-			w->attackMod = aMod;
-			w->damageMod = dMod;
 			weapons.append(w);
 		}
 	}
