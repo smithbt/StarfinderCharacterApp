@@ -42,3 +42,16 @@ void CreatorWizard::accept()
 	QDialog::accept();
 	emit characterDataReady(json);
 }
+
+void CreatorWizard::on_rAdjButton_clicked()
+{
+	QString score = ui.rAdjScoreComboBox->currentText();
+	int value = ui.rAdjSpinBox->value();
+	if (value != 0 && abilitySpinBoxes.contains(score)) {
+		QString entry = QString("%1 %2").arg(value).arg(score);
+		ui.rAbilityAdjWidget->addItem(entry);
+		abilitySpinBoxes[score]->stepBy(value);
+	}
+	ui.rAdjScoreComboBox->setCurrentIndex(0);
+	ui.rAdjSpinBox->setValue(0);
+}

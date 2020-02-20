@@ -19,6 +19,9 @@ public:
 signals:
 	void characterDataReady(QJsonObject);
 
+protected slots:
+	void on_rAdjButton_clicked();
+
 private:
 	Ui::CreatorWizard ui;
 	QHash<QString, QSpinBox*> abilitySpinBoxes;
