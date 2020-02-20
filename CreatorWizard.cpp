@@ -22,6 +22,14 @@ CreatorWizard::~CreatorWizard()
 void CreatorWizard::accept()
 {
 	Character* pc = new Character();
+	Race* r = pc->getRace();
+	r->setName(ui.rNameLineEdit->text());
+	r->setHitPoints(ui.rHPSpinBox->value());
+	for (int i = 0; i < ui.rFeaturesWidget->rowCount(); ++i) {
+		r->addFeature(ui.rFeaturesWidget->item(i, 0)->text(), ui.rFeaturesWidget->item(i, 1)->text());
+	}
+	pc->setRace(r);
+
 	pc->setCharacterName(ui.characterNameLineEdit->text());
 
 	// loop over ability scores
