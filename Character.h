@@ -1,10 +1,14 @@
 #pragma once
 
+#include <QHash>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QObject>
+#include <QVector>
 #include "Ability.h"
+#include "Race.h"
 #include "Resource.h"
 #include "Weapon.h"
-#include "ClassModel.h"
 
 class Character : public QObject
 {
@@ -12,6 +16,7 @@ class Character : public QObject
 
 private:
 	QString characterName;
+	Race* race;
 	int bab;
 	int fortitude;
 	int reflex;
@@ -27,6 +32,7 @@ public:
 
 	// Getters
 	QString getCharacterName() const;
+	Race* getRace() const;
 	int getBAB() const;
 	int getFortitude() const;
 	int getReflex() const;
@@ -36,6 +42,7 @@ public:
 	
 	// Setters
 	void setCharacterName(const QString name);
+	void setRace(Race* race);
 	//void setBAB() const;
 	//void setFortitude() const;
 	//void setReflex() const;

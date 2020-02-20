@@ -1,5 +1,10 @@
 {
   "CharacterName": "",
+  "Race":{
+    "Name": "",
+    "HP": 0,
+    "Features":[]
+  }
   "BAB": 0,
   "Fortitude": 0,
   "Reflex": 0,
