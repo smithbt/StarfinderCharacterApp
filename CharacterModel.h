@@ -10,11 +10,12 @@ class CharacterModel : public QAbstractTableModel
 
 private:
 	QVector<Character*> pcs;
-	const static int columns = 14; 
+	const static int columns = 15; 
 
 public:
 	enum ColumnIndex : int {
 		Object = 0,
+		RaceData,
 		
 		// Strings
 		CharacterName,
@@ -36,7 +37,8 @@ public:
 	enum {
 		Resource_CurrentRole = Qt::UserRole + 1,
 		Resource_MaxRole,
-		Ability_TypeRole,
+		Resource_StepRole,
+
 		Ability_BaseRole,
 		Ability_UpgradeRole
 	};

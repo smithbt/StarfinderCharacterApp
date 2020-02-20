@@ -23,6 +23,7 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 	if (role == Qt::DisplayRole || role == Qt::EditRole) {
 		switch (index.column()) {
 		case Object: return QVariant::fromValue(pcs.at(index.row()));
+		case RaceData: return QVariant::fromValue(pcs.at(index.row())->getRace());
 		case CharacterName: return pcs.at(index.row())->getCharacterName();
 		case BAB: return pcs.at(index.row())->getBAB();
 		case Fortitude: return pcs.at(index.row())->getFortitude();
@@ -69,7 +70,6 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		return false;
 
 	if (role == Qt::EditRole || Qt::DisplayRole) {
-		Character* thisPC = pcs.at(row);
 		switch (index.column()) {
 		case Object:
 			if (value.canConvert<Character*>()) {
@@ -78,8 +78,13 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 				return true;
 			}
 			break;
-		case CharacterName: 
-			thisPC->setCharacterName(value.toString());
+		case RaceData:
+			if (value.canConvert<Race*>())
+				pcs[row]->setRace(value.value<Race*>());
+			else return false;
+			break;
+		case CharacterName:
+			pcs[row]->setCharacterName(value.toString());
 			break;
 		case BAB:
 			break;
@@ -90,28 +95,44 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		case Will:
 			break;
 		case Stamina:
-			thisPC->setStamina(value.value<Resource*>());
+			if (value.canConvert<Resource*>())
+				pcs[row]->setStamina(value.value<Resource*>());
+			else return false;
 			break;
 		case Strength:
-			thisPC->setAbility("Strength", value.value<Ability*>());
+			if (value.canConvert<Ability*>())
+				pcs[row]->setAbility("Strength", value.value<Ability*>());
+			else return false;
 			break;
 		case Dexterity:
-			thisPC->setAbility("Dexterity", value.value<Ability*>());
+			if (value.canConvert<Ability*>())
+				pcs[row]->setAbility("Dexterity", value.value<Ability*>());
+			else return false;
 			break;
 		case Constitution:
-			thisPC->setAbility("Constitution", value.value<Ability*>());
+			if (value.canConvert<Ability*>())
+				pcs[row]->setAbility("Constitution", value.value<Ability*>());
+			else return false;
 			break;
 		case Intelligence:
-			thisPC->setAbility("Intelligence", value.value<Ability*>());
+			if (value.canConvert<Ability*>())
+				pcs[row]->setAbility("Intelligence", value.value<Ability*>());
+			else return false;
 			break;
 		case Wisdom:
-			thisPC->setAbility("Wisdom", value.value<Ability*>());
+			if (value.canConvert<Ability*>())
+				pcs[row]->setAbility("Wisdom", value.value<Ability*>());
+			else return false;
 			break;
 		case Charisma:
-			thisPC->setAbility("Charisma", value.value<Ability*>());
+			if (value.canConvert<Ability*>())
+				pcs[row]->setAbility("Charisma", value.value<Ability*>());
+			else return false;
 			break;
 		case Weapons:
-			thisPC->setWeapons(value.value<QVector<Weapon*>>());
+			if (value.canConvert<QVector<Weapon*>>())
+				pcs[row]->setWeapons(value.value<QVector<Weapon*>>());
+			else return false;
 			break;
 		}
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
