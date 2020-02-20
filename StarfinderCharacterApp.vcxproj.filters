@@ -76,6 +76,9 @@
     <ClCompile Include="Race.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RaceWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="StarfinderCharacterApp.h">
@@ -123,6 +126,9 @@
     <QtMoc Include="Race.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="RaceWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="StarfinderCharacterApp.ui">
@@ -141,6 +147,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="CreatorWizard.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="RaceWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

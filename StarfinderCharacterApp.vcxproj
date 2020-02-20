@@ -98,6 +98,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Race.cpp" />
+    <ClCompile Include="RaceWidget.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceWidget.cpp" />
     <ClCompile Include="StarfinderCharacterApp.cpp" />
@@ -112,6 +113,7 @@
   <ItemGroup>
     <QtUic Include="AbilityWidget.ui" />
     <QtUic Include="CreatorWizard.ui" />
+    <QtUic Include="RaceWidget.ui" />
     <QtUic Include="ResourceWidget.ui" />
     <QtUic Include="StarfinderCharacterApp.ui" />
     <QtUic Include="WeaponDialog.ui" />
@@ -121,6 +123,7 @@
     <QtRcc Include="StarfinderCharacterApp.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="RaceWidget.h" />
     <QtMoc Include="Race.h" />
     <QtMoc Include="WeaponModel.h" />
     <QtMoc Include="ResourceWidget.h" />

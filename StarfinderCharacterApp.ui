@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
-    <height>565</height>
+    <width>647</width>
+    <height>704</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,26 +39,10 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="title">
-       <string>Classes</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_9">
-       <item row="0" column="0">
-        <widget class="QLabel" name="classes_label">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="mainTab">
        <attribute name="title">
@@ -66,110 +50,138 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
+         <widget class="QGroupBox" name="abilityBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Abilities</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="AbilityWidget" name="str_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="dex_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="con_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_13">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="int_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_12">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="wis_widget" native="true"/>
+           </item>
+           <item>
+            <widget class="Line" name="line_11">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="AbilityWidget" name="cha_widget" native="true"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1" rowspan="2">
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="abilityBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+          <item row="1" column="0">
+           <widget class="QGroupBox" name="tGroupBox">
             <property name="title">
-             <string>Abilities</string>
+             <string>Theme</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>3</number>
-             </property>
-             <property name="topMargin">
-              <number>3</number>
-             </property>
-             <property name="rightMargin">
-              <number>3</number>
-             </property>
-             <property name="bottomMargin">
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="AbilityWidget" name="str_widget" native="true"/>
-             </item>
-             <item>
-              <widget class="Line" name="line_9">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="AbilityWidget" name="dex_widget" native="true"/>
-             </item>
-             <item>
-              <widget class="Line" name="line_10">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="AbilityWidget" name="con_widget" native="true"/>
-             </item>
-             <item>
-              <widget class="Line" name="line_13">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="AbilityWidget" name="int_widget" native="true"/>
-             </item>
-             <item>
-              <widget class="Line" name="line_12">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="AbilityWidget" name="wis_widget" native="true"/>
-             </item>
-             <item>
-              <widget class="Line" name="line_11">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="AbilityWidget" name="cha_widget" native="true"/>
+            <layout class="QGridLayout" name="gridLayout_13">
+             <item row="0" column="0">
+              <widget class="QTableWidget" name="tFeaturesTableWidget"/>
              </item>
             </layout>
            </widget>
           </item>
-          <item row="1" column="0">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="2" column="0">
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Classes</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
+            <layout class="QGridLayout" name="gridLayout_9">
+             <item row="0" column="0">
+              <widget class="QLabel" name="classes_label">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
-          <item row="0" column="1" rowspan="2">
+          <item row="0" column="1" rowspan="3">
            <widget class="QGroupBox" name="skillsBox">
             <property name="title">
              <string>Skills</string>
@@ -177,6 +189,18 @@
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
               <widget class="QTableView" name="skillsView"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="rGroupBox">
+            <property name="title">
+             <string>Race</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="0" column="0">
+              <widget class="RaceWidget" name="rWidget" native="true"/>
              </item>
             </layout>
            </widget>
@@ -382,13 +406,6 @@
              <bool>true</bool>
             </property>
             <layout class="QGridLayout" name="gridLayout_6">
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_11">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="2">
               <widget class="QLabel" name="label_10">
                <property name="font">
@@ -400,9 +417,6 @@
                 <string>Maximum</string>
                </property>
               </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBox"/>
              </item>
              <item row="5" column="2">
               <widget class="QLabel" name="label_13">
@@ -482,6 +496,9 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="1" colspan="2">
+              <widget class="ResourceWidget" name="hpWidget" native="true"/>
+             </item>
             </layout>
            </widget>
           </item>
@@ -511,7 +528,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>726</width>
+     <width>647</width>
      <height>21</height>
     </rect>
    </property>
@@ -613,6 +630,12 @@
    <class>ResourceWidget</class>
    <extends>QWidget</extends>
    <header>ResourceWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RaceWidget</class>
+   <extends>QWidget</extends>
+   <header>RaceWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

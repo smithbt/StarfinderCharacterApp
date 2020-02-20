@@ -15,6 +15,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	ui.cha_widget->setLabelText("Charisma");
 
 	mapper->setModel(pcModel);
+	mapper->addMapping(ui.rWidget, CharacterModel::RaceData, "race");
 	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
 	mapper->addMapping(ui.str_widget, CharacterModel::Strength, "ability");
