@@ -17,15 +17,12 @@ void RaceWidget::setRace(Race* race)
 		m_race = race;
 
 		ui.rNameLabel->setText(m_race->name());
-		ui.rHPLabel->setText(QString("Hit Points: %1").arg(m_race->hitPoints()));
+		ui.rHPLabel->setText(QString("<b>Hit Points</b>: %1").arg(m_race->hitPoints()));
 
-		ui.rFeatureTableWidget->setRowCount(m_race->features().size());
-		int row = 0;
-		for (QMap<QString, QString>::ConstIterator ci = m_race->features().cbegin(); ci != m_race->features().cend(); ++ci) {
-			ui.rFeatureTableWidget->setItem(row, 0, new QTableWidgetItem(ci.key()));
-			ui.rFeatureTableWidget->setItem(row, 1, new QTableWidgetItem(ci.value()));
-			++row;
-		}
+		QString featureList;
+		for (QMap<QString, QString>::ConstIterator ci = m_race->features().cbegin(); ci != m_race->features().cend(); ++ci)
+			featureList += QString("<b>%1</b><br>%2<br>").arg(ci.key(), ci.value());
+		ui.rFeaturesLabel->setText(featureList);
 	}
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
-    <height>211</height>
+    <width>140</width>
+    <height>32</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,13 +33,6 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="rSizeLabel">
-     <property name="text">
-      <string>Size</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="2">
     <widget class="QLabel" name="rTypeLabel">
      <property name="text">
@@ -54,24 +47,24 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="4">
-    <widget class="QTableWidget" name="rFeatureTableWidget">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
+   <item row="0" column="1">
+    <widget class="QLabel" name="rSizeLabel">
+     <property name="text">
+      <string>Size</string>
      </property>
-     <attribute name="horizontalHeaderStretchLastSection">
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QLabel" name="rFeaturesLabel">
+     <property name="text">
+      <string>FeatureLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
       <bool>true</bool>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Feature</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Description</string>
-      </property>
-     </column>
+     </property>
     </widget>
    </item>
   </layout>
