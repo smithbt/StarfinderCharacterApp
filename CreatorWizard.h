@@ -1,10 +1,9 @@
 #pragma once
 
-#include <QJsonArray>
-#include <QJsonObject>
 #include <QStringList>
 #include <QWizard>
 #include "ui_CreatorWizard.h"
+#include "Character.h"
 
 class CreatorWizard : public QWizard
 {
@@ -17,12 +16,12 @@ public:
 	void accept() override;
 
 signals:
-	void characterDataReady(QJsonObject);
+	void characterReady(Character*);
 
 protected slots:
 	void on_rAdjButton_clicked();
 
 private:
 	Ui::CreatorWizard ui;
-	QHash<QString, QSpinBox*> abilitySpinBoxes;
+	QHash<QString, QSpinBox*> abilitySpinBoxes; 
 };

@@ -92,6 +92,13 @@ void Character::setAbility(const QString abilityName, Ability* a)
 		abilities.insert(abilityName, a);
 }
 
+bool Character::setAbilityProperty(const QString abilityName, const char* propertyName, QVariant& value)
+{
+	if (abilities.contains(abilityName))
+		return abilities[abilityName]->setProperty(propertyName, value);
+	return false;
+}
+
 QVector<Weapon*> Character::getWeapons() const
 {
 	return weapons;
@@ -207,7 +214,7 @@ void Character::write(QJsonObject& json) const
 
 	// Abilities
 	QJsonObject aObject;
-	for (QHash<QString, Ability*>::ConstIterator i = abilities.begin(); i != abilities.end(); ++i)
+	for (QHash<QString, Ability*>::ConstIterator i = abilities.cbegin(); i != abilities.cend(); ++i)
 		aObject.insert(i.key(), i.value()->toJsonObject());
 	json.insert("Abilities", aObject);
 	

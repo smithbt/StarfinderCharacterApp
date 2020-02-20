@@ -49,6 +49,7 @@ public:
 	//void setWill() const;
 	void setStamina(Resource* s);
 	void setAbility(const QString abilityName, Ability* a);
+	bool setAbilityProperty(const QString abilityName, const char* propertyName, QVariant& value);
 
 	// Weapon Management Methods
 	QVector<Weapon*> getWeapons() const;

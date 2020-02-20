@@ -17,32 +17,26 @@
   "Abilities": {
     "Strength": {
       "Base": 10,
-      "Name": "Strength",
       "Upgrade": 0
     },
     "Dexterity": {
       "Base": 10,
-      "Name": "Dexterity",
       "Upgrade": 0
     },
     "Constitution": {
       "Base": 10,
-      "Name": "Constitution",
       "Upgrade": 0
     },
     "Intelligence": {
       "Base": 10,
-      "Name": "Intelligence",
       "Upgrade": 0
     },
     "Wisdom": {
       "Base": 10,
-      "Name": "Wisdom",
       "Upgrade": 0
     },
     "Charisma": {
       "Base": 10,
-      "Name": "Charisma",
       "Upgrade": 0
     }
   },

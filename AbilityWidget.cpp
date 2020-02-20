@@ -31,7 +31,6 @@ void AbilityWidget::setAbility(Ability* a)
 			connect(ability, &Ability::scoreChanged, ui.mod_label, [=]() {
 				ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier()))); });
 		}
-		ui.ability_pushButton->setText(ability->name());
 		ui.score_label->setNum(ability->score());
 		ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier())));
 		ui.base_spinBox->setValue(ability->getBase());
@@ -42,4 +41,9 @@ void AbilityWidget::setAbility(Ability* a)
 Ability* AbilityWidget::getAbility() const
 {
 	return ability;
+}
+
+void AbilityWidget::setLabelText(QString name)
+{
+	ui.ability_pushButton->setText(name);
 }

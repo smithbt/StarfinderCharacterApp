@@ -21,26 +21,16 @@ CreatorWizard::~CreatorWizard()
 
 void CreatorWizard::accept()
 {
-	QJsonObject json;
-	json.insert("CharacterName", ui.characterNameLineEdit->text());
+	Character* pc = new Character();
+	pc->setCharacterName(ui.characterNameLineEdit->text());
 
 	// loop over ability scores
-	QJsonObject abilities;
 	for (QHash<QString, QSpinBox*>::Iterator i = abilitySpinBoxes.begin(); i != abilitySpinBoxes.end(); ++i) {
-		abilities.insert(i.key(), QJsonObject{
-			{"Name", i.key()},
-			{"Base", i.value()->value()} });
+		pc->setAbilityProperty(i.key(), "base", QVariant(i.value()->value()));
 	}
-	json.insert("Abilities", abilities);
-
-	//// class
-	//QJsonObject cObject;
-	//cObject.insert("Class", ui.classComboBox->currentText());
-	//cObject.insert("Level", ui.levelSpinBox->value());
-	//json.insert("Classes", QJsonArray { cObject });
 
 	QDialog::accept();
-	emit characterDataReady(json);
+	emit characterReady(pc);
 }
 
 void CreatorWizard::on_rAdjButton_clicked()

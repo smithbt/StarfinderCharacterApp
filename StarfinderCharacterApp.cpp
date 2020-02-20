@@ -7,6 +7,13 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper(new QDataWidgetMapper(this))
 {
 	ui.setupUi(this);
+	ui.str_widget->setLabelText("Strength");
+	ui.dex_widget->setLabelText("Dexterity");
+	ui.con_widget->setLabelText("Constitution");
+	ui.int_widget->setLabelText("Intelligence");
+	ui.wis_widget->setLabelText("Wisdom");
+	ui.cha_widget->setLabelText("Charisma");
+
 	mapper->setModel(pcModel);
 	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
@@ -76,9 +83,8 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
 	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	CreatorWizard* creator = new CreatorWizard(this);
-	connect(creator, &CreatorWizard::characterDataReady, [=](QJsonObject json) {
-		Character* pc = new Character(pcModel);
-		pc->read(json);
+	connect(creator, &CreatorWizard::characterReady, [=](Character* pc) {
+		pc->setParent(pcModel);
 		pcModel->insertRow(0);
 		pcModel->setData(pcModel->index(0, CharacterModel::Object), QVariant::fromValue(pc));
 		mapper->setCurrentIndex(0);

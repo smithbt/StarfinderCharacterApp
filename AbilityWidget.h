@@ -16,6 +16,8 @@ public:
 	void setAbility(Ability* a);
 	Ability* getAbility() const;
 
+	void setLabelText(QString name);
+
 private:
 	Ui::AbilityWidget ui;
 	Ability* ability;

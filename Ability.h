@@ -23,17 +23,13 @@ public:
 
 	int score() const;
 	int modifier() const;
-	QString name() const;
 
 	int getBase() const;
 	int getUpgrade() const;
 
-	QString toString() const;
-
 public slots:
 	void setBase(int b);
 	void setUpgrade(int u);
-	void setName(QString name);
 
 signals:
 	void scoreChanged(int);
@@ -43,5 +39,4 @@ signals:
 private:
 	int base;
 	int upgrade;
-	QString m_name;
 };
