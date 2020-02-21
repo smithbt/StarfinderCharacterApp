@@ -71,6 +71,21 @@ Ability* Character::getAbility(const QString abilityName) const
 	return nullptr;
 }
 
+QVariant Character::getAbilityProperty(const QString abilityName, const QString propertyName) const
+{
+	if (abilities.contains(abilityName)) {
+		if (!propertyName.compare("base"))
+			return abilities[abilityName]->getBase();
+		if (!propertyName.compare("upgrade"))
+			return abilities[abilityName]->getUpgrade();
+		if (!propertyName.compare("score"))
+			return abilities[abilityName]->score();
+		if (!propertyName.compare("modifier"))
+			return abilities[abilityName]->modifier();
+	}
+	return QVariant();
+}
+
 void Character::setCharacterName(const QString name)
 {
 	characterName = name;
@@ -92,10 +107,15 @@ void Character::setAbility(const QString abilityName, Ability* a)
 		abilities.insert(abilityName, a);
 }
 
-bool Character::setAbilityProperty(const QString abilityName, const char* propertyName, QVariant& value)
+bool Character::setAbilityProperty(const QString abilityName, const QString propertyName, const QVariant& value)
 {
-	if (abilities.contains(abilityName))
-		return abilities[abilityName]->setProperty(propertyName, value);
+	if (abilities.contains(abilityName)) {
+		if (!propertyName.compare("base"))
+			abilities[abilityName]->setBase(value.toInt());
+		if (!propertyName.compare("upgrade"))
+			abilities[abilityName]->setUpgrade(value.toInt());
+		return true;
+	}
 	return false;
 }
 
@@ -121,6 +141,7 @@ Weapon* Character::getWeaponAt(int index) const
 		break;
 	case Weapon::Type::Ranged:
 		weapons[index]->attackMod = bab + abilities.value("Dexterity")->modifier();
+		weapons[index]->damageMod = 0;
 		break;
 	}
 	return weapons.at(index);

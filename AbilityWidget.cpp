@@ -2,45 +2,59 @@
 
 AbilityWidget::AbilityWidget(QWidget *parent)
 	: QWidget(parent),
-	ability(nullptr)
+	m_base(10),
+	m_upgrade(0)
 {
 	ui.setupUi(this);
 	ui.edit_frame->setVisible(false);
+
+	connect(ui.upgrade_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &AbilityWidget::setUpgrade); 
+	connect(ui.base_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &AbilityWidget::setBase);
+
+	connect(ui.ability_pushButton, &QPushButton::toggled, [this](bool checked) { if (!checked) emit editDone(this); });
 }
 
 AbilityWidget::~AbilityWidget()
 {
 }
 
-void AbilityWidget::setAbility(Ability* a)
+int AbilityWidget::base() const
 {
-	if (a != ability) {
-		if (ability)
-			ability->disconnect(this);
+	return m_base;
+}
 
-		ability = a;
+int AbilityWidget::upgrade() const
+{
+	return m_upgrade;
+}
 
-		if (ability) {
-			connect(ability, &Ability::upgradeChanged, ui.upgrade_spinBox, &QSpinBox::setValue);
-			connect(ui.upgrade_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), ability, &Ability::setUpgrade);
+void AbilityWidget::setScore(int score)
+{
+	if (score != ui.score_label->text())
+		ui.score_label->setNum(score);
+}
 
-			connect(ability, &Ability::baseChanged, ui.base_spinBox, &QSpinBox::setValue);
-			connect(ui.base_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), ability, &Ability::setBase);
+void AbilityWidget::setModifier(int modifier)
+{
+	QString modText = QString::asprintf("%+i", (modifier));
+	if (modText != ui.mod_label->text())
+		ui.mod_label->setText(modText);
+}
 
-			connect(ability, &Ability::scoreChanged, ui.score_label, QOverload<int>::of(&QLabel::setNum));
-			connect(ability, &Ability::scoreChanged, ui.mod_label, [=]() {
-				ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier()))); });
-		}
-		ui.score_label->setNum(ability->score());
-		ui.mod_label->setText(QString::asprintf("%+i", (ability->modifier())));
-		ui.base_spinBox->setValue(ability->getBase());
-		ui.upgrade_spinBox->setValue(ability->getUpgrade());
+void AbilityWidget::setBase(int base)
+{
+	if (base != m_base) {
+		m_base = base;
+		emit baseChanged(m_base);
 	}
 }
 
-Ability* AbilityWidget::getAbility() const
+void AbilityWidget::setUpgrade(int upgrade)
 {
-	return ability;
+	if (upgrade != m_upgrade) {
+		m_upgrade = upgrade;
+		emit upgradeChanged(m_upgrade);
+	}
 }
 
 void AbilityWidget::setLabelText(QString name)

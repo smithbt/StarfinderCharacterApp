@@ -14,7 +14,7 @@ private:
 
 public:
 	enum ColumnIndex : int {
-		Object = 0,
+		FullObject = 0,
 		RaceData,
 		
 		// Strings
@@ -40,7 +40,9 @@ public:
 		Resource_StepRole,
 
 		Ability_BaseRole,
-		Ability_UpgradeRole
+		Ability_UpgradeRole,
+		Ability_ScoreRole,
+		Ability_ModifierRole
 	};
 
 	CharacterModel(QObject *parent = nullptr);

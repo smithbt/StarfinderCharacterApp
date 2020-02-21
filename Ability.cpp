@@ -2,15 +2,16 @@
 
 Ability::Ability(QObject* parent)
 	: QObject(parent), 
-	base(10), upgrade(0)
+	base(10), 
+	upgrade(0)
 {
 }
 
 void Ability::read(const QJsonObject& json)
 {
-	if (json.contains("Base") && json["Base"].isDouble())
+	if (json.contains("Base") && json.value("Base").isDouble())
 		base = json.value("Base").toInt();
-	if (json.contains("Upgrade") && json["Upgrade"].isDouble())
+	if (json.contains("Upgrade") && json.value("Upgrade").isDouble())
 		upgrade = json.value("Upgrade").toInt();
 }
 
@@ -50,17 +51,23 @@ int Ability::getUpgrade() const
 void Ability::setBase(int b)
 {
 	if (b != base) {
+		int oldMod = modifier();
 		base = b;
 		emit baseChanged(base);
 		emit scoreChanged(score());
+		if (oldMod != modifier())
+			emit modifierChanged(modifier());
 	}
 }
 
 void Ability::setUpgrade(int u)
 {
 	if (u != upgrade) {
+		int oldMod = modifier();
 		upgrade = u;
 		emit upgradeChanged(upgrade);
 		emit scoreChanged(score());
+		if (oldMod != modifier())
+			emit modifierChanged(modifier());
 	}
 }

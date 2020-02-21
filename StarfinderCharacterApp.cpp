@@ -15,20 +15,21 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	ui.cha_widget->setLabelText("Charisma");
 
 	mapper->setModel(pcModel);
+	mapper->setItemDelegate(new CharacterDelegate());
 	mapper->addMapping(ui.rWidget, CharacterModel::RaceData, "race");
 	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
-	mapper->addMapping(ui.str_widget, CharacterModel::Strength, "ability");
-	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity, "ability");
-	mapper->addMapping(ui.con_widget, CharacterModel::Constitution, "ability");
-	mapper->addMapping(ui.int_widget, CharacterModel::Intelligence, "ability");
-	mapper->addMapping(ui.wis_widget, CharacterModel::Wisdom, "ability");
-	mapper->addMapping(ui.cha_widget, CharacterModel::Charisma, "ability");
+	mapper->addMapping(ui.str_widget, CharacterModel::Strength);
+	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity);
+	mapper->addMapping(ui.con_widget, CharacterModel::Constitution);
+	mapper->addMapping(ui.int_widget, CharacterModel::Intelligence);
+	mapper->addMapping(ui.wis_widget, CharacterModel::Wisdom);
+	mapper->addMapping(ui.cha_widget, CharacterModel::Charisma);
 	mapper->addMapping(ui.fortLabel, CharacterModel::Fortitude, "text");
 	mapper->addMapping(ui.refLabel, CharacterModel::Reflex, "text");
 	mapper->addMapping(ui.willLabel, CharacterModel::Will, "text");
 	connect(mapper, &QDataWidgetMapper::currentIndexChanged, wModel, [=](int index) {
-		wModel->setCharacter(pcModel->index(index, CharacterModel::Object).data().value<Character*>()); });
+		wModel->setCharacter(pcModel->index(index, CharacterModel::FullObject).data().value<Character*>()); });
 	ui.weaponList->setModel(wModel);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 	
@@ -63,7 +64,7 @@ bool StarfinderCharacterApp::readModelFromFile(QString path)
 	Character* pc = new Character(pcModel);
 	pc->read(loadDoc.object());
 	pcModel->insertRow(0);
-	pcModel->setData(pcModel->index(0, CharacterModel::Object), QVariant::fromValue(pc));
+	pcModel->setData(pcModel->index(0, CharacterModel::FullObject), QVariant::fromValue(pc));
 	mapper->setCurrentIndex(0);
 	loadFile.close();
 	return true;
@@ -87,7 +88,7 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 	connect(creator, &CreatorWizard::characterReady, [=](Character* pc) {
 		pc->setParent(pcModel);
 		pcModel->insertRow(0);
-		pcModel->setData(pcModel->index(0, CharacterModel::Object), QVariant::fromValue(pc));
+		pcModel->setData(pcModel->index(0, CharacterModel::FullObject), QVariant::fromValue(pc));
 		mapper->setCurrentIndex(0);
 		});
 	creator->open();
@@ -112,7 +113,7 @@ bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()
 	}
 
 	QJsonObject pcObj;
-	pcModel->index(mapper->currentIndex(), CharacterModel::Object).data().value<Character*>()->write(pcObj);
+	pcModel->index(mapper->currentIndex(), CharacterModel::FullObject).data().value<Character*>()->write(pcObj);
 	QJsonDocument saveDoc(pcObj);
 	saveFile.write(saveDoc.toJson());
 	saveFile.close();

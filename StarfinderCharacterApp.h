@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QJsonDocument>
 #include "ui_StarfinderCharacterApp.h"
+#include "CharacterDelegate.h"
 #include "CharacterModel.h"
 #include "CreatorWizard.h"
 #include "WeaponDialog.h"

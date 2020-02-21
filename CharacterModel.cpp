@@ -22,7 +22,7 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 
 	if (role == Qt::DisplayRole || role == Qt::EditRole) {
 		switch (index.column()) {
-		case Object: return QVariant::fromValue(pcs.at(index.row()));
+		case FullObject: return QVariant::fromValue(pcs.at(index.row()));
 		case RaceData: return QVariant::fromValue(pcs.at(index.row())->getRace());
 		case CharacterName: return pcs.at(index.row())->getCharacterName();
 		case BAB: return pcs.at(index.row())->getBAB();
@@ -39,6 +39,69 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 		case Weapons: return QVariant::fromValue(pcs.at(index.row())->getWeapons());
 		}
 	}
+
+	if (role == Resource_CurrentRole) {
+		switch (index.column()) {
+		case Stamina: return pcs.at(index.row())->getStamina()->current();
+		}
+	}
+
+	if (role == Resource_MaxRole) {
+		switch (index.column()) {
+		case Stamina: return pcs.at(index.row())->getStamina()->max();
+		}
+	}
+
+	if (role == Resource_StepRole) {
+		switch (index.column()) {
+		case Stamina: return pcs.at(index.row())->getStamina()->step();
+		}
+	}
+
+	if (role == Ability_BaseRole) {
+		switch (index.column()) {
+		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "base");
+		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "base");
+		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "base");
+		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "base");
+		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "base");
+		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "base");
+		}
+	}
+
+	if (role == Ability_UpgradeRole) {
+		switch (index.column()) {
+		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "upgrade");
+		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "upgrade");
+		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "upgrade");
+		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "upgrade");
+		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "upgrade");
+		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "upgrade");
+		}
+	}
+
+	if (role == Ability_ScoreRole) {
+		switch (index.column()) {
+		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "score");
+		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "score");
+		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "score");
+		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "score");
+		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "score");
+		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "score");
+		}
+	}
+
+	if (role == Ability_ModifierRole) {
+		switch (index.column()) {
+		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "modifier");
+		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "modifier");
+		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "modifier");
+		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "modifier");
+		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "modifier");
+		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "modifier");
+		}
+	}
+
 	return QVariant();
 }
 
@@ -71,7 +134,7 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 
 	if (role == Qt::EditRole || Qt::DisplayRole) {
 		switch (index.column()) {
-		case Object:
+		case FullObject:
 			if (value.canConvert<Character*>()) {
 				pcs.replace(row, value.value<Character*>());
 				emit dataChanged(this->index(row, 0), this->index(row, (columns - 1)), { Qt::DisplayRole, Qt::EditRole });
@@ -85,14 +148,6 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 			break;
 		case CharacterName:
 			pcs[row]->setCharacterName(value.toString());
-			break;
-		case BAB:
-			break;
-		case Fortitude:
-			break;
-		case Reflex:
-			break;
-		case Will:
 			break;
 		case Stamina:
 			if (value.canConvert<Resource*>())
@@ -136,6 +191,91 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 			break;
 		}
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
+		return true;
+	}
+
+	if (role == Resource_CurrentRole) {
+		switch (index.column()) {
+		case Stamina:
+			pcs[row]->getStamina()->setCurrent(value.toInt());
+			break;
+		default: return false;
+		}
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
+		return true;
+	}
+
+	if (role == Resource_MaxRole) {
+		switch (index.column()) {
+		case Stamina:
+			pcs[row]->getStamina()->setMax(value.toInt());
+			break;
+		default: return false;
+		}
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
+		return true;
+	}
+
+	if (role == Resource_StepRole) {
+		switch (index.column()) {
+		case Stamina:
+			pcs[row]->getStamina()->setStep(value.toInt());
+			break;
+		default: return false;
+		}
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
+		return true;
+	}
+
+	if (role == Ability_BaseRole) {
+		switch (index.column()) {
+		case Strength:
+			pcs[index.row()]->setAbilityProperty("Strength", "base", value);
+			break;
+		case Dexterity:
+			pcs[index.row()]->setAbilityProperty("Dexterity", "base", value);
+			break;
+		case Constitution:
+			pcs[index.row()]->setAbilityProperty("Constitution", "base", value);
+			break;
+		case Intelligence:
+			pcs[index.row()]->setAbilityProperty("Intelligence", "base", value);
+			break;
+		case Wisdom:
+			pcs[index.row()]->setAbilityProperty("Wisdom", "base", value);
+			break;
+		case Charisma:
+			pcs[index.row()]->setAbilityProperty("Charisma", "base", value);
+			break;
+		default: return false;
+		}
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, Ability_BaseRole, Ability_ScoreRole, Ability_ModifierRole });
+		return true;
+	}
+
+	if (role == Ability_UpgradeRole) {
+		switch (index.column()) {
+		case Strength:
+			pcs[index.row()]->setAbilityProperty("Strength", "upgrade", value);
+			break;
+		case Dexterity:
+			pcs[index.row()]->setAbilityProperty("Dexterity", "upgrade", value);
+			break;
+		case Constitution:
+			pcs[index.row()]->setAbilityProperty("Constitution", "upgrade", value);
+			break;
+		case Intelligence:
+			pcs[index.row()]->setAbilityProperty("Intelligence", "upgrade", value);
+			break;
+		case Wisdom:
+			pcs[index.row()]->setAbilityProperty("Wisdom", "upgrade", value);
+			break;
+		case Charisma:
+			pcs[index.row()]->setAbilityProperty("Charisma", "upgrade", value);
+			break;
+		default: return false;
+		}
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, Ability_UpgradeRole, Ability_ScoreRole, Ability_ModifierRole });
 		return true;
 	}
 

@@ -12,6 +12,7 @@ class Ability : public QObject
 	Q_PROPERTY(int base READ getBase WRITE setBase NOTIFY baseChanged)
 	Q_PROPERTY(int upgrade READ getUpgrade WRITE setUpgrade NOTIFY upgradeChanged)
 	Q_PROPERTY(int score READ score STORED false NOTIFY scoreChanged)
+	Q_PROPERTY(int modifier READ modifier STORED false NOTIFY modifierChanged)
 
 public:
 
@@ -33,6 +34,7 @@ public slots:
 
 signals:
 	void scoreChanged(int);
+	void modifierChanged(int);
 	void baseChanged(int);
 	void upgradeChanged(int);
 
