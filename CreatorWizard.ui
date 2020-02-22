@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>688</height>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -79,103 +79,89 @@
     <item row="2" column="1">
      <widget class="QSpinBox" name="rHPSpinBox"/>
     </item>
-    <item row="4" column="0" colspan="2">
+    <item row="3" column="0">
+     <widget class="QLabel" name="rAbilityAdjLabel">
+      <property name="text">
+       <string>Ability
+Adjustment</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QComboBox" name="rAdjScoreComboBox"/>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="rAdjSpinBox">
+        <property name="minimum">
+         <number>-10</number>
+        </property>
+        <property name="maximum">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rAdjButton">
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rAdjResetPushButton">
+        <property name="text">
+         <string>Reset Adjustments</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="1">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
        <string>Racial Abilities</string>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QFormLayout" name="formLayout_6">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+       </property>
        <item row="0" column="0">
-        <widget class="QTableWidget" name="rFeaturesWidget">
-         <attribute name="horizontalHeaderStretchLastSection">
-          <bool>true</bool>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>Feature</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Description</string>
-          </property>
-         </column>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Feature</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Description</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QTextEdit" name="textEdit"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Add Feature</string>
+         </property>
         </widget>
        </item>
       </layout>
      </widget>
     </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>Ability Score Adjustments</string>
+    <item row="4" column="1">
+     <widget class="QLabel" name="rAbilityAdjWidget">
+      <property name="text">
+       <string/>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="rAdjSpinBox">
-         <property name="minimum">
-          <number>-10</number>
-         </property>
-         <property name="maximum">
-          <number>10</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QComboBox" name="rAdjScoreComboBox">
-         <item>
-          <property name="text">
-           <string>Strength</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Dexterity</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Constitution</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Intelligence</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Wisdom</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Charisma</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QListWidget" name="rAbilityAdjWidget">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="rAdjButton">
-         <property name="text">
-          <string>Add</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
    </layout>
@@ -189,7 +175,7 @@
      <enum>QFormLayout::ExpandingFieldsGrow</enum>
     </property>
     <item row="0" column="0">
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="tNameLabel">
       <property name="text">
        <string>Name</string>
       </property>
@@ -212,38 +198,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QComboBox" name="tAbilityComboBox">
-      <item>
-       <property name="text">
-        <string>Strength</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Dexterity</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Constitution</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Intelligence</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Wisdom</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Charisma</string>
-       </property>
-      </item>
-     </widget>
+     <widget class="QComboBox" name="tAbilityComboBox"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_5">
@@ -318,33 +273,27 @@
      <enum>QFormLayout::ExpandingFieldsGrow</enum>
     </property>
     <item row="0" column="0">
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="classLabel">
       <property name="text">
        <string>Class</string>
       </property>
-      <property name="buddy">
-       <cstring>classComboBox</cstring>
-      </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="classComboBox"/>
-    </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="cKeyAbilityLabel">
       <property name="text">
        <string>Key Ability Score</string>
       </property>
       <property name="buddy">
-       <cstring>comboBox_3</cstring>
+       <cstring>cKeyAbilityComboBox</cstring>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QComboBox" name="comboBox_3"/>
+     <widget class="QComboBox" name="cKeyAbilityComboBox"/>
     </item>
     <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="levelLabel">
       <property name="text">
        <string>Level</string>
       </property>
@@ -354,7 +303,97 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QSpinBox" name="levelSpinBox"/>
+     <widget class="QSpinBox" name="levelSpinBox">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>20</number>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="babLabel">
+      <property name="text">
+       <string>BAB Rate</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="fortitudeLabel">
+      <property name="text">
+       <string>Fortitude</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QComboBox" name="fortitudeComboBox"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="reflexLabel">
+      <property name="text">
+       <string>Reflex</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="reflexComboBox"/>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="willLabel">
+      <property name="text">
+       <string>Will</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="willComboBox"/>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="staminaLabel">
+      <property name="text">
+       <string>Stamina / level</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="cHPLlabel">
+      <property name="text">
+       <string>Hit points / level</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="cSkillslabel">
+      <property name="text">
+       <string>Skill points / level</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QSpinBox" name="staminaSpinBox"/>
+    </item>
+    <item row="8" column="1">
+     <widget class="QSpinBox" name="cHPSpinBox"/>
+    </item>
+    <item row="9" column="1">
+     <widget class="QSpinBox" name="cSkillsSpinBox"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QDoubleSpinBox" name="babSpinBox">
+      <property name="minimum">
+       <double>0.500000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.250000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="classLineEdit"/>
     </item>
    </layout>
   </widget>

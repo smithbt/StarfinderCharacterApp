@@ -5,9 +5,6 @@ Character::Character(QObject* parent)
 	characterName(QString()),
 	race(new Race(this)),
 	bab(0),
-	fortitude(0),
-	reflex(0),
-	will(0),
 	stamina(new Resource(this)),
 	abilities({
 		{"Strength", new Ability(this) },
@@ -46,17 +43,17 @@ int Character::getBAB() const
 
 int Character::getFortitude() const
 {
-	return fortitude;
+	return abilities["Constitution"]->modifier();
 }
 
 int Character::getReflex() const
 {
-	return reflex;
+	return abilities["Dexterity"]->modifier();
 }
 
 int Character::getWill() const
 {
-	return will;
+	return abilities["Wisdom"]->modifier();
 }
 
 Resource* Character::getStamina() const
@@ -184,12 +181,6 @@ void Character::read(const QJsonObject& json)
 	// Parse Ints
 	if (json.contains("BAB") && json.value("BAB").isDouble())
 		bab = json.value("BAB").toInt();
-	if (json.contains("Fortitude") && json.value("Fortitude").isDouble())
-		fortitude = json.value("Fortitude").toInt();
-	if (json.contains("Reflex") && json.value("Reflex").isDouble())
-		reflex = json.value("Reflex").toInt();
-	if (json.contains("Will") && json.value("Will").isDouble())
-		will = json.value("Will").toInt();
 
 	// Parse Resources
 	if (json.contains("Stamina") && json.value("Stamina").isObject()) 
@@ -222,9 +213,6 @@ void Character::write(QJsonObject& json) const
 	json.insert("CharacterName", characterName);
 	json.insert("Race", race->toJsonObject());
 	json.insert("BAB", bab);
-	json.insert("Fortitude", fortitude);
-	json.insert("Reflex", reflex);
-	json.insert("Will", will);
 
 	// Resources
 	json.insert("Stamina", stamina->toJsonObject());

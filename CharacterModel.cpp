@@ -4,6 +4,20 @@ CharacterModel::CharacterModel(QObject* parent)
 	: QAbstractTableModel(parent),
 	pcs()
 {
+	connect(this, &CharacterModel::dataChanged, [this](QModelIndex tl, QModelIndex br, QVector<int> roles) {
+		for (int column = tl.column(); column < br.column(); ++column) {
+			for (int row = tl.row(); row < br.row(); ++row) {
+				if (column == Dexterity)
+					emit dataChanged(this->index(row, Reflex), this->index(row, Reflex), { Qt::DisplayRole, Qt::EditRole });
+				if (column == Constitution) {
+					emit dataChanged(this->index(row, Fortitude), this->index(row, Fortitude), { Qt::DisplayRole, Qt::EditRole });
+					emit dataChanged(this->index(row, Stamina), this->index(row, Stamina), { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
+				}
+				if (column == Wisdom)
+					emit dataChanged(this->index(row, Will), this->index(row, Will), { Qt::DisplayRole, Qt::EditRole });
+			}
+		}
+		});
 }
 
 CharacterModel::~CharacterModel()
@@ -260,15 +274,19 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 			break;
 		case Dexterity:
 			pcs[index.row()]->setAbilityProperty("Dexterity", "upgrade", value);
+			emit dataChanged(this->index(row, Reflex), this->index(row, Reflex), { Qt::DisplayRole, Qt::EditRole });
 			break;
 		case Constitution:
 			pcs[index.row()]->setAbilityProperty("Constitution", "upgrade", value);
+			emit dataChanged(this->index(row, Fortitude), this->index(row, Fortitude), { Qt::DisplayRole, Qt::EditRole });
+			emit dataChanged(this->index(row, Stamina), this->index(row, Stamina), { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
 			break;
 		case Intelligence:
 			pcs[index.row()]->setAbilityProperty("Intelligence", "upgrade", value);
 			break;
 		case Wisdom:
 			pcs[index.row()]->setAbilityProperty("Wisdom", "upgrade", value);
+			emit dataChanged(this->index(row, Will), this->index(row, Will), { Qt::DisplayRole, Qt::EditRole });
 			break;
 		case Charisma:
 			pcs[index.row()]->setAbilityProperty("Charisma", "upgrade", value);
