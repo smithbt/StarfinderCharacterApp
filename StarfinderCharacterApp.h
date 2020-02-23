@@ -27,8 +27,6 @@ private:
 	QString fileName;
 	QDataWidgetMapper* mapper;
 
-	bool readModelFromFile(QString path);
-
 private slots:
 	void on_actionAdd_Weapon_triggered();
 	void on_actionCharacter_New_triggered();

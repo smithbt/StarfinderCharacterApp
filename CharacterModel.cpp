@@ -4,20 +4,6 @@ CharacterModel::CharacterModel(QObject* parent)
 	: QAbstractTableModel(parent),
 	pcs()
 {
-	connect(this, &CharacterModel::dataChanged, [this](QModelIndex tl, QModelIndex br, QVector<int> roles) {
-		for (int column = tl.column(); column < br.column(); ++column) {
-			for (int row = tl.row(); row < br.row(); ++row) {
-				if (column == Dexterity)
-					emit dataChanged(this->index(row, Reflex), this->index(row, Reflex), { Qt::DisplayRole, Qt::EditRole });
-				if (column == Constitution) {
-					emit dataChanged(this->index(row, Fortitude), this->index(row, Fortitude), { Qt::DisplayRole, Qt::EditRole });
-					emit dataChanged(this->index(row, Stamina), this->index(row, Stamina), { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
-				}
-				if (column == Wisdom)
-					emit dataChanged(this->index(row, Will), this->index(row, Will), { Qt::DisplayRole, Qt::EditRole });
-			}
-		}
-		});
 }
 
 CharacterModel::~CharacterModel()
@@ -44,6 +30,7 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 		case Reflex: return pcs.at(index.row())->getReflex();
 		case Will: return pcs.at(index.row())->getWill();
 		case Stamina: return QVariant::fromValue(pcs.at(index.row())->getStamina());
+		case HitPoints: return QVariant::fromValue(pcs.at(row)->getHP());
 		case Strength: return QVariant::fromValue(pcs.at(index.row())->getAbility("Strength"));
 		case Dexterity: return QVariant::fromValue(pcs.at(index.row())->getAbility("Dexterity"));
 		case Constitution: return QVariant::fromValue(pcs.at(index.row())->getAbility("Constitution"));
@@ -57,18 +44,21 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 	if (role == Resource_CurrentRole) {
 		switch (index.column()) {
 		case Stamina: return pcs.at(index.row())->getStamina()->current();
+		case HitPoints: return pcs.at(index.row())->getHP()->current();
 		}
 	}
 
 	if (role == Resource_MaxRole) {
 		switch (index.column()) {
 		case Stamina: return pcs.at(index.row())->getStamina()->max();
+		case HitPoints: return pcs.at(index.row())->getHP()->max();
 		}
 	}
 
 	if (role == Resource_StepRole) {
 		switch (index.column()) {
 		case Stamina: return pcs.at(index.row())->getStamina()->step();
+		case HitPoints: return pcs.at(index.row())->getHP()->step();
 		}
 	}
 
@@ -168,19 +158,29 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 				pcs[row]->setStamina(value.value<Resource*>());
 			else return false;
 			break;
+		case HitPoints:
+			if (value.canConvert<Resource*>())
+				pcs[row]->setHP(value.value<Resource*>());
+			else return false;
+			break;
 		case Strength:
 			if (value.canConvert<Ability*>())
 				pcs[row]->setAbility("Strength", value.value<Ability*>());
 			else return false;
 			break;
 		case Dexterity:
-			if (value.canConvert<Ability*>())
+			if (value.canConvert<Ability*>()) {
 				pcs[row]->setAbility("Dexterity", value.value<Ability*>());
+				emit dataChanged(this->index(row, Reflex), this->index(row, Reflex), { Qt::DisplayRole, Qt::EditRole });
+			}
 			else return false;
 			break;
 		case Constitution:
-			if (value.canConvert<Ability*>())
+			if (value.canConvert<Ability*>()) {
 				pcs[row]->setAbility("Constitution", value.value<Ability*>());
+				emit dataChanged(this->index(row, Fortitude), this->index(row, Fortitude), { Qt::DisplayRole, Qt::EditRole });
+				emit dataChanged(this->index(row, Stamina), this->index(row, Stamina), { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
+			}
 			else return false;
 			break;
 		case Intelligence:
@@ -189,8 +189,10 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 			else return false;
 			break;
 		case Wisdom:
-			if (value.canConvert<Ability*>())
+			if (value.canConvert<Ability*>()) {
 				pcs[row]->setAbility("Wisdom", value.value<Ability*>());
+				emit dataChanged(this->index(row, Will), this->index(row, Will), { Qt::DisplayRole, Qt::EditRole });
+			}
 			else return false;
 			break;
 		case Charisma:
@@ -213,6 +215,9 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		case Stamina:
 			pcs[row]->getStamina()->setCurrent(value.toInt());
 			break;
+		case HitPoints:
+			pcs[row]->getHP()->setCurrent(value.toInt());
+			break; 
 		default: return false;
 		}
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
@@ -224,6 +229,9 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		case Stamina:
 			pcs[row]->getStamina()->setMax(value.toInt());
 			break;
+		case HitPoints:
+			pcs[row]->getHP()->setMax(value.toInt());
+			break;
 		default: return false;
 		}
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
@@ -234,6 +242,9 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		switch (index.column()) {
 		case Stamina:
 			pcs[row]->getStamina()->setStep(value.toInt());
+			break;
+		case HitPoints:
+			pcs[row]->getHP()->setStep(value.toInt());
 			break;
 		default: return false;
 		}
@@ -248,15 +259,19 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 			break;
 		case Dexterity:
 			pcs[index.row()]->setAbilityProperty("Dexterity", "base", value);
+			emit dataChanged(this->index(row, Reflex), this->index(row, Reflex), { Qt::DisplayRole, Qt::EditRole });
 			break;
 		case Constitution:
 			pcs[index.row()]->setAbilityProperty("Constitution", "base", value);
+			emit dataChanged(this->index(row, Fortitude), this->index(row, Fortitude), { Qt::DisplayRole, Qt::EditRole });
+			emit dataChanged(this->index(row, Stamina), this->index(row, Stamina), { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
 			break;
 		case Intelligence:
 			pcs[index.row()]->setAbilityProperty("Intelligence", "base", value);
 			break;
 		case Wisdom:
 			pcs[index.row()]->setAbilityProperty("Wisdom", "base", value);
+			emit dataChanged(this->index(row, Will), this->index(row, Will), { Qt::DisplayRole, Qt::EditRole });
 			break;
 		case Charisma:
 			pcs[index.row()]->setAbilityProperty("Charisma", "base", value);

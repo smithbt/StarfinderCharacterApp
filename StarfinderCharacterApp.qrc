@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/StarfinderCharacterApp">
-        <file>Resources/default.json</file>
         <file>Resources/classes.csv</file>
     </qresource>
 </RCC>

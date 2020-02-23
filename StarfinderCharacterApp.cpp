@@ -19,6 +19,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.rWidget, CharacterModel::RaceData, "race");
 	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina, "resource");
+	mapper->addMapping(ui.hpWidget, CharacterModel::HitPoints, "resource");
 	mapper->addMapping(ui.str_widget, CharacterModel::Strength);
 	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity);
 	mapper->addMapping(ui.con_widget, CharacterModel::Constitution);
@@ -34,8 +35,6 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 	
 	connect(pcModel, &CharacterModel::modelReset, mapper, &QDataWidgetMapper::toFirst);
-
-	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	
 }
 
@@ -44,30 +43,6 @@ StarfinderCharacterApp::~StarfinderCharacterApp()
 	delete pcModel;
 	delete wModel;
 	delete mapper;
-}
-
-bool StarfinderCharacterApp::readModelFromFile(QString path)
-{
-	QFile loadFile(path);
-
-	if (!loadFile.open(QIODevice::ReadOnly)) {
-		qWarning("Error opening file.");
-		return false;
-	}
-
-	QByteArray loadData = loadFile.readAll();
-
-	QJsonParseError *error = new QJsonParseError();
-	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData, error));
-	qDebug() << error->errorString();
-	
-	Character* pc = new Character(pcModel);
-	pc->read(loadDoc.object());
-	pcModel->insertRow(0);
-	pcModel->setData(pcModel->index(0, CharacterModel::FullObject), QVariant::fromValue(pc));
-	mapper->setCurrentIndex(0);
-	loadFile.close();
-	return true;
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
@@ -83,7 +58,6 @@ void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
 
 void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 {
-	readModelFromFile(":/StarfinderCharacterApp/Resources/default.json");
 	CreatorWizard* creator = new CreatorWizard(this);
 	connect(creator, &CreatorWizard::characterReady, [=](Character* pc) {
 		pc->setParent(pcModel);
@@ -98,7 +72,26 @@ void StarfinderCharacterApp::on_actionCharacter_New_triggered()
 bool StarfinderCharacterApp::on_actionCharacter_Open_triggered()
 {
 	fileName = QFileDialog::getOpenFileName(this, tr("Open file"), "..", tr("JSON Files (*.json)"));
-	return readModelFromFile(fileName);
+	QFile loadFile(fileName);
+
+	if (!loadFile.open(QIODevice::ReadOnly)) {
+		qWarning("Error opening file.");
+		return false;
+	}
+
+	QByteArray loadData = loadFile.readAll();
+
+	QJsonParseError* error = new QJsonParseError();
+	QJsonDocument loadDoc(QJsonDocument::fromJson(loadData, error));
+	qDebug() << error->errorString();
+
+	Character* pc = new Character(pcModel);
+	pc->read(loadDoc.object());
+	pcModel->insertRow(0);
+	pcModel->setData(pcModel->index(0, CharacterModel::FullObject), QVariant::fromValue(pc));
+	mapper->setCurrentIndex(0);
+	loadFile.close();
+	return true;
 }
 
 bool StarfinderCharacterApp::on_actionCharacter_Save_triggered()

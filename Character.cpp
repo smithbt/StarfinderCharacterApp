@@ -4,8 +4,9 @@ Character::Character(QObject* parent)
 	: QObject(parent),
 	characterName(QString()),
 	race(new Race(this)),
-	bab(0),
+	pcClass(new ClassInfo(this)),
 	stamina(new Resource(this)),
+	hitpoints(new Resource(this)),
 	abilities({
 		{"Strength", new Ability(this) },
 		{"Dexterity", new Ability(this) },
@@ -14,12 +15,18 @@ Character::Character(QObject* parent)
 		{"Wisdom", new Ability(this) },
 		{"Charisma", new Ability(this) }, }),
 	weapons()
-{
+{ 
+	connect(abilities["Constitution"], &Ability::modifierChanged, this, &Character::calcMaxStamina);
+	connect(pcClass, &ClassInfo::levelChanged, this, &Character::calcMaxStamina);
+	connect(pcClass, &ClassInfo::levelChanged, this, &Character::calcMaxHP);
 }
 
 Character::~Character()
 {
+	delete race;
+	delete pcClass;
 	delete stamina;
+	delete hitpoints;
 
 	qDeleteAll(abilities);
 
@@ -36,29 +43,39 @@ Race* Character::getRace() const
 	return race;
 }
 
+int Character::getClassLevel() const
+{
+	return pcClass->level();
+}
+
 int Character::getBAB() const
 {
-	return bab;
+	return pcClass->getPropertyValue(ClassInfo::BAB);
 }
 
 int Character::getFortitude() const
 {
-	return abilities["Constitution"]->modifier();
+	return pcClass->getPropertyValue(ClassInfo::Fortitude) + abilities["Constitution"]->modifier();
 }
 
 int Character::getReflex() const
 {
-	return abilities["Dexterity"]->modifier();
+	return pcClass->getPropertyValue(ClassInfo::Reflex) + abilities["Dexterity"]->modifier();
 }
 
 int Character::getWill() const
 {
-	return abilities["Wisdom"]->modifier();
+	return pcClass->getPropertyValue(ClassInfo::Will) + abilities["Wisdom"]->modifier();
 }
 
 Resource* Character::getStamina() const
 {
 	return stamina;
+}
+
+Resource* Character::getHP() const
+{
+	return hitpoints;
 }
 
 Ability* Character::getAbility(const QString abilityName) const
@@ -93,9 +110,19 @@ void Character::setRace(Race* race)
 	this->race = race;
 }
 
+void Character::setClassLevel(int level)
+{
+	pcClass->setLevel(level);
+}
+
 void Character::setStamina(Resource* s)
 {
 	stamina = s;
+}
+
+void Character::setHP(Resource* hp)
+{
+	hitpoints = hp;
 }
 
 void Character::setAbility(const QString abilityName, Ability* a)
@@ -133,11 +160,11 @@ Weapon* Character::getWeaponAt(int index) const
 {
 	switch (weapons[index]->type) {
 	case Weapon::Type::Melee:
-		weapons[index]->attackMod = bab + abilities.value("Strength")->modifier();
+		weapons[index]->attackMod = getBAB() + abilities.value("Strength")->modifier();
 		weapons[index]->damageMod = abilities.value("Strength")->modifier();
 		break;
 	case Weapon::Type::Ranged:
-		weapons[index]->attackMod = bab + abilities.value("Dexterity")->modifier();
+		weapons[index]->attackMod = getBAB() + abilities.value("Dexterity")->modifier();
 		weapons[index]->damageMod = 0;
 		break;
 	}
@@ -179,12 +206,14 @@ void Character::read(const QJsonObject& json)
 		race->read(json.value("Race").toObject());
 
 	// Parse Ints
-	if (json.contains("BAB") && json.value("BAB").isDouble())
-		bab = json.value("BAB").toInt();
+	if (json.contains("Class") && json.value("Class").isObject())
+		pcClass->read(json.value("Class").toObject());
 
 	// Parse Resources
-	if (json.contains("Stamina") && json.value("Stamina").isObject()) 
+	if (json.contains("Stamina") && json.value("Stamina").isObject())
 		stamina->read(json.value("Stamina").toObject());
+	if (json.contains("HitPoints") && json.value("HitPoints").isObject())
+		hitpoints->read(json.value("HitPoints").toObject());
 
 	// Parse Abilities
 	if (json.contains("Abilities") && json.value("Abilities").isObject()) {
@@ -212,10 +241,11 @@ void Character::write(QJsonObject& json) const
 {
 	json.insert("CharacterName", characterName);
 	json.insert("Race", race->toJsonObject());
-	json.insert("BAB", bab);
+	json.insert("Class", pcClass->toJsonObject());
 
 	// Resources
 	json.insert("Stamina", stamina->toJsonObject());
+	json.insert("HitPoints", hitpoints->toJsonObject());
 
 	// Abilities
 	QJsonObject aObject;
@@ -235,4 +265,16 @@ QJsonObject Character::toJsonObject() const
 	QJsonObject json;
 	write(json);
 	return json;
+}
+
+void Character::calcMaxStamina()
+{
+	int newMax = pcClass->getPropertyValue(ClassInfo::Stamina) + (pcClass->level() * abilities["Constitution"]->modifier());
+	stamina->setMax(newMax);
+}
+
+void Character::calcMaxHP()
+{
+	int newMax = pcClass->getPropertyValue(ClassInfo::HP) + race->hitPoints();
+	hitpoints->setMax(newMax);
 }

@@ -93,6 +93,7 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="CharacterDelegate.cpp" />
     <ClCompile Include="CharacterModel.cpp" />
+    <ClCompile Include="ClassInfo.cpp" />
     <ClCompile Include="ClassModel.cpp" />
     <ClCompile Include="CreatorWizard.cpp" />
     <ClCompile Include="Damage.cpp" />
@@ -131,6 +132,7 @@
     <QtMoc Include="ClassModel.h" />
     <QtMoc Include="CreatorWizard.h" />
     <QtMoc Include="CharacterDelegate.h" />
+    <QtMoc Include="ClassInfo.h" />
     <ClInclude Include="Damage.h" />
     <QtMoc Include="Resource.h" />
     <QtMoc Include="AbilityWidget.h" />

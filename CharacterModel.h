@@ -10,12 +10,13 @@ class CharacterModel : public QAbstractTableModel
 
 private:
 	QVector<Character*> pcs;
-	const static int columns = 15; 
+	const static int columns = 17; 
 
 public:
 	enum ColumnIndex : int {
 		FullObject = 0,
 		RaceData,
+		ClassData,
 		
 		// Strings
 		CharacterName,
@@ -26,6 +27,7 @@ public:
 
 		// Resources
 		Stamina,
+		HitPoints,
 
 		// Ability Scores
 		Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma,

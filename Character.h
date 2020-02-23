@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QVector>
 #include "Ability.h"
+#include "ClassInfo.h"
 #include "Race.h"
 #include "Resource.h"
 #include "Weapon.h"
@@ -17,8 +18,9 @@ class Character : public QObject
 private:
 	QString characterName;
 	Race* race;
-	int bab;
+	ClassInfo* pcClass;
 	Resource* stamina;
+	Resource* hitpoints;
 	QHash<QString, Ability*> abilities;
 	QVector<Weapon*> weapons;
 
@@ -30,18 +32,22 @@ public:
 	// Getters
 	QString getCharacterName() const;
 	Race* getRace() const;
+	int getClassLevel() const;
 	int getBAB() const;
 	int getFortitude() const;
 	int getReflex() const;
 	int getWill() const;
 	Resource* getStamina() const;
+	Resource* getHP() const;
 	Ability* getAbility(const QString abilityName) const;
 	QVariant getAbilityProperty(const QString abilityName, const QString propertyName) const;
 	
 	// Setters
 	void setCharacterName(const QString name);
 	void setRace(Race* race);
+	void setClassLevel(int level);
 	void setStamina(Resource* s);
+	void setHP(Resource* hp);
 	void setAbility(const QString abilityName, Ability* a);
 	bool setAbilityProperty(const QString abilityName, const QString propertyName, const QVariant& value);
 
@@ -62,5 +68,8 @@ public:
 signals:
 	void weaponListChanged(QVector<Weapon*>);
 
+private slots:
+	void calcMaxStamina();
+	void calcMaxHP();
 };
 
