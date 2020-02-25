@@ -6,23 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>587</height>
+    <width>322</width>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>CreatorWizard</string>
   </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ModernStyle</enum>
+  </property>
   <widget class="QWizardPage" name="racePage">
    <property name="title">
     <string>Race</string>
    </property>
-   <property name="subTitle">
-    <string>Enter information about your race here</string>
-   </property>
    <layout class="QFormLayout" name="formLayout">
     <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
     </property>
     <item row="0" column="0">
      <widget class="QLabel" name="rNameLabel">
@@ -67,6 +67,16 @@
      </widget>
     </item>
     <item row="2" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Type (subtype)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_2"/>
+    </item>
+    <item row="3" column="0">
      <widget class="QLabel" name="rHPLabel">
       <property name="text">
        <string>Hit Points</string>
@@ -76,18 +86,17 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QSpinBox" name="rHPSpinBox"/>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <widget class="QLabel" name="rAbilityAdjLabel">
       <property name="text">
-       <string>Ability
-Adjustment</string>
+       <string>Ability Adjustments</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QComboBox" name="rAdjScoreComboBox"/>
@@ -109,59 +118,62 @@ Adjustment</string>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="rAdjResetPushButton">
-        <property name="text">
-         <string>Reset Adjustments</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
+    <item row="5" column="0">
+     <widget class="QPushButton" name="rAdjResetPushButton">
+      <property name="text">
+       <string>Reset Adjustments</string>
+      </property>
+     </widget>
+    </item>
     <item row="5" column="1">
+     <widget class="QLabel" name="rAbilityAdjWidget">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="2">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
        <string>Racial Abilities</string>
       </property>
       <layout class="QFormLayout" name="formLayout_6">
        <property name="fieldGrowthPolicy">
-        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+        <enum>QFormLayout::FieldsStayAtSizeHint</enum>
        </property>
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="rFeatureNamelabel">
          <property name="text">
           <string>Feature</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="rFeatureNameLineEdit"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="rFeatureDescriptionLabel">
          <property name="text">
           <string>Description</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="rFeatureDescriptionTextEdit"/>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="rAddFeatureButton">
          <property name="text">
           <string>Add Feature</string>
          </property>
         </widget>
        </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QListWidget" name="rFeaturesListWidget"/>
+       </item>
       </layout>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLabel" name="rAbilityAdjWidget">
-      <property name="text">
-       <string/>
-      </property>
      </widget>
     </item>
    </layout>
@@ -172,7 +184,7 @@ Adjustment</string>
    </property>
    <layout class="QFormLayout" name="formLayout_3">
     <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
     </property>
     <item row="0" column="0">
      <widget class="QLabel" name="tNameLabel">
@@ -265,12 +277,9 @@ Adjustment</string>
    <property name="title">
     <string>Class</string>
    </property>
-   <property name="subTitle">
-    <string>Enter your class and level</string>
-   </property>
    <layout class="QFormLayout" name="formLayout_2">
     <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
     </property>
     <item row="0" column="0">
      <widget class="QLabel" name="classLabel">
@@ -401,12 +410,9 @@ Adjustment</string>
    <property name="title">
     <string>Ability Scores</string>
    </property>
-   <property name="subTitle">
-    <string>Adjust your Ability scores</string>
-   </property>
    <layout class="QFormLayout" name="formLayout_4">
     <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
     </property>
     <item row="0" column="0">
      <widget class="QLabel" name="pointsLabel">
@@ -541,12 +547,9 @@ Adjustment</string>
    <property name="title">
     <string>Final Details</string>
    </property>
-   <property name="subTitle">
-    <string>Enter personal details about your character here.</string>
-   </property>
    <layout class="QFormLayout" name="formLayout_5">
     <property name="fieldGrowthPolicy">
-     <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     <enum>QFormLayout::FieldsStayAtSizeHint</enum>
     </property>
     <item row="0" column="0">
      <widget class="QLabel" name="label_7">

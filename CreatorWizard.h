@@ -20,8 +20,9 @@ signals:
 
 protected slots:
 	void on_rAdjButton_clicked();
+	void on_rAddFeatureButton_clicked();
 
 private:
 	Ui::CreatorWizard ui;
-	QHash<QString, QSpinBox*> abilitySpinBoxes; 
+	QHash<QString, QSpinBox*> abilitySpinBoxes;
 };

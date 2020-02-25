@@ -34,9 +34,10 @@ void CreatorWizard::accept()
 	Race* r = pc->getRace();
 	r->setName(ui.rNameLineEdit->text());
 	r->setHitPoints(ui.rHPSpinBox->value());
-	//for (int i = 0; i < ui.rFeaturesWidget->rowCount(); ++i) {
-	//	r->addFeature(ui.rFeaturesWidget->item(i, 0)->text(), ui.rFeaturesWidget->item(i, 1)->text());
-	//}
+	for (int i = 0; i < ui.rFeaturesListWidget->count(); ++i) {
+		QStringList entry = ui.rFeaturesListWidget->item(i)->text().split(": ");
+		r->addFeature(entry.at(0), entry.at(1));
+	}
 	pc->setRace(r);
 
 	pc->setCharacterName(ui.characterNameLineEdit->text());
@@ -64,4 +65,15 @@ void CreatorWizard::on_rAdjButton_clicked()
 	}
 	ui.rAdjScoreComboBox->setCurrentIndex(0);
 	ui.rAdjSpinBox->setValue(0);
+}
+
+void CreatorWizard::on_rAddFeatureButton_clicked()
+{
+	QString name = ui.rFeatureNameLineEdit->text();
+	QString desc = ui.rFeatureDescriptionTextEdit->toPlainText();
+
+	if (!name.isEmpty()) {
+		QString entry = QString("%1: %2").arg(name, desc);
+		ui.rFeaturesListWidget->addItem(entry);
+	}
 }
