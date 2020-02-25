@@ -43,6 +43,11 @@ Race* Character::getRace() const
 	return race;
 }
 
+QString Character::getClassName() const
+{
+	return pcClass->name();
+}
+
 int Character::getClassLevel() const
 {
 	return pcClass->level();
@@ -108,6 +113,11 @@ void Character::setCharacterName(const QString name)
 void Character::setRace(Race* race)
 {
 	this->race = race;
+}
+
+void Character::setClassName(QString name)
+{
+	pcClass->setName(name);
 }
 
 void Character::setClassLevel(int level)

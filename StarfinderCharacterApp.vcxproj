@@ -95,6 +95,7 @@
     <ClCompile Include="CharacterModel.cpp" />
     <ClCompile Include="ClassInfo.cpp" />
     <ClCompile Include="ClassModel.cpp" />
+    <ClCompile Include="ClassWidget.cpp" />
     <ClCompile Include="CreatorWizard.cpp" />
     <ClCompile Include="Damage.cpp" />
     <ClCompile Include="main.cpp" />
@@ -114,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AbilityWidget.ui" />
+    <QtUic Include="ClassWidget.ui" />
     <QtUic Include="CreatorWizard.ui" />
     <QtUic Include="RaceWidget.ui" />
     <QtUic Include="ResourceWidget.ui" />
@@ -133,6 +135,7 @@
     <QtMoc Include="CreatorWizard.h" />
     <QtMoc Include="CharacterDelegate.h" />
     <QtMoc Include="ClassInfo.h" />
+    <QtMoc Include="ClassWidget.h" />
     <ClInclude Include="Damage.h" />
     <QtMoc Include="Resource.h" />
     <QtMoc Include="AbilityWidget.h" />

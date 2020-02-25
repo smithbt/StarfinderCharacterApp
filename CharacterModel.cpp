@@ -41,6 +41,14 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 		}
 	}
 
+	if (role == Class_NameRole && index.column() == ClassData) {
+		return pcs[row]->getClassName();
+	}
+
+	if (role == Class_LevelRole && index.column() == ClassData) {
+		return pcs[row]->getClassLevel();
+	}
+
 	if (role == Resource_CurrentRole) {
 		switch (index.column()) {
 		case Stamina: return pcs.at(index.row())->getStamina()->current();
@@ -208,6 +216,17 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 		}
 		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
 		return true;
+	}
+
+	if (role == Class_NameRole && index.column() == ClassData) {
+		pcs[row]->setClassName(value.toString());
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
+	}
+
+	if (role == Class_LevelRole && index.column() == ClassData) {
+		pcs[row]->setClassLevel(value.toInt());
+		emit dataChanged(this->index(row, BAB), this->index(row, HitPoints), { Qt::DisplayRole, Qt::EditRole, Resource_MaxRole });
+		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole, role });
 	}
 
 	if (role == Resource_CurrentRole) {

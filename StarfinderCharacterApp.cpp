@@ -17,6 +17,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->setModel(pcModel);
 	mapper->setItemDelegate(new CharacterDelegate());
 	mapper->addMapping(ui.rWidget, CharacterModel::RaceData, "race");
+	mapper->addMapping(ui.classWidget, CharacterModel::ClassData);
 	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina);
 	mapper->addMapping(ui.hpWidget, CharacterModel::HitPoints);

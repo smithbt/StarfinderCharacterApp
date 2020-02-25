@@ -3,6 +3,7 @@
 #include <QStyledItemDelegate>
 #include "AbilityWidget.h"
 #include "CharacterModel.h"
+#include "ClassWidget.h"
 #include "ResourceWidget.h"
 
 class CharacterDelegate : public QStyledItemDelegate

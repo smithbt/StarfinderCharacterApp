@@ -32,6 +32,7 @@ public:
 	// Getters
 	QString getCharacterName() const;
 	Race* getRace() const;
+	QString getClassName() const;
 	int getClassLevel() const;
 	int getBAB() const;
 	int getFortitude() const;
@@ -45,6 +46,7 @@ public:
 	// Setters
 	void setCharacterName(const QString name);
 	void setRace(Race* race);
+	void setClassName(QString name);
 	void setClassLevel(int level);
 	void setStamina(Resource* s);
 	void setHP(Resource* hp);

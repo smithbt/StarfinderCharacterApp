@@ -8,7 +8,14 @@ CharacterDelegate::CharacterDelegate(QWidget *parent)
 void CharacterDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
 	const int column = index.column();
-	if (column == CharacterModel::Stamina ||
+	if (column == CharacterModel::ClassData) {
+		ClassWidget* cWdgt = qobject_cast<ClassWidget*>(editor);
+		QString className = index.data(CharacterModel::Class_NameRole).toString();
+		cWdgt->setClassName(className);
+		int level = index.data(CharacterModel::Class_LevelRole).toInt();
+		cWdgt->setLevel(level);
+	}
+	else if (column == CharacterModel::Stamina ||
 		column == CharacterModel::HitPoints) 
 	{
 		ResourceWidget* rWdgt = qobject_cast<ResourceWidget*>(editor);
@@ -44,7 +51,12 @@ void CharacterDelegate::setEditorData(QWidget* editor, const QModelIndex& index)
 void CharacterDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
 	const int column = index.column();
-	if (column == CharacterModel::Stamina ||
+	if (column == CharacterModel::ClassData) {
+		ClassWidget* cWdgt = qobject_cast<ClassWidget*>(editor);
+		int level = cWdgt->getLevel();
+		model->setData(index, level, CharacterModel::Class_LevelRole);
+	}
+	else if (column == CharacterModel::Stamina ||
 		column == CharacterModel::HitPoints) 
 	{
 		ResourceWidget* rWdgt = qobject_cast<ResourceWidget*>(editor);

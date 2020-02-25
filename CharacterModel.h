@@ -37,7 +37,10 @@ public:
 	};
 
 	enum {
-		Resource_CurrentRole = Qt::UserRole + 1,
+		Class_NameRole = Qt::UserRole + 1,
+		Class_LevelRole,
+
+		Resource_CurrentRole,
 		Resource_MaxRole,
 		Resource_StepRole,
 
