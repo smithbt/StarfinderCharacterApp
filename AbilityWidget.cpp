@@ -1,16 +1,11 @@
 #include "AbilityWidget.h"
 
 AbilityWidget::AbilityWidget(QWidget *parent)
-	: QWidget(parent),
-	m_base(10),
-	m_upgrade(0)
+	: QWidget(parent)
 {
 	ui.setupUi(this);
 	ui.edit_frame->setVisible(false);
-
-	connect(ui.upgrade_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &AbilityWidget::setUpgrade); 
-	connect(ui.base_spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &AbilityWidget::setBase);
-
+	
 	connect(ui.ability_pushButton, &QPushButton::toggled, [this](bool checked) { if (!checked) emit editDone(this); });
 }
 
@@ -20,12 +15,12 @@ AbilityWidget::~AbilityWidget()
 
 int AbilityWidget::base() const
 {
-	return m_base;
+	return ui.base_spinBox->value();
 }
 
 int AbilityWidget::upgrade() const
 {
-	return m_upgrade;
+	return ui.upgrade_spinBox->value();
 }
 
 void AbilityWidget::setScore(int score)
@@ -43,17 +38,15 @@ void AbilityWidget::setModifier(int modifier)
 
 void AbilityWidget::setBase(int base)
 {
-	if (base != m_base) {
-		m_base = base;
-		emit baseChanged(m_base);
+	if (base != ui.base_spinBox->value()) {
+		ui.base_spinBox->setValue(base);
 	}
 }
 
 void AbilityWidget::setUpgrade(int upgrade)
 {
-	if (upgrade != m_upgrade) {
-		m_upgrade = upgrade;
-		emit upgradeChanged(m_upgrade);
+	if (upgrade != ui.upgrade_spinBox->value()) {
+		ui.upgrade_spinBox->setValue(upgrade);
 	}
 }
 

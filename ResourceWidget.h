@@ -7,14 +7,16 @@
 class ResourceWidget : public QWidget
 {
 	Q_OBJECT
-	Q_PROPERTY(Resource* resource READ getResource WRITE setResource)
 
 public:
 	ResourceWidget(QWidget *parent = Q_NULLPTR);
 	~ResourceWidget();
 
-	Resource* getResource() const;
-	void setResource(Resource* resource);
+	int getCurrentValue() const;
+
+	void setCurrent(int current);
+	void setMax(int max);
+	void setStep(int step);
 
 private:
 	Ui::ResourceWidget ui;

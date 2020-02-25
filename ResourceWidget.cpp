@@ -1,8 +1,7 @@
 #include "ResourceWidget.h"
 
 ResourceWidget::ResourceWidget(QWidget *parent)
-	: QWidget(parent),
-	m_resource(nullptr)
+	: QWidget(parent)
 {
 	ui.setupUi(this);
 }
@@ -11,27 +10,27 @@ ResourceWidget::~ResourceWidget()
 {
 }
 
-Resource* ResourceWidget::getResource() const
+int ResourceWidget::getCurrentValue() const
 {
-	return m_resource;
+	return ui.currentSpinBox->value();
 }
 
-void ResourceWidget::setResource(Resource* resource)
+void ResourceWidget::setCurrent(int current)
 {
-	if (resource != m_resource) {
-		if (m_resource) 
-			m_resource->disconnect();
+	if (current != ui.currentSpinBox->value())
+		ui.currentSpinBox->setValue(current);
+}
 
-		m_resource = resource;
-
-		if (m_resource) {
-			connect(m_resource, &Resource::currentChanged, ui.currentSpinBox, &QSpinBox::setValue);
-			connect(ui.currentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), m_resource, &Resource::setCurrent);
-			
-			ui.maxLabel->setNum(m_resource->max());
-			ui.currentSpinBox->setMaximum(m_resource->max());
-			ui.currentSpinBox->setValue(m_resource->current());
-			ui.currentSpinBox->setSingleStep(m_resource->step());
-		}
+void ResourceWidget::setMax(int max)
+{ 
+	if (max != ui.maxLabel->text().toInt()) {
+		ui.maxLabel->setNum(max);
+		ui.currentSpinBox->setMaximum(max);
 	}
+}
+
+void ResourceWidget::setStep(int step)
+{
+	if (step != ui.currentSpinBox->singleStep())
+		ui.currentSpinBox->setSingleStep(step);
 }
