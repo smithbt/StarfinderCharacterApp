@@ -20,7 +20,9 @@ signals:
 
 protected slots:
 	void on_rAdjButton_clicked();
+	void on_rAdjResetButton_clicked();
 	void on_rAddFeatureButton_clicked();
+	void on_rRemoveFeatureButton_clicked();
 
 private:
 	Ui::CreatorWizard ui;

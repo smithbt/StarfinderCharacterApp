@@ -5,6 +5,8 @@ CreatorWizard::CreatorWizard(QWidget *parent)
 	abilitySpinBoxes()
 {
 	ui.setupUi(this);
+	ui.rAdjResetButton->setVisible(false);
+	ui.rAbilityAdjListLabel->setVisible(false);
 
 	QStringList abilityNames = { "Strength",  "Dexterity",  "Constitution",  "Intelligence",  "Wisdom",  "Charisma" };
 	ui.rAdjScoreComboBox->addItems(abilityNames);
@@ -35,8 +37,9 @@ void CreatorWizard::accept()
 	r->setName(ui.rNameLineEdit->text());
 	r->setHitPoints(ui.rHPSpinBox->value());
 	for (int i = 0; i < ui.rFeaturesListWidget->count(); ++i) {
-		QStringList entry = ui.rFeaturesListWidget->item(i)->text().split(": ");
-		r->addFeature(entry.at(0), entry.at(1));
+		QString name = ui.rFeaturesListWidget->item(i)->data(Qt::UserRole + 1).toString();
+		QString desc = ui.rFeaturesListWidget->item(i)->data(Qt::UserRole + 2).toString();
+		r->addFeature(name, desc);
 	}
 	pc->setRace(r);
 
@@ -56,15 +59,37 @@ void CreatorWizard::on_rAdjButton_clicked()
 	QString score = ui.rAdjScoreComboBox->currentText();
 	int value = ui.rAdjSpinBox->value();
 	if (value != 0 && abilitySpinBoxes.contains(score)) {
-		QString text = ui.rAbilityAdjWidget->text();
+		QString text = ui.rAbilityAdjListLabel->text();
 		if (!text.isEmpty())
 			text += "; ";
 		text += QString::asprintf("%+i %2", value).arg(score);
-		ui.rAbilityAdjWidget->setText(text);
+		ui.rAbilityAdjListLabel->setText(text);
 		abilitySpinBoxes[score]->stepBy(value);
+		ui.rAdjScoreComboBox->setCurrentIndex(0);
+		ui.rAdjSpinBox->setValue(0);
+		if (!ui.rAdjResetButton->isVisible())
+			ui.rAdjResetButton->setVisible(true);
+		if (!ui.rAbilityAdjListLabel->isVisible())
+			ui.rAbilityAdjListLabel->setVisible(true);
 	}
-	ui.rAdjScoreComboBox->setCurrentIndex(0);
-	ui.rAdjSpinBox->setValue(0);
+}
+
+void CreatorWizard::on_rAdjResetButton_clicked()
+{
+	// readjust abilities
+	QStringList adjs = ui.rAbilityAdjListLabel->text().split("; ");
+	for (QString adj : adjs) {
+		QStringList abilityAdj = adj.split(" ");
+		if (adj.at(0) == '+')
+			abilityAdj[0].remove(0, 1);
+		int value = abilityAdj.at(0).toInt();
+		abilitySpinBoxes[abilityAdj.at(1)]->stepBy(value * -1);
+	}
+
+	// Clear label and hide button
+	ui.rAbilityAdjListLabel->setText("");
+	ui.rAdjResetButton->setVisible(false);
+	ui.rAbilityAdjListLabel->setVisible(false);
 }
 
 void CreatorWizard::on_rAddFeatureButton_clicked()
@@ -73,7 +98,16 @@ void CreatorWizard::on_rAddFeatureButton_clicked()
 	QString desc = ui.rFeatureDescriptionTextEdit->toPlainText();
 
 	if (!name.isEmpty()) {
-		QString entry = QString("%1: %2").arg(name, desc);
-		ui.rFeaturesListWidget->addItem(entry);
+		QListWidgetItem* entry = new QListWidgetItem(ui.rFeaturesListWidget);
+		entry->setText(QString("%1: %2").arg(name, desc));
+		entry->setData((Qt::UserRole + 1), name);
+		entry->setData((Qt::UserRole + 2), desc);
 	}
+	ui.rFeatureNameLineEdit->setText("");
+	ui.rFeatureDescriptionTextEdit->setText("");
+}
+
+void CreatorWizard::on_rRemoveFeatureButton_clicked()
+{
+	ui.rFeaturesListWidget->removeItemWidget(ui.rFeaturesListWidget->currentItem());
 }
