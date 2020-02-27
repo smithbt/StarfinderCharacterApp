@@ -35,6 +35,8 @@ void CreatorWizard::accept()
 	Character* pc = new Character();
 	Race* r = pc->getRace();
 	r->setName(ui.rNameLineEdit->text());
+	r->setSize(ui.rSizeComboBox->currentText());
+	r->setType(ui.rTypeLineEdit->text());
 	r->setHitPoints(ui.rHPSpinBox->value());
 	for (int i = 0; i < ui.rFeaturesListWidget->count(); ++i) {
 		QString name = ui.rFeaturesListWidget->item(i)->data(Qt::UserRole + 1).toString();

@@ -67,14 +67,14 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="rTypeLabel">
       <property name="text">
        <string>Type (subtype)</string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_2"/>
+     <widget class="QLineEdit" name="rTypeLineEdit"/>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="rHPLabel">

@@ -17,6 +17,8 @@ void RaceWidget::setRace(Race* race)
 		m_race = race;
 
 		ui.rNameLabel->setText(m_race->name());
+		ui.rSizeLabel->setText(m_race->size());
+		ui.rTypeLabel->setText(m_race->type());
 		ui.rHPLabel->setText(QString("<b>Hit Points</b>: %1").arg(m_race->hitPoints()));
 
 		QString featureList;

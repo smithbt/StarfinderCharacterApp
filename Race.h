@@ -15,11 +15,15 @@ public:
 
 	// Getters
 	QString name() const;
+	QString size() const;
+	QString type() const;
 	int hitPoints() const;
 	QMap<QString, QString> features() const;
 
 	//Setters
 	void setName(QString name);
+	void setSize(QString size);
+	void setType(QString type);
 	void setHitPoints(int hitPoints);
 	void setFeatures(QMap<QString, QString> features);
 
@@ -31,6 +35,8 @@ public:
 
 private:
 	QString m_name;
+	QString m_size;
+	QString m_type;
 	int m_hitPoints;
 	QMap<QString, QString> m_features;
 };
