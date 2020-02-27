@@ -2,8 +2,8 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QMap>
 #include <QObject>
+#include <QVector>
 
 class Race : public QObject
 {
@@ -18,16 +18,16 @@ public:
 	QString size() const;
 	QString type() const;
 	int hitPoints() const;
-	QMap<QString, QString> features() const;
+	QVector<QString> features() const;
 
 	//Setters
 	void setName(QString name);
 	void setSize(QString size);
 	void setType(QString type);
 	void setHitPoints(int hitPoints);
-	void setFeatures(QMap<QString, QString> features);
+	void setFeatures(QVector<QString> features);
 
-	void addFeature(QString name, QString description);
+	void addFeature(QString feature);
 
 	void read(const QJsonObject& json);
 	void write(QJsonObject& json) const;
@@ -38,5 +38,5 @@ private:
 	QString m_size;
 	QString m_type;
 	int m_hitPoints;
-	QMap<QString, QString> m_features;
+	QVector<QString> m_features;
 };

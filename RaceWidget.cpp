@@ -22,8 +22,10 @@ void RaceWidget::setRace(Race* race)
 		ui.rHPLabel->setText(QString("<b>Hit Points</b>: %1").arg(m_race->hitPoints()));
 
 		QString featureList;
-		for (QMap<QString, QString>::ConstIterator ci = m_race->features().cbegin(); ci != m_race->features().cend(); ++ci)
-			featureList += QString("<b>%1</b><br>%2<br>").arg(ci.key(), ci.value());
+		for (int i = 0; i < m_race->features().size(); ++i) {
+			QStringList feature = m_race->features().at(i).split("|");
+			featureList += QString("<b>%1</b><br>%2<br>").arg(feature.at(0), feature.at(1));
+		}
 		ui.rFeaturesLabel->setText(featureList);
 	}
 }

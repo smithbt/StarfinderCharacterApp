@@ -40,9 +40,7 @@ void CreatorWizard::accept()
 	r->setType(ui.rTypeLineEdit->text());
 	r->setHitPoints(ui.rHPSpinBox->value());
 	for (int i = 0; i < ui.rFeaturesListWidget->count(); ++i) {
-		QString name = ui.rFeaturesListWidget->item(i)->data(Qt::UserRole + 1).toString();
-		QString desc = ui.rFeaturesListWidget->item(i)->data(Qt::UserRole + 2).toString();
-		r->addFeature(name, desc);
+		r->addFeature(ui.rFeaturesListWidget->item(i)->data(Qt::UserRole).toString());
 	}
 	pc->setRace(r);
 
@@ -117,8 +115,7 @@ void CreatorWizard::on_rAddFeatureButton_clicked()
 	if (!name.isEmpty()) {
 		QListWidgetItem* entry = new QListWidgetItem(ui.rFeaturesListWidget);
 		entry->setText(QString("%1: %2").arg(name, desc));
-		entry->setData((Qt::UserRole + 1), name);
-		entry->setData((Qt::UserRole + 2), desc);
+		entry->setData(Qt::UserRole, QString("%1|%2").arg(name, desc));
 	}
 	ui.rFeatureNameLineEdit->setText("");
 	ui.rFeatureDescriptionTextEdit->setText("");

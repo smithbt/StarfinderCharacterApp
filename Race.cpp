@@ -35,7 +35,7 @@ int Race::hitPoints() const
 	return m_hitPoints;
 }
 
-QMap<QString, QString> Race::features() const
+QVector<QString> Race::features() const
 {
 	return m_features;
 }
@@ -60,14 +60,14 @@ void Race::setHitPoints(int hitPoints)
 	m_hitPoints = hitPoints;
 }
 
-void Race::setFeatures(QMap<QString, QString> features)
+void Race::setFeatures(QVector<QString> features)
 {
 	m_features = features;
 }
 
-void Race::addFeature(QString name, QString description)
+void Race::addFeature(QString feature)
 {
-	m_features.insert(name, description);
+	m_features.append(feature);
 }
 
 void Race::read(const QJsonObject& json)
@@ -83,16 +83,8 @@ void Race::read(const QJsonObject& json)
 	if (json.contains("Features") && json.value("Features").isArray()) {
 		QJsonArray featureArray = json.value("Features").toArray();
 		for (int i = 0; i < featureArray.size(); ++i) {
-			if (featureArray.at(i).isObject()) {
-				QJsonObject fObject = featureArray.at(i).toObject();
-				if (fObject.contains("Name") && fObject.value("Name").isString() &&
-					fObject.contains("Description") && fObject.value("Description").isString()) {
-					QString key, value;
-					key = fObject.value("Name").toString();
-					value = fObject.value("Description").toString();
-					m_features.insert(key, value);
-				}
-			}
+			if (featureArray.at(i).isString())
+				m_features.append(featureArray.at(i).toString());
 		}
 	}
 }
@@ -104,10 +96,8 @@ void Race::write(QJsonObject& json) const
 	json.insert("Type", m_type);
 	json.insert("HP", m_hitPoints);
 	QJsonArray featureArray;
-	for (QMap<QString, QString>::ConstIterator i = m_features.cbegin(); i != m_features.cend(); ++i) {
-		featureArray.append(QJsonObject{
-			{"Name", i.key()},
-			{"Description", i.value()} });
+	for (int i = 0; i < m_features.size(); ++i) {
+		featureArray.append(m_features.at(i));
 	}
 	json.insert("Features", featureArray);
 }
