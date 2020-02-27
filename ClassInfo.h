@@ -12,7 +12,7 @@ class ClassInfo : public QObject
 private:
 	QString m_name;
 	int m_level;
-	QString keyAbility;
+	QString m_keyAbility;
 	double bab_rate;
 	bool fort_isGood;
 	bool ref_isGood;
@@ -26,7 +26,7 @@ private:
 
 public:
 	enum LevelStat {
-		BAB = 0,
+		BAB,
 		Fortitude, Reflex, Will,
 		Stamina, HP, Skills
 	};
@@ -36,10 +36,12 @@ public:
 
 	QString name() const;
 	int level() const;
+	QString keyAbility() const;
 	int getPropertyValue(LevelStat propertyType) const;
 
 	void setName(QString name);
 	void setLevel(int level);
+	void setKeyAbility(QString keyAbility);
 	void setPropertyRate(LevelStat propertyType, const QVariant& value);
 
 	void read(const QJsonObject& json);

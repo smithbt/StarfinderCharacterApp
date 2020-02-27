@@ -3,6 +3,7 @@
 ClassInfo::ClassInfo(QObject *parent)
 	: QObject(parent),
 	m_name(QString()),
+	m_keyAbility(QString()),
 	m_level(0),
 	bab_rate(0),
 	fort_isGood(false),
@@ -26,6 +27,11 @@ QString ClassInfo::name() const
 int ClassInfo::level() const
 {
 	return m_level;
+}
+
+QString ClassInfo::keyAbility() const
+{
+	return m_keyAbility;
 }
 
 int ClassInfo::getPropertyValue(LevelStat propertyType) const
@@ -60,6 +66,12 @@ void ClassInfo::setLevel(int level)
 		m_level = level;
 		emit levelChanged(m_level);
 	}
+}
+
+void ClassInfo::setKeyAbility(QString keyAbility)
+{
+	if (keyAbility != m_keyAbility)
+		m_keyAbility = keyAbility;
 }
 
 void ClassInfo::setPropertyRate(LevelStat propertyType, const QVariant& value)
@@ -113,7 +125,7 @@ void ClassInfo::read(const QJsonObject& json)
 	if (json.contains("Level") && json.value("Level").isDouble())
 		m_level = json.value("Level").toInt();
 	if (json.contains("KeyAbility") && json.value("KeyAbility").isString())
-		keyAbility = json.value("KeyAbility").toString();
+		m_keyAbility = json.value("KeyAbility").toString();
 	if (json.contains("BAB_Rate") && json.value("BAB_Rate").isDouble())
 		bab_rate = json.value("BAB_Rate").toDouble();
 	if (json.contains("Fort_isGood") && json.value("Fort_isGood").isBool())
@@ -134,7 +146,7 @@ void ClassInfo::write(QJsonObject& json) const
 {
 	json.insert("ClassName", m_name);
 	json.insert("Level", m_level);
-	json.insert("KeyAbility", keyAbility);
+	json.insert("KeyAbility", m_keyAbility);
 	json.insert("BAB_Rate", bab_rate);
 	json.insert("Fort_isGood", fort_isGood);
 	json.insert("Ref_isGood", ref_isGood);

@@ -33,6 +33,7 @@ CreatorWizard::~CreatorWizard()
 void CreatorWizard::accept()
 {
 	Character* pc = new Character();
+	// set up race
 	Race* r = pc->getRace();
 	r->setName(ui.rNameLineEdit->text());
 	r->setSize(ui.rSizeComboBox->currentText());
@@ -45,12 +46,26 @@ void CreatorWizard::accept()
 	}
 	pc->setRace(r);
 
-	pc->setCharacterName(ui.characterNameLineEdit->text());
+	// set up class
+	pc->setClassName(ui.classLineEdit->text());
+	pc->setKeyAbility(ui.cKeyAbilityComboBox->currentText());
+	pc->setClassProperties({
+		{ ClassInfo::BAB, QVariant(ui.babSpinBox->value()) },
+		{ ClassInfo::Fortitude, QVariant(ui.fortitudeComboBox->currentText() == "Good") },
+		{ ClassInfo::Reflex, QVariant(ui.reflexComboBox->currentText() == "Good") },
+		{ ClassInfo::Will, QVariant(ui.willComboBox->currentText() == "Good") },
+		{ ClassInfo::Stamina, QVariant(ui.staminaSpinBox->value()) },
+		{ ClassInfo::HP, QVariant(ui.cHPSpinBox->value()) },
+		{ ClassInfo::Skills, QVariant(ui.cSkillsSpinBox->value()) } });
+	pc->setClassLevel(ui.levelSpinBox->value());
 
 	// loop over ability scores
 	for (QHash<QString, QSpinBox*>::Iterator i = abilitySpinBoxes.begin(); i != abilitySpinBoxes.end(); ++i) {
-		pc->setAbilityProperty(i.key(), "base", QVariant(i.value()->value()));
+		pc->setAbilityProperty(i.key(), "base", i.value()->value());
 	}
+
+	// final details
+	pc->setCharacterName(ui.characterNameLineEdit->text());
 
 	QDialog::accept();
 	emit characterReady(pc);

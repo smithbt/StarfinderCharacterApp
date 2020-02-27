@@ -7,6 +7,7 @@ Character::Character(QObject* parent)
 	pcClass(new ClassInfo(this)),
 	stamina(new Resource(this)),
 	hitpoints(new Resource(this)),
+	resolve(new Resource(this)),
 	abilities({
 		{"Strength", new Ability(this) },
 		{"Dexterity", new Ability(this) },
@@ -19,6 +20,7 @@ Character::Character(QObject* parent)
 	connect(abilities["Constitution"], &Ability::modifierChanged, this, &Character::calcMaxStamina);
 	connect(pcClass, &ClassInfo::levelChanged, this, &Character::calcMaxStamina);
 	connect(pcClass, &ClassInfo::levelChanged, this, &Character::calcMaxHP);
+	connect(pcClass, &ClassInfo::levelChanged, this, &Character::calcMaxResolve);
 }
 
 Character::~Character()
@@ -27,6 +29,7 @@ Character::~Character()
 	delete pcClass;
 	delete stamina;
 	delete hitpoints;
+	delete resolve;
 
 	qDeleteAll(abilities);
 
@@ -51,6 +54,11 @@ QString Character::getClassName() const
 int Character::getClassLevel() const
 {
 	return pcClass->level();
+}
+
+QString Character::getKeyAbility() const
+{
+	return pcClass->keyAbility();
 }
 
 int Character::getBAB() const
@@ -83,6 +91,11 @@ Resource* Character::getHP() const
 	return hitpoints;
 }
 
+Resource* Character::getResolve() const
+{
+	return resolve;
+}
+
 Ability* Character::getAbility(const QString abilityName) const
 {
 	if (abilities.contains(abilityName))
@@ -90,7 +103,7 @@ Ability* Character::getAbility(const QString abilityName) const
 	return nullptr;
 }
 
-QVariant Character::getAbilityProperty(const QString abilityName, const QString propertyName) const
+int Character::getAbilityProperty(const QString abilityName, const QString propertyName) const
 {
 	if (abilities.contains(abilityName)) {
 		if (!propertyName.compare("base"))
@@ -102,7 +115,7 @@ QVariant Character::getAbilityProperty(const QString abilityName, const QString 
 		if (!propertyName.compare("modifier"))
 			return abilities[abilityName]->modifier();
 	}
-	return QVariant();
+	return 0;
 }
 
 void Character::setCharacterName(const QString name)
@@ -115,6 +128,13 @@ void Character::setRace(Race* race)
 	this->race = race;
 }
 
+void Character::setClassProperties(QHash<ClassInfo::LevelStat, QVariant> properties)
+{
+	for (QHash<ClassInfo::LevelStat, QVariant>::ConstIterator ci = properties.cbegin(); ci != properties.cend(); ++ci) {
+		pcClass->setPropertyRate(ci.key(), ci.value());
+	}
+}
+
 void Character::setClassName(QString name)
 {
 	pcClass->setName(name);
@@ -123,6 +143,17 @@ void Character::setClassName(QString name)
 void Character::setClassLevel(int level)
 {
 	pcClass->setLevel(level);
+}
+
+void Character::setKeyAbility(QString keyAbility)
+{
+	// disconnect old keyAbility (if any)
+	if (abilities.contains(pcClass->keyAbility()))
+		disconnect(abilities[pcClass->keyAbility()], &Ability::modifierChanged, this, &Character::calcMaxResolve);
+
+	// set and connect new key ability
+	pcClass->setKeyAbility(keyAbility);
+	connect(abilities[keyAbility], &Ability::modifierChanged, this, &Character::calcMaxResolve);
 }
 
 void Character::setStamina(Resource* s)
@@ -135,19 +166,24 @@ void Character::setHP(Resource* hp)
 	hitpoints = hp;
 }
 
+void Character::setResolve(Resource* resolve)
+{
+	this->resolve = resolve;
+}
+
 void Character::setAbility(const QString abilityName, Ability* a)
 {
 	if (abilities.contains(abilityName))
 		abilities.insert(abilityName, a);
 }
 
-bool Character::setAbilityProperty(const QString abilityName, const QString propertyName, const QVariant& value)
+bool Character::setAbilityProperty(const QString abilityName, const QString propertyName, const int value)
 {
 	if (abilities.contains(abilityName)) {
 		if (!propertyName.compare("base"))
-			abilities[abilityName]->setBase(value.toInt());
+			abilities[abilityName]->setBase(value);
 		if (!propertyName.compare("upgrade"))
-			abilities[abilityName]->setUpgrade(value.toInt());
+			abilities[abilityName]->setUpgrade(value);
 		return true;
 	}
 	return false;
@@ -216,14 +252,20 @@ void Character::read(const QJsonObject& json)
 		race->read(json.value("Race").toObject());
 
 	// Parse Ints
-	if (json.contains("Class") && json.value("Class").isObject())
+	if (json.contains("Class") && json.value("Class").isObject()) {
+		if (abilities.contains(pcClass->keyAbility()))
+			disconnect(abilities[pcClass->keyAbility()], &Ability::modifierChanged, this, &Character::calcMaxResolve);
 		pcClass->read(json.value("Class").toObject());
+		connect(abilities[pcClass->keyAbility()], &Ability::modifierChanged, this, &Character::calcMaxResolve);
+	}
 
 	// Parse Resources
 	if (json.contains("Stamina") && json.value("Stamina").isObject())
 		stamina->read(json.value("Stamina").toObject());
 	if (json.contains("HitPoints") && json.value("HitPoints").isObject())
 		hitpoints->read(json.value("HitPoints").toObject());
+	if (json.contains("Resolve") && json.value("Resolve").isObject())
+		resolve->read(json.value("Resolve").toObject());
 
 	// Parse Abilities
 	if (json.contains("Abilities") && json.value("Abilities").isObject()) {
@@ -256,6 +298,7 @@ void Character::write(QJsonObject& json) const
 	// Resources
 	json.insert("Stamina", stamina->toJsonObject());
 	json.insert("HitPoints", hitpoints->toJsonObject());
+	json.insert("Resolve", resolve->toJsonObject());
 
 	// Abilities
 	QJsonObject aObject;
@@ -279,7 +322,7 @@ QJsonObject Character::toJsonObject() const
 
 void Character::calcMaxStamina()
 {
-	int newMax = pcClass->getPropertyValue(ClassInfo::Stamina) + (pcClass->level() * abilities["Constitution"]->modifier());
+	int newMax = pcClass->getPropertyValue(ClassInfo::Stamina) + (getClassLevel() * abilities["Constitution"]->modifier());
 	stamina->setMax(newMax);
 }
 
@@ -287,4 +330,10 @@ void Character::calcMaxHP()
 {
 	int newMax = pcClass->getPropertyValue(ClassInfo::HP) + race->hitPoints();
 	hitpoints->setMax(newMax);
+}
+
+void Character::calcMaxResolve()
+{
+	int newMax = fmax((getClassLevel() / 2), 1) + getAbilityProperty(getKeyAbility(), "modifier");
+	resolve->setMax(newMax);
 }

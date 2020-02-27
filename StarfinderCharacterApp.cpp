@@ -21,6 +21,7 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.charName_field, CharacterModel::CharacterName);
 	mapper->addMapping(ui.staminaWidget, CharacterModel::Stamina);
 	mapper->addMapping(ui.hpWidget, CharacterModel::HitPoints);
+	mapper->addMapping(ui.resolveWidget, CharacterModel::Resolve);
 	mapper->addMapping(ui.str_widget, CharacterModel::Strength);
 	mapper->addMapping(ui.dex_widget, CharacterModel::Dexterity);
 	mapper->addMapping(ui.con_widget, CharacterModel::Constitution);

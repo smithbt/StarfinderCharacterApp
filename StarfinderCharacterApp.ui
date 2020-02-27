@@ -42,7 +42,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="mainTab">
        <attribute name="title">
@@ -399,7 +399,7 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_6">
              <item row="0" column="2">
-              <widget class="QLabel" name="label_10">
+              <widget class="QLabel" name="maxLabel">
                <property name="font">
                 <font>
                  <italic>true</italic>
@@ -410,18 +410,8 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="2">
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QSpinBox" name="spinBox_3"/>
-             </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="hpLabel">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -434,7 +424,7 @@
               </widget>
              </item>
              <item row="5" column="0">
-              <widget class="QLabel" name="label_3">
+              <widget class="QLabel" name="resolveLabel">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -447,7 +437,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLabel" name="label_9">
+              <widget class="QLabel" name="currentLabel">
                <property name="font">
                 <font>
                  <italic>true</italic>
@@ -476,7 +466,7 @@
               <widget class="ResourceWidget" name="staminaWidget" native="true"/>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="staminaLabel">
                <property name="font">
                 <font>
                  <weight>75</weight>
@@ -490,6 +480,9 @@
              </item>
              <item row="1" column="1" colspan="2">
               <widget class="ResourceWidget" name="hpWidget" native="true"/>
+             </item>
+             <item row="5" column="1" colspan="2">
+              <widget class="ResourceWidget" name="resolveWidget" native="true"/>
              </item>
             </layout>
            </widget>
