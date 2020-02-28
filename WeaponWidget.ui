@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>117</height>
+    <width>369</width>
+    <height>112</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -72,12 +72,15 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QGroupBox" name="crit_groupBox">
+   <item row="2" column="1">
+    <widget class="QGroupBox" name="price_groupBox">
      <property name="title">
-      <string>Crit</string>
+      <string>Price</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_6">
       <property name="leftMargin">
        <number>3</number>
       </property>
@@ -94,7 +97,7 @@
        <number>2</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="crit_label">
+       <widget class="QLabel" name="price_label">
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -126,6 +129,37 @@
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="attack_label">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QGroupBox" name="crit_groupBox">
+     <property name="title">
+      <string>Crit</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <property name="leftMargin">
+       <number>3</number>
+      </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <property name="bottomMargin">
+       <number>3</number>
+      </property>
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="crit_label">
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -171,40 +205,6 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QGroupBox" name="price_groupBox">
-     <property name="title">
-      <string>Price</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_6">
-      <property name="leftMargin">
-       <number>3</number>
-      </property>
-      <property name="topMargin">
-       <number>3</number>
-      </property>
-      <property name="rightMargin">
-       <number>3</number>
-      </property>
-      <property name="bottomMargin">
-       <number>3</number>
-      </property>
-      <property name="spacing">
-       <number>2</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="price_label">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="1" column="3">
     <widget class="QGroupBox" name="range_groupBox">
      <property name="title">
@@ -228,40 +228,6 @@
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="range_label">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3">
-    <widget class="QGroupBox" name="name_groupBox">
-     <property name="title">
-      <string>Name</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <property name="leftMargin">
-       <number>3</number>
-      </property>
-      <property name="topMargin">
-       <number>3</number>
-      </property>
-      <property name="rightMargin">
-       <number>3</number>
-      </property>
-      <property name="bottomMargin">
-       <number>3</number>
-      </property>
-      <property name="spacing">
-       <number>2</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="name_label">
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -304,6 +270,58 @@
      </layout>
     </widget>
    </item>
+   <item row="0" column="4" rowspan="2">
+    <widget class="QGroupBox" name="ammo_groupBox">
+     <property name="title">
+      <string>Capacity/Usage</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_9">
+      <property name="leftMargin">
+       <number>3</number>
+      </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <property name="bottomMargin">
+       <number>3</number>
+      </property>
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <item row="1" column="1">
+       <widget class="QLabel" name="capUseLabel">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="fire_pushButton">
+        <property name="text">
+         <string>Fire</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="reload_pushButton">
+        <property name="text">
+         <string>Reload</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="currAmmoLabel">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="2" column="2" colspan="3">
     <widget class="QGroupBox" name="special_groupBox">
      <property name="title">
@@ -338,12 +356,15 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="4" rowspan="2">
-    <widget class="QGroupBox" name="ammo_groupBox">
+   <item row="0" column="0" colspan="3">
+    <widget class="QGroupBox" name="name_groupBox">
      <property name="title">
-      <string>Capacity/Usage</string>
+      <string>Name</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_9">
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
@@ -360,29 +381,9 @@
        <number>2</number>
       </property>
       <item row="0" column="0">
-       <widget class="QPushButton" name="reload_pushButton">
+       <widget class="QLabel" name="name_label">
         <property name="text">
-         <string>Reload</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="fire_pushButton">
-        <property name="text">
-         <string>Fire</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QProgressBar" name="capUse_progressBar">
-        <property name="maximum">
-         <number>20</number>
-        </property>
-        <property name="value">
-         <number>20</number>
-        </property>
-        <property name="format">
-         <string>%v/%m</string>
+         <string>TextLabel</string>
         </property>
        </widget>
       </item>

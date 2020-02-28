@@ -6,10 +6,9 @@ WeaponWidget::WeaponWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	connect(ui.fire_pushButton, &QPushButton::clicked, this, [=]() { 
-		weapon->ammo->adjustCurrent(-1); emit weaponChanged(weapon); });
-	connect(ui.reload_pushButton, &QPushButton::clicked, this, [=]() { 
-		weapon->ammo->setCurrent(weapon->capacity()); emit weaponChanged(weapon); });
+	connect(ui.fire_pushButton, &QPushButton::clicked, this, [=]() { weapon->ammo->adjustCurrent(-1); });
+	connect(ui.reload_pushButton, &QPushButton::clicked, this, [=]() { weapon->ammo->setCurrent(weapon->capacity()); });
+	connect(weapon->ammo, &Resource::currentChanged, ui.currAmmoLabel, QOverload<int>::of(&QLabel::setNum));
 	connect(this, &WeaponWidget::weaponChanged, &WeaponWidget::updateLabels);
 }
 
@@ -37,8 +36,7 @@ void WeaponWidget::updateLabels()
 	ui.damagelabel->setText(dmgString);
 	ui.crit_label->setText(weapon->crit);
 	ui.range_label->setText(QString("%1 ft.").arg(weapon->range));
-	ui.capUse_progressBar->setMaximum(weapon->capacity());
-	ui.capUse_progressBar->setValue(weapon->ammo->current());
+	ui.capUseLabel->setText(QString("%1 [Usage %2]").arg(weapon->capacity()).arg(weapon->usage()));
 	ui.price_label->setNum(weapon->price);
 	ui.bulk_label->setNum(weapon->bulk);
 	ui.special_label->setText(weapon->special.join(", "));
