@@ -2,18 +2,31 @@
 
 WeaponWidget::WeaponWidget(QWidget* parent)
 	: QWidget(parent),
-	weapon(nullptr)
+	weapon(nullptr),
+	fireAction(new QAction(tr("Fire"), this)),
+	reloadAction(new QAction(tr("Reload"), this)),
+	editAction(new QAction(tr("Edit"), this)),
+	deleteAction(new QAction(tr("Delete"), this))
 {
 	ui.setupUi(this);
-
-	connect(ui.fire_pushButton, &QPushButton::clicked, this, [=]() { weapon->ammo->adjustCurrent(-1); });
-	connect(ui.reload_pushButton, &QPushButton::clicked, this, [=]() { weapon->ammo->setCurrent(weapon->capacity()); });
-	connect(weapon->ammo, &Resource::currentChanged, ui.currAmmoLabel, QOverload<int>::of(&QLabel::setNum));
 	connect(this, &WeaponWidget::weaponChanged, &WeaponWidget::updateLabels);
+
+	connect(fireAction, &QAction::triggered, this, &WeaponWidget::shootWeapon);
+	ui.fireButton->setDefaultAction(fireAction);
+	connect(reloadAction, &QAction::triggered, this, &WeaponWidget::reloadWeapon);
+	ui.fireButton->addAction(reloadAction);
+
+	// connect to dialog popup
+	// signal to remove from Character.
+	ui.toolButton->addActions({ editAction, deleteAction });
 }
 
 WeaponWidget::~WeaponWidget()
 {
+	delete fireAction;
+	delete reloadAction;
+	delete editAction;
+	delete deleteAction;
 }
 
 Weapon* WeaponWidget::getWeapon() const
@@ -23,22 +36,44 @@ Weapon* WeaponWidget::getWeapon() const
 
 void WeaponWidget::setWeapon(Weapon* w)
 {
-	weapon = w;
-	emit weaponChanged(weapon);
+	if (w != weapon) {
+		if (weapon)
+			disconnect(weapon->ammo, &Resource::currentChanged, ui.capUseProgressBar, &QProgressBar::setValue);
+		weapon = w;
+		if (weapon)
+			connect(weapon->ammo, &Resource::currentChanged, ui.capUseProgressBar, &QProgressBar::setValue);
+		emit weaponChanged(weapon);
+	}
+	
+}
+
+void WeaponWidget::shootWeapon()
+{
+	weapon->ammo->adjustCurrent(-1);
+	if (!weapon->ammo->current())
+		ui.fireButton->setDefaultAction(reloadAction);
+}
+
+void WeaponWidget::reloadWeapon()
+{
+	weapon->ammo->setCurrent(weapon->capacity());
+	if (ui.fireButton->defaultAction() != fireAction)
+		ui.fireButton->setDefaultAction(fireAction);
 }
 
 void WeaponWidget::updateLabels()
 {
 	ui.name_label->setText(weapon->name);
 	ui.level_label->setNum(weapon->level);
-	ui.attack_label->setText(QString::asprintf("%+i", weapon->attackMod));
-	QString dmgString = QString::asprintf("%1%+i %3", weapon->damageMod).arg(weapon->damage->dice()).arg(weapon->damage->type);
-	ui.damagelabel->setText(dmgString);
+	QString atkString = QString::asprintf("%+i", weapon->attackMod);
+	QString dmgString = QString::asprintf("%1%+i %3", weapon->damageMod).arg(weapon->damage->dice(), weapon->damage->type);
+	ui.atkLabel->setText(atkString);
+	ui.dmgLabel->setText(dmgString);
 	ui.crit_label->setText(weapon->crit);
-	ui.range_label->setText(QString("%1 ft.").arg(weapon->range));
-	ui.capUseLabel->setText(QString("%1 [Usage %2]").arg(weapon->capacity()).arg(weapon->usage()));
-	ui.price_label->setNum(weapon->price);
-	ui.bulk_label->setNum(weapon->bulk);
+	ui.range_label->setText(QString("%1 ft.").arg(weapon->range)); 
+	ui.capUseProgressBar->setMaximum(weapon->capacity());
+	ui.capUseProgressBar->setValue(weapon->ammo->current());
+	fireAction->setText(QString("Fire [%2]").arg(weapon->usage()));
 	ui.special_label->setText(weapon->special.join(", "));
 }
 

@@ -19,6 +19,8 @@ public:
 
 public slots:
 	void updateLabels();
+	void shootWeapon();
+	void reloadWeapon();
 
 signals:
 	void weaponChanged(Weapon*);
@@ -32,4 +34,9 @@ protected:
 private:
 	Ui::WeaponWidget ui;
 	Weapon* weapon;
+	QAction* fireAction;
+	QAction* reloadAction;
+	QAction* editAction;
+	QAction* deleteAction;
+
 };
