@@ -9,7 +9,6 @@ WeaponWidget::WeaponWidget(QWidget* parent)
 	deleteAction(new QAction(tr("Delete"), this))
 {
 	ui.setupUi(this);
-	connect(this, &WeaponWidget::weaponChanged, &WeaponWidget::updateLabels);
 
 	connect(fireAction, &QAction::triggered, this, &WeaponWidget::shootWeapon);
 	ui.fireButton->setDefaultAction(fireAction);
@@ -17,6 +16,7 @@ WeaponWidget::WeaponWidget(QWidget* parent)
 	ui.fireButton->addAction(reloadAction);
 
 	// connect to dialog popup
+	connect(editAction, &QAction::triggered, this, &WeaponWidget::openWeaponDialog);
 	// signal to remove from Character.
 	ui.toolButton->addActions({ editAction, deleteAction });
 }
@@ -40,11 +40,23 @@ void WeaponWidget::setWeapon(Weapon* w)
 		if (weapon)
 			disconnect(weapon->ammo, &Resource::currentChanged, ui.capUseProgressBar, &QProgressBar::setValue);
 		weapon = w;
-		if (weapon)
+		if (weapon) {
+			ui.name_label->setText(weapon->name);
+			ui.level_label->setNum(weapon->level);
+			QString atkString = QString::asprintf("%+i", weapon->attackMod);
+			QString dmgString = QString::asprintf("%1%+i %3", weapon->damageMod).arg(weapon->damage->dice(), weapon->damage->type);
+			ui.atkLabel->setText(atkString);
+			ui.dmgLabel->setText(dmgString);
+			ui.crit_label->setText(weapon->crit);
+			ui.range_label->setText(QString("%1 ft.").arg(weapon->range));
+			ui.capUseProgressBar->setMaximum(weapon->capacity());
+			ui.capUseProgressBar->setValue(weapon->ammo->current());
+			fireAction->setText(QString("Fire [%2]").arg(weapon->usage()));
+			ui.special_label->setText(weapon->special.join(", "));
 			connect(weapon->ammo, &Resource::currentChanged, ui.capUseProgressBar, &QProgressBar::setValue);
+		}
 		emit weaponChanged(weapon);
 	}
-	
 }
 
 void WeaponWidget::shootWeapon()
@@ -61,34 +73,10 @@ void WeaponWidget::reloadWeapon()
 		ui.fireButton->setDefaultAction(fireAction);
 }
 
-void WeaponWidget::updateLabels()
+void WeaponWidget::openWeaponDialog()
 {
-	ui.name_label->setText(weapon->name);
-	ui.level_label->setNum(weapon->level);
-	QString atkString = QString::asprintf("%+i", weapon->attackMod);
-	QString dmgString = QString::asprintf("%1%+i %3", weapon->damageMod).arg(weapon->damage->dice(), weapon->damage->type);
-	ui.atkLabel->setText(atkString);
-	ui.dmgLabel->setText(dmgString);
-	ui.crit_label->setText(weapon->crit);
-	ui.range_label->setText(QString("%1 ft.").arg(weapon->range)); 
-	ui.capUseProgressBar->setMaximum(weapon->capacity());
-	ui.capUseProgressBar->setValue(weapon->ammo->current());
-	fireAction->setText(QString("Fire [%2]").arg(weapon->usage()));
-	ui.special_label->setText(weapon->special.join(", "));
-}
-
-void WeaponWidget::paintEvent(QPaintEvent* event)
-{
-	QPainter painter(this);
-}
-
-void WeaponWidget::mouseMoveEvent(QMouseEvent* event)
-{
-	QWidget::mouseMoveEvent(event);
-}
-
-void WeaponWidget::mouseReleaseEvent(QMouseEvent* event)
-{
-	emit editingFinished();
-	QWidget::mouseReleaseEvent(event);
+	WeaponDialog* dialog = new WeaponDialog(this, weapon);
+	dialog->setAttribute(Qt::WA_DeleteOnClose);
+	connect(dialog, &WeaponDialog::weaponReady, this, &WeaponWidget::setWeapon);
+	dialog->open();
 }

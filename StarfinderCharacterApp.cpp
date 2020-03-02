@@ -48,14 +48,16 @@ StarfinderCharacterApp::~StarfinderCharacterApp()
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
-	WeaponDialog dialog(this);
-	if (dialog.exec()) {
-		Weapon* w = dialog.newWeapon();
-		if (w) {
-			wModel->insertRow(0);
-			wModel->setData(wModel->index(0), QVariant::fromValue(w));
-		}
-	}
+	WeaponDialog* dialog = new WeaponDialog(this);
+	dialog->setAttribute(Qt::WA_DeleteOnClose);
+	connect(dialog, &WeaponDialog::weaponReady, [this](Weapon* weapon) {
+		weapon->ammo->setCurrent(weapon->capacity());
+		weapon->setParent(pcModel);
+		wModel->insertRow(0);
+		wModel->setData(wModel->index(0), QVariant::fromValue(weapon));
+		});
+	dialog->setModal(true);
+	dialog->open();
 }
 
 void StarfinderCharacterApp::on_actionCharacter_New_triggered()

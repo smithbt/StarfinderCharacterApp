@@ -4,6 +4,7 @@
 #include <QPainter>
 #include "ui_WeaponWidget.h"
 #include "Weapon.h"
+#include "WeaponDialog.h"
 
 class WeaponWidget : public QWidget
 {
@@ -17,19 +18,14 @@ public:
 	Weapon* getWeapon() const;
 	void setWeapon(Weapon* w);
 
-public slots:
-	void updateLabels();
+private slots:
 	void shootWeapon();
 	void reloadWeapon();
+	void openWeaponDialog();
 
 signals:
 	void weaponChanged(Weapon*);
 	void editingFinished();
-
-protected:
-	void paintEvent(QPaintEvent* event) override;
-	void mouseMoveEvent(QMouseEvent* event) override;
-	void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
 	Ui::WeaponWidget ui;
@@ -38,5 +34,4 @@ private:
 	QAction* reloadAction;
 	QAction* editAction;
 	QAction* deleteAction;
-
 };
