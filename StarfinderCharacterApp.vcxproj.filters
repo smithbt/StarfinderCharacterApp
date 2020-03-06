@@ -88,6 +88,9 @@
     <ClCompile Include="ClassWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponDelegate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="StarfinderCharacterApp.h">
@@ -145,6 +148,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ClassWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WeaponDelegate.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

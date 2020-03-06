@@ -8,15 +8,58 @@ WeaponModel::WeaponModel(QObject* parent)
 
 QVariant WeaponModel::data(const QModelIndex& index, int role) const
 {
-	const int idx = index.row();
 	if (!index.isValid()) // invalid index
 		return QVariant();
 
-	if (idx >= m_pc->getWeaponCount() || idx < 0) // out of range
+	const int row = index.row();
+	if (row >= m_pc->getWeaponCount() || row < 0) // out of range
 		return QVariant();
 
-	if (role == Qt::DisplayRole || role == Qt::EditRole)
-		return QVariant::fromValue(m_pc->getWeaponAt(idx));
+	if (role == Qt::DisplayRole) {
+		return m_pc->getWeaponAt(row)->toString();
+	}
+
+	if (role >= Qt::UserRole) {
+		Weapon* weapon = m_pc->getWeaponAt(row);
+		switch (role) {
+		case NameRole: return weapon->name;
+		case LevelRole: return weapon->level;
+		case BulkRole: return weapon->bulk;
+		case PriceRole: return weapon->price;
+		case AttackRole: {
+			int attackMod = m_pc->getBAB();
+			switch (weapon->type) {
+			case Weapon::Type::Melee:
+				attackMod += m_pc->getAbilityProperty("Strength", "modifier");
+				break;
+			case Weapon::Type::Ranged:
+				attackMod += m_pc->getAbilityProperty("Dexterity", "modifier");
+				break;
+			}
+			return QString::asprintf("%+i", attackMod);
+		}
+		case DamageRole: {
+			int damageMod = 0;
+			switch (weapon->type) {
+			case Weapon::Type::Melee:
+				damageMod += m_pc->getAbilityProperty("Strength", "modifier");
+				break;
+			case Weapon::Type::Ranged:
+				damageMod += 0;
+				break;
+			}
+			return QString::asprintf("%1%+i %3", damageMod).arg(weapon->damage->dice(), weapon->damage->type);
+		}
+		case CritRole: return weapon->crit;
+		case RangeRole: return weapon->range;
+		case TypeRole: return "Type";
+		case CurrentAmmoRole: return weapon->ammo->current();
+		case CapacityRole: return weapon->capacity();
+		case UsageRole: return weapon->usage();
+		case SpecialRole: return weapon->special;
+		default: return QVariant::fromValue(m_pc->getWeaponAt(row));
+		}
+	}
 
 	return QVariant();
 }
@@ -38,12 +81,60 @@ int WeaponModel::rowCount(const QModelIndex& parent) const
 
 bool WeaponModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	if (!index.isValid() || index.row() < 0 || index.row() >= m_pc->getWeaponCount())
+	if (!index.isValid()) // invalid index
 		return false;
-	
-	if ((role == Qt::DisplayRole || role == Qt::EditRole) && value.canConvert<Weapon*>()) {
-		m_pc->setWeaponAt(index.row(), value.value<Weapon*>());
-		emit dataChanged(index, index, { Qt::DisplayRole, Qt::EditRole });
+
+	const int row = index.row();
+	if (row >= m_pc->getWeaponCount() || row < 0) // out of range
+		return false;
+
+	if (role >= Qt::UserRole) {
+		Weapon* weapon = m_pc->getWeaponAt(row);
+		switch (role) {
+		case NameRole:
+			weapon->name = value.toString();
+			break;
+		case LevelRole:
+			weapon->level = value.toInt();
+			break;
+		case BulkRole:
+			weapon->bulk = value.toDouble();
+			break;
+		case PriceRole:
+			weapon->price = value.toInt();
+			break;
+		case DamageRole: {
+			QVariantList dmgData = value.value<QVariantList>();
+			weapon->damage->dieCount = dmgData.at(0).toInt();
+			weapon->damage->dieSize = dmgData.at(1).toInt();
+			weapon->damage->type = dmgData.at(2).toString();
+		} break;
+		case CritRole:
+			weapon->crit = value.toString();
+			break;
+		case RangeRole:
+			weapon->range = value.toInt();
+			break;
+		case TypeRole: break; // parse type
+		case CurrentAmmoRole:
+			weapon->ammo->setCurrent(value.toInt());
+			break;
+		case CapacityRole:
+			weapon->ammo->setMax(value.toInt());
+			break;
+		case UsageRole:
+			weapon->ammo->setStep(value.toInt());
+			break;
+		case SpecialRole:
+			weapon->special = value.toStringList();
+			break;
+		default:
+			if (value.canConvert<Weapon*>())
+				weapon = value.value<Weapon*>();
+			break;
+		}
+		m_pc->setWeaponAt(row, weapon);
+		emit dataChanged(index, index, { Qt::DisplayRole, role });
 		return true;
 	}
 	return false;
@@ -55,7 +146,7 @@ bool WeaponModel::insertRows(int position, int rows, const QModelIndex& parent)
 	beginInsertRows(QModelIndex(), position, position + rows - 1);
 
 	for (int i = position; i < (position + rows); ++i) {
-		m_pc->insertWeaponAt(i, nullptr);
+		m_pc->insertWeaponAt(i, new Weapon(m_pc));
 	}
 
 	endInsertRows();
@@ -82,77 +173,4 @@ void WeaponModel::setCharacter(Character* pc)
 		m_pc = pc;
 		endResetModel();
 	}
-}
-
-WeaponDelegate::WeaponDelegate(QWidget* parent)
-	: QStyledItemDelegate(parent)
-{
-}
-
-void WeaponDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-	if (index.data().canConvert<Weapon*>()) {
-		Weapon* w = index.data().value<Weapon*>();
-		WeaponWidget ww;
-		ww.setWeapon(w);
-		ww.setGeometry(option.rect);
-
-		if (option.state & QStyle::State_Selected)
-			painter->fillRect(option.rect, option.palette.highlight());
-		else
-			painter->fillRect(option.rect, option.palette.background());
-
-		painter->save();
-		painter->drawPixmap(option.rect, ww.grab());
-		painter->restore();
-	}
-	else QStyledItemDelegate::paint(painter, option, index);
-}
-
-QSize WeaponDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-	if (index.data().canConvert<Weapon*>())
-		return WeaponWidget(0).sizeHint();
-	return QStyledItemDelegate::sizeHint(option, index);
-}
-
-QWidget* WeaponDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-	if (index.data().canConvert<Weapon*>()) {
-		WeaponWidget* editor = new WeaponWidget(parent);
-		connect(editor, &WeaponWidget::editingFinished,
-			this, &WeaponDelegate::commitAndCloseEditor);
-		return editor;
-	}
-	return QStyledItemDelegate::createEditor(parent, option, index);
-}
-
-void WeaponDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
-{
-	if (index.data().canConvert<Weapon*>()) {
-		Weapon* wpn = index.data().value<Weapon*>();
-		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
-		wpnEditor->setWeapon(wpn);
-	}
-	else {
-		QStyledItemDelegate::setEditorData(editor, index);
-	}
-}
-
-void WeaponDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
-{
-	if (index.data().canConvert<Weapon*>()) {
-		WeaponWidget* wpnEditor = qobject_cast<WeaponWidget*>(editor);
-		model->setData(index, QVariant::fromValue(wpnEditor->getWeapon()));
-	}
-	else {
-		QStyledItemDelegate::setModelData(editor, model, index);
-	}
-}
-
-void WeaponDelegate::commitAndCloseEditor()
-{
-	WeaponWidget* editor = qobject_cast<WeaponWidget*>(sender());
-	emit commitData(editor);
-	emit closeEditor(editor);
 }

@@ -9,7 +9,9 @@ Weapon::Weapon(QObject* parent)
 	ammo(new Resource(this)),
 	range(0),
 	special()
-{}
+{
+	connect(ammo, &Resource::currentChanged, this, &Weapon::currentAmmoChanged);
+}
 
 Weapon::~Weapon()
 {
@@ -89,4 +91,14 @@ QString Weapon::toString() const
 	}
 	output += QString("\nSpecial: %1").arg(special.join(", "));
 	return output;
+}
+
+void Weapon::fire()
+{
+	ammo->adjustCurrent(-1);
+}
+
+void Weapon::reload()
+{
+	ammo->setCurrent(capacity());
 }

@@ -1,8 +1,7 @@
 #include "WeaponDialog.h"
 
-WeaponDialog::WeaponDialog(QWidget *parent, Weapon* weapon)
-	: QDialog(parent), 
-	weaponTypes(QMetaEnum::fromType<Weapon::Type>()),
+WeaponDialog::WeaponDialog(QWidget *parent)
+	: QDialog(parent),
 	damageRegEx("^(?<count>\\d+)[d,D](?<size>\\d+)\\s*(?<type>.*)$")
 {
 	ui.setupUi(this);
@@ -15,72 +14,101 @@ WeaponDialog::WeaponDialog(QWidget *parent, Weapon* weapon)
 	ui.damage_lineEdit->setValidator(validDice);
 	ui.damage_lineEdit->setPlaceholderText("e.g. 1d6 E & F");
 	ui.damage_lineEdit->setCursorPosition(0);
-
-	for (int t = 0; t < weaponTypes.keyCount(); ++t) {
-		ui.type_comboBox->addItem(
-			weaponTypes.key(t), QVariant::fromValue<Weapon::Type>(
-				static_cast<Weapon::Type>(weaponTypes.value(t))));
-	}
+	
+	QStringList types = { "Melee", "Ranged" };
+	ui.type_comboBox->insertItems(0, types);
 	ui.type_comboBox->setCurrentIndex(0);
-	connect(ui.type_comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &WeaponDialog::updateFields);
-
-	if (weapon)
-		setWeapon(weapon);
-	else
-		m_weapon = nullptr;
-
+	connect(ui.type_comboBox, &QComboBox::currentTextChanged, this, &WeaponDialog::updateFields);
 }
 
 WeaponDialog::~WeaponDialog()
 {
 }
 
-void WeaponDialog::setWeapon(Weapon* weapon)
+void WeaponDialog::setName(const QString name)
 {
-	if (weapon != m_weapon) {
-		m_weapon = weapon;
-		ui.type_comboBox->setCurrentText(weaponTypes.valueToKey(static_cast<int>(m_weapon->type)));
-		ui.range_spinBox->setValue(m_weapon->range);
-		ui.damage_lineEdit->setText(m_weapon->damage->toString());
-		ui.crit_lineEdit->setText(m_weapon->crit);
-		ui.capacity_spinBox->setValue(m_weapon->capacity());
-		ui.usage_spinBox->setValue(m_weapon->usage());
-		ui.level_spinBox->setValue(m_weapon->level);
-		ui.price_lineEdit->setText(QString::number(m_weapon->price));
-		ui.bulk_doubleSpinBox->setValue(m_weapon->bulk);
-		ui.name_lineEdit->setText(m_weapon->name);
-		ui.special_lineEdit->setText(m_weapon->special.join(", "));
-	}
+	ui.name_lineEdit->setText(name);
 }
 
-Weapon* WeaponDialog::getWeapon()
+void WeaponDialog::setLevel(const int level)
 {
-	return m_weapon;
+	ui.level_spinBox->setValue(level);
 }
 
-void WeaponDialog::accept() 
+void WeaponDialog::setBulk(const double bulk)
 {
-	if (!m_weapon)
-		m_weapon = new Weapon();
-	m_weapon->type = ui.type_comboBox->currentData(Qt::UserRole).value<Weapon::Type>();
-	m_weapon->range = ui.range_spinBox->value();
-	m_weapon->damage = parseDamageString(ui.damage_lineEdit->text());
-	m_weapon->crit = ui.crit_lineEdit->text();
-	m_weapon->ammo->setMax(ui.capacity_spinBox->value());
-	m_weapon->ammo->setStep(ui.usage_spinBox->value());
-	m_weapon->level = ui.level_spinBox->value();
-	m_weapon->price = ui.price_lineEdit->text().toInt();
-	m_weapon->bulk = ui.bulk_doubleSpinBox->value();
-	m_weapon->name = ui.name_lineEdit->text();
-	m_weapon->special = ui.special_lineEdit->text().split(", ");
-
-	emit weaponReady(m_weapon);
-	QDialog::accept();
+	ui.bulk_doubleSpinBox->setValue(bulk);
 }
 
-Damage* WeaponDialog::parseDamageString(QString dmg)
+void WeaponDialog::setPrice(const int price)
 {
-	QRegularExpressionMatch dMatch = damageRegEx.match(dmg, 0, QRegularExpression::PartialPreferCompleteMatch);
+	ui.price_lineEdit->setText(QString::number(price));
+}
+
+void WeaponDialog::setType(const QString type)
+{
+	ui.type_comboBox->setCurrentText(type);
+}
+
+void WeaponDialog::setDamage(const QString damage)
+{
+	ui.damage_lineEdit->setText(damage);
+}
+
+void WeaponDialog::setCrit(const QString crit)
+{
+	ui.crit_lineEdit->setText(crit);
+}
+
+void WeaponDialog::setRange(const int range)
+{
+	ui.range_spinBox->setValue(range);
+}
+
+void WeaponDialog::setCapacity(const int capacity)
+{
+	ui.capacity_spinBox->setValue(capacity);
+}
+
+void WeaponDialog::setUsage(const int usage)
+{
+	ui.usage_spinBox->setValue(usage);
+}
+
+void WeaponDialog::setSpecial(const QStringList special)
+{
+	ui.special_lineEdit->setText(special.join(", "));
+}
+
+QString WeaponDialog::getName() const
+{
+	return ui.name_lineEdit->text();
+}
+
+int WeaponDialog::getLevel() const
+{
+	return ui.level_spinBox->value();
+}
+
+double WeaponDialog::getBulk() const
+{
+	return ui.bulk_doubleSpinBox->value();
+}
+
+int WeaponDialog::getPrice() const
+{
+	return ui.price_lineEdit->text().toInt();
+}
+
+QString WeaponDialog::getType() const
+{
+	return ui.type_comboBox->currentText();
+}
+
+QVariantList WeaponDialog::getDamage() const
+{
+	QRegularExpressionMatch dMatch = damageRegEx.match(
+		ui.damage_lineEdit->text(), 0, QRegularExpression::PartialPreferCompleteMatch);
 	int count = 0;
 	int size = 0;
 	QString type = QString();
@@ -89,15 +117,38 @@ Damage* WeaponDialog::parseDamageString(QString dmg)
 		size = dMatch.captured("size").toInt();
 		type = dMatch.captured("type");
 	}
-	return new Damage(count, size, type);
+	return { count, size, type };
 }
 
-void WeaponDialog::updateFields()
+QString WeaponDialog::getCrit() const
 {
-	Weapon::Type wt = ui.type_comboBox->currentData().value<Weapon::Type>();
+	return ui.crit_lineEdit->text();
+}
 
-	bool ranged = (wt == Weapon::Type::Ranged);
-	bool melee = (wt == Weapon::Type::Melee);
+int WeaponDialog::getRange() const
+{
+	return ui.range_spinBox->value();
+}
+
+int WeaponDialog::getCapacity() const
+{
+	return ui.capacity_spinBox->value();
+}
+
+int WeaponDialog::getUsage() const
+{
+	return ui.usage_spinBox->value();
+}
+
+QStringList WeaponDialog::getSpecial() const
+{
+	return ui.special_lineEdit->text().split(", ");
+}
+
+void WeaponDialog::updateFields(const QString wt)
+{
+	bool ranged = (wt == "Ranged");
+	bool melee = (wt == "Melee");
 
 	ui.rangedWeapon_fields->setVisible(ranged);
 	ui.damage_fields->setVisible(ranged | melee);

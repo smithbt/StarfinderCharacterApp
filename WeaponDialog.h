@@ -2,34 +2,42 @@
 
 #include <QDialog>
 #include "ui_WeaponDialog.h"
-#include "Weapon.h"
 
 class WeaponDialog : public QDialog
 {
 	Q_OBJECT
-	Q_PROPERTY(Weapon* weapon READ getWeapon WRITE setWeapon)
 
 public:
-	WeaponDialog(QWidget *parent = Q_NULLPTR, Weapon* weapon = nullptr);
+	WeaponDialog(QWidget *parent = Q_NULLPTR);
 	~WeaponDialog();
 
-	void setWeapon(Weapon* weapon);
-	Weapon* getWeapon();
+	void setName(const QString name);
+	void setLevel(const int level);
+	void setBulk(const double bulk);
+	void setPrice(const int price);
+	void setType(const QString type);
+	void setDamage(const QString damage);
+	void setCrit(const QString crit);
+	void setRange(const int range);
+	void setCapacity(const int capacity);
+	void setUsage(const int usage);
+	void setSpecial(const QStringList special);
 
-public slots:
-	void accept() override;
-
-private slots:
-	void updateFields();
-
-signals:
-	void weaponReady(Weapon*);
+	QString getName() const;
+	int getLevel() const;
+	double getBulk() const;
+	int getPrice() const;
+	QString getType() const;
+	QVariantList getDamage() const;
+	QString getCrit() const;
+	int getRange() const;
+	int getCapacity() const;
+	int getUsage() const;
+	QStringList getSpecial() const;
 
 private:
 	Ui::WeaponDialog ui;
 	QRegularExpression damageRegEx;
-	QMetaEnum weaponTypes;
-	Weapon* m_weapon;
 
-	Damage* parseDamageString(QString dmg);
+	void updateFields(const QString wt);
 };

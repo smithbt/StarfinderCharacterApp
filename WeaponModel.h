@@ -1,17 +1,29 @@
 #pragma once
 
 #include <QAbstractListModel>
-#include <QStyledItemDelegate>
-#include <QPainter>
 #include "Character.h"
-#include "WeaponWidget.h"
-#include "Weapon.h"
 
 class WeaponModel : public QAbstractListModel
 {
 	Q_OBJECT
 	
 public:
+	enum roles {
+		NameRole = Qt::UserRole + 1,
+		LevelRole,
+		BulkRole,
+		PriceRole,
+		AttackRole,
+		DamageRole,
+		CritRole,
+		RangeRole,
+		TypeRole,
+		CurrentAmmoRole,
+		CapacityRole,
+		UsageRole,
+		SpecialRole
+	};
+
 	WeaponModel(QObject *parent);
 
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
@@ -28,21 +40,4 @@ public:
 
 private:
 	Character* m_pc;
-};
-
-class WeaponDelegate : public QStyledItemDelegate
-{
-	Q_OBJECT
-
-public:
-	WeaponDelegate(QWidget* parent = Q_NULLPTR);
-
-	void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-	QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-	QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-	void setEditorData(QWidget* editor, const QModelIndex& index) const override;
-	void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override;
-
-private slots:
-	void commitAndCloseEditor();
 };

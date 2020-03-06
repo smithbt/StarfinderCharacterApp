@@ -9,6 +9,7 @@
 #include "CharacterDelegate.h"
 #include "CharacterModel.h"
 #include "CreatorWizard.h"
+#include "WeaponDelegate.h"
 #include "WeaponDialog.h"
 #include "WeaponModel.h"
 
@@ -20,13 +21,6 @@ public:
 	StarfinderCharacterApp(QWidget *parent = Q_NULLPTR);
 	~StarfinderCharacterApp();
 
-private:
-	Ui::StarfinderCharacterAppClass ui;
-	WeaponModel* wModel;
-	CharacterModel* pcModel;
-	QString fileName;
-	QDataWidgetMapper* mapper;
-
 private slots:
 	void on_actionAdd_Weapon_triggered();
 	void on_actionCharacter_New_triggered();
@@ -34,4 +28,12 @@ private slots:
 	bool on_actionCharacter_Save_triggered();
 	bool on_actionCharacter_SaveAs_triggered();
 	bool on_actionQuit_triggered();
+
+private:
+	Ui::StarfinderCharacterAppClass ui;
+	WeaponModel* wModel;
+	CharacterModel* pcModel;
+	QString fileName;
+	QDataWidgetMapper* mapper;
+
 };

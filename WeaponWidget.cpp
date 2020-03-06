@@ -1,8 +1,7 @@
 #include "WeaponWidget.h"
 
 WeaponWidget::WeaponWidget(QWidget* parent)
-	: QWidget(parent),
-	weapon(nullptr),
+	: QFrame(parent),
 	fireAction(new QAction(tr("Fire"), this)),
 	reloadAction(new QAction(tr("Reload"), this)),
 	editAction(new QAction(tr("Edit"), this)),
@@ -10,15 +9,15 @@ WeaponWidget::WeaponWidget(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	connect(fireAction, &QAction::triggered, this, &WeaponWidget::shootWeapon);
-	ui.fireButton->setDefaultAction(fireAction);
-	connect(reloadAction, &QAction::triggered, this, &WeaponWidget::reloadWeapon);
-	ui.fireButton->addAction(reloadAction);
+	// Connect fire and reload Actions to button and output signals.
+	connect(fireAction, &QAction::triggered, this, &WeaponWidget::weaponFired);
+	connect(reloadAction, &QAction::triggered, this, &WeaponWidget::weaponReloaded);
+	ui.fireButton->addActions({ fireAction, reloadAction });
 
-	// connect to dialog popup
-	connect(editAction, &QAction::triggered, this, &WeaponWidget::openWeaponDialog);
+	connect(editAction, &QAction::triggered, this, &WeaponWidget::editDialogRequested);
 	// signal to remove from Character.
 	ui.toolButton->addActions({ editAction, deleteAction });
+	ui.toolButton->setDefaultAction(editAction);
 }
 
 WeaponWidget::~WeaponWidget()
@@ -29,54 +28,61 @@ WeaponWidget::~WeaponWidget()
 	delete deleteAction;
 }
 
-Weapon* WeaponWidget::getWeapon() const
+void WeaponWidget::setName(const QString name)
 {
-	return weapon;
+	ui.name_label->setText(name);
 }
 
-void WeaponWidget::setWeapon(Weapon* w)
+void WeaponWidget::setLevel(const int level)
 {
-	if (w != weapon) {
-		if (weapon)
-			disconnect(weapon->ammo, &Resource::currentChanged, ui.capUseProgressBar, &QProgressBar::setValue);
-		weapon = w;
-		if (weapon) {
-			ui.name_label->setText(weapon->name);
-			ui.level_label->setNum(weapon->level);
-			QString atkString = QString::asprintf("%+i", weapon->attackMod);
-			QString dmgString = QString::asprintf("%1%+i %3", weapon->damageMod).arg(weapon->damage->dice(), weapon->damage->type);
-			ui.atkLabel->setText(atkString);
-			ui.dmgLabel->setText(dmgString);
-			ui.crit_label->setText(weapon->crit);
-			ui.range_label->setText(QString("%1 ft.").arg(weapon->range));
-			ui.capUseProgressBar->setMaximum(weapon->capacity());
-			ui.capUseProgressBar->setValue(weapon->ammo->current());
-			fireAction->setText(QString("Fire [%2]").arg(weapon->usage()));
-			ui.special_label->setText(weapon->special.join(", "));
-			connect(weapon->ammo, &Resource::currentChanged, ui.capUseProgressBar, &QProgressBar::setValue);
-		}
-		emit weaponChanged(weapon);
-	}
+	ui.level_label->setNum(level);
 }
 
-void WeaponWidget::shootWeapon()
+void WeaponWidget::setAttack(const QString attack)
 {
-	weapon->ammo->adjustCurrent(-1);
-	if (!weapon->ammo->current())
+	ui.atkLabel->setText(attack);
+}
+
+void WeaponWidget::setDamage(const QString damage)
+{
+	ui.dmgLabel->setText(damage);
+}
+
+void WeaponWidget::setCrit(const QString crit)
+{
+	ui.crit_label->setText(crit);
+}
+
+void WeaponWidget::setRange(const int range)
+{
+	ui.range_label->setText(QString("%1 ft.").arg(range));
+}
+
+void WeaponWidget::setCapacity(const int capacity)
+{
+	ui.capUseProgressBar->setMaximum(capacity);
+}
+
+void WeaponWidget::setUsage(const int usage)
+{
+	fireAction->setText(QString("Fire [%2]").arg(usage));
+}
+
+void WeaponWidget::setCurrentAmmo(const int current)
+{
+	ui.capUseProgressBar->setValue(current);
+	if (current <= ui.capUseProgressBar->minimum())
 		ui.fireButton->setDefaultAction(reloadAction);
-}
-
-void WeaponWidget::reloadWeapon()
-{
-	weapon->ammo->setCurrent(weapon->capacity());
-	if (ui.fireButton->defaultAction() != fireAction)
+	else if (ui.fireButton->defaultAction() != fireAction)
 		ui.fireButton->setDefaultAction(fireAction);
 }
 
-void WeaponWidget::openWeaponDialog()
+void WeaponWidget::setSpecial(const QStringList special)
 {
-	WeaponDialog* dialog = new WeaponDialog(this, weapon);
-	dialog->setAttribute(Qt::WA_DeleteOnClose);
-	connect(dialog, &WeaponDialog::weaponReady, this, &WeaponWidget::setWeapon);
-	dialog->open();
+	ui.special_label->setText(special.join(", "));
+}
+
+int WeaponWidget::getCurrentAmmo() const
+{
+	return ui.capUseProgressBar->value();
 }

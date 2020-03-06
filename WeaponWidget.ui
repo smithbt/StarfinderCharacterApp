@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>WeaponWidget</class>
- <widget class="QWidget" name="WeaponWidget">
+ <widget class="QFrame" name="WeaponWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,6 +18,9 @@
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

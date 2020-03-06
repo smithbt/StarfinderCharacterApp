@@ -36,4 +36,11 @@ public:
 	void write(QJsonObject& json) const;
 	QJsonObject toJsonObject() const;
 	QString toString() const;
+
+public slots:
+	void fire();
+	void reload();
+
+signals:
+	void currentAmmoChanged(int);
 };

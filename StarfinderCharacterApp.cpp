@@ -31,8 +31,8 @@ StarfinderCharacterApp::StarfinderCharacterApp(QWidget* parent)
 	mapper->addMapping(ui.fortLabel, CharacterModel::Fortitude, "text");
 	mapper->addMapping(ui.refLabel, CharacterModel::Reflex, "text");
 	mapper->addMapping(ui.willLabel, CharacterModel::Will, "text");
-	connect(mapper, &QDataWidgetMapper::currentIndexChanged, wModel, [=](int index) {
-		wModel->setCharacter(pcModel->index(index, CharacterModel::FullObject).data().value<Character*>()); });
+	connect(mapper, &QDataWidgetMapper::currentIndexChanged, wModel, [=](int row) {
+		wModel->setCharacter(pcModel->index(row, CharacterModel::FullObject).data().value<Character*>()); });
 	ui.weaponList->setModel(wModel);
 	ui.weaponList->setItemDelegate(new WeaponDelegate(this));
 	
@@ -48,16 +48,24 @@ StarfinderCharacterApp::~StarfinderCharacterApp()
 }
 
 void StarfinderCharacterApp::on_actionAdd_Weapon_triggered() {
-	WeaponDialog* dialog = new WeaponDialog(this);
-	dialog->setAttribute(Qt::WA_DeleteOnClose);
-	connect(dialog, &WeaponDialog::weaponReady, [this](Weapon* weapon) {
-		weapon->ammo->setCurrent(weapon->capacity());
-		weapon->setParent(pcModel);
+	WeaponDialog dialog(this);
+	if (dialog.exec() == QDialog::Accepted) {
 		wModel->insertRow(0);
-		wModel->setData(wModel->index(0), QVariant::fromValue(weapon));
-		});
-	dialog->setModal(true);
-	dialog->open();
+		wModel->setItemData(wModel->index(0), {
+			{WeaponModel::NameRole, dialog.getName()},
+			{WeaponModel::LevelRole, dialog.getLevel()},
+			{WeaponModel::BulkRole, dialog.getBulk()},
+			{WeaponModel::PriceRole, dialog.getPrice()},
+			{WeaponModel::DamageRole, dialog.getDamage()},
+			{WeaponModel::CritRole, dialog.getCrit()},
+			{WeaponModel::RangeRole, dialog.getRange()},
+			{WeaponModel::TypeRole, dialog.getType()},
+			{WeaponModel::CurrentAmmoRole, dialog.getCapacity()},
+			{WeaponModel::CapacityRole, dialog.getCapacity()},
+			{WeaponModel::UsageRole, dialog.getUsage()},
+			{WeaponModel::SpecialRole, dialog.getSpecial()} });
+	}
+	dialog.deleteLater();
 }
 
 void StarfinderCharacterApp::on_actionCharacter_New_triggered()

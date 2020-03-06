@@ -1,35 +1,36 @@
 #pragma once
 
-#include <QWidget>
-#include <QPainter>
+#include <QFrame>
 #include "ui_WeaponWidget.h"
-#include "Weapon.h"
-#include "WeaponDialog.h"
 
-class WeaponWidget : public QWidget
+class WeaponWidget : public QFrame
 {
 	Q_OBJECT
-	Q_PROPERTY(Weapon* weapon READ getWeapon WRITE setWeapon NOTIFY weaponChanged)
 
 public:
 	WeaponWidget(QWidget *parent = Q_NULLPTR);
 	~WeaponWidget();
 
-	Weapon* getWeapon() const;
-	void setWeapon(Weapon* w);
+	void setName(const QString name);
+	void setLevel(const int level);
+	void setAttack(const QString attack);
+	void setDamage(const QString damage);
+	void setCrit(const QString crit);
+	void setRange(const int range);
+	void setCapacity(const int capacity);
+	void setUsage(const int usage);
+	void setCurrentAmmo(const int current);
+	void setSpecial(const QStringList special);
 
-private slots:
-	void shootWeapon();
-	void reloadWeapon();
-	void openWeaponDialog();
+	int getCurrentAmmo() const;
 
 signals:
-	void weaponChanged(Weapon*);
-	void editingFinished();
+	void weaponFired();
+	void weaponReloaded();
+	void editDialogRequested();
 
 private:
 	Ui::WeaponWidget ui;
-	Weapon* weapon;
 	QAction* fireAction;
 	QAction* reloadAction;
 	QAction* editAction;
