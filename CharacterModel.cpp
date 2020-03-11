@@ -75,47 +75,27 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 	}
 
 	if (role == Ability_BaseRole) {
-		switch (index.column()) {
-		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "base");
-		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "base");
-		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "base");
-		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "base");
-		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "base");
-		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "base");
-		}
+		QString ability = abilityNameFromColumn(index.column());
+		if (!ability.isEmpty() && !ability.isNull())
+			return pcs.at(row)->getAbilityProperty(ability, "base");
 	}
 
 	if (role == Ability_UpgradeRole) {
-		switch (index.column()) {
-		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "upgrade");
-		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "upgrade");
-		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "upgrade");
-		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "upgrade");
-		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "upgrade");
-		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "upgrade");
-		}
+		QString ability = abilityNameFromColumn(index.column());
+		if (!ability.isEmpty() && !ability.isNull())
+			return pcs.at(row)->getAbilityProperty(ability, "upgrade");
 	}
 
 	if (role == Ability_ScoreRole) {
-		switch (index.column()) {
-		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "score");
-		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "score");
-		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "score");
-		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "score");
-		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "score");
-		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "score");
-		}
+		QString ability = abilityNameFromColumn(index.column());
+		if (!ability.isEmpty() && !ability.isNull())
+			return pcs.at(row)->getAbilityProperty(ability, "score");
 	}
 
 	if (role == Ability_ModifierRole) {
-		switch (index.column()) {
-		case Strength: return pcs.at(row)->getAbilityProperty("Strength", "modifier");
-		case Dexterity: return pcs.at(row)->getAbilityProperty("Dexterity", "modifier");
-		case Constitution: return pcs.at(row)->getAbilityProperty("Constitution", "modifier");
-		case Intelligence: return pcs.at(row)->getAbilityProperty("Intelligence", "modifier");
-		case Wisdom: return pcs.at(row)->getAbilityProperty("Wisdom", "modifier");
-		case Charisma: return pcs.at(row)->getAbilityProperty("Charisma", "modifier");
-		}
+		QString ability = abilityNameFromColumn(index.column());
+		if (!ability.isEmpty() && !ability.isNull())
+			return pcs.at(row)->getAbilityProperty(ability, "modifier");
 	}
 
 	return QVariant();
