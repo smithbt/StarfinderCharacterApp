@@ -10,7 +10,7 @@ class CharacterModel : public QAbstractTableModel
 
 private:
 	QVector<Character*> pcs;
-	const static int columns = 18;
+	const static int columns = 19;
 
 	QString abilityNameFromColumn(int column) const;
 
@@ -18,6 +18,7 @@ public:
 	enum ColumnIndex : int {
 		FullObject = 0,
 		RaceData,
+		Theme,
 		ClassData,
 		
 		// Strings

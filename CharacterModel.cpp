@@ -24,6 +24,7 @@ QVariant CharacterModel::data(const QModelIndex& index, int role) const
 		switch (index.column()) {
 		case FullObject: return QVariant::fromValue(pcs.at(index.row()));
 		case RaceData: return QVariant::fromValue(pcs.at(index.row())->getRace());
+		case Theme: return pcs.at(row)->theme();
 		case CharacterName: return pcs.at(index.row())->getCharacterName();
 		case BAB: return pcs.at(index.row())->getBAB();
 		case Fortitude: return pcs.at(index.row())->getFortitude();
@@ -141,6 +142,9 @@ bool CharacterModel::setData(const QModelIndex& index, const QVariant& value, in
 			if (value.canConvert<Race*>())
 				pcs[row]->setRace(value.value<Race*>());
 			else return false;
+			break;
+		case Theme:
+			pcs[row]->setTheme(value.toString());
 			break;
 		case CharacterName:
 			pcs[row]->setCharacterName(value.toString());

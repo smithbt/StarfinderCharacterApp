@@ -18,6 +18,7 @@ class Character : public QObject
 private:
 	QString characterName;
 	Race* race;
+	QString m_theme;
 	ClassInfo* pcClass;
 	Resource* stamina;
 	Resource* hitpoints;
@@ -33,6 +34,7 @@ public:
 	// Getters
 	QString getCharacterName() const;
 	Race* getRace() const;
+	QString theme() const;
 	QString getClassName() const;
 	int getClassLevel() const;
 	QString getKeyAbility() const;
@@ -49,6 +51,7 @@ public:
 	// Setters
 	void setCharacterName(const QString name);
 	void setRace(Race* race);
+	void setTheme(QString theme);
 	void setClassProperties(QHash<ClassInfo::LevelStat, QVariant> properties);
 	void setClassName(QString name);
 	void setClassLevel(int level);

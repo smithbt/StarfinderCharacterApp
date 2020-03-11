@@ -4,6 +4,7 @@ Character::Character(QObject* parent)
 	: QObject(parent),
 	characterName(QString()),
 	race(new Race(this)),
+	m_theme(QString()),
 	pcClass(new ClassInfo(this)),
 	stamina(new Resource(this)),
 	hitpoints(new Resource(this)),
@@ -44,6 +45,11 @@ QString Character::getCharacterName() const
 Race* Character::getRace() const
 {
 	return race;
+}
+
+QString Character::theme() const
+{
+	return m_theme;
 }
 
 QString Character::getClassName() const
@@ -126,6 +132,11 @@ void Character::setCharacterName(const QString name)
 void Character::setRace(Race* race)
 {
 	this->race = race;
+}
+
+void Character::setTheme(QString theme)
+{
+	m_theme = theme;
 }
 
 void Character::setClassProperties(QHash<ClassInfo::LevelStat, QVariant> properties)
@@ -251,7 +262,11 @@ void Character::read(const QJsonObject& json)
 	if (json.contains("Race") && json.value("Race").isObject())
 		race->read(json.value("Race").toObject());
 
-	// Parse Ints
+	// Theme
+	if (json.contains("Theme") && json.value("Theme").isString())
+		m_theme = json.value("Theme").toString();
+
+	// Parse Class
 	if (json.contains("Class") && json.value("Class").isObject()) {
 		if (abilities.contains(pcClass->keyAbility()))
 			disconnect(abilities[pcClass->keyAbility()], &Ability::modifierChanged, this, &Character::calcMaxResolve);
@@ -293,6 +308,7 @@ void Character::write(QJsonObject& json) const
 {
 	json.insert("CharacterName", characterName);
 	json.insert("Race", race->toJsonObject());
+	json.insert("Theme", m_theme);
 	json.insert("Class", pcClass->toJsonObject());
 
 	// Resources
